@@ -54,7 +54,7 @@ for i, checkpoint_name in enumerate(checkpoint_names):
         for j in range(frames.shape[1]):
             frame = np.array(frames[i, j, :, :, :] * 127.5 + 127.5).astype('uint8')
             img = Image.fromarray(frame)
-            img.resize(size=(120, 90))
+            img = img.resize(size=(120, 90))
             output_frames.append(img)
 
     output_frames[0].save(animation_file, save_all=True, append_images=output_frames[1:], duration=30, loop=0)
