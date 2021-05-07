@@ -40,29 +40,24 @@ class DCGAN():
 
     def build_generator(self):
         model = Sequential()
-        model.add(Dense(1*3*4*96, use_bias=False, input_shape=(self.latent_dim,)))
+        model.add(Dense(2*6*8*96, use_bias=False, input_shape=(self.latent_dim,)))
         model.add(BatchNormalization())
         model.add(LeakyReLU())
 
-        model.add(Reshape((1, 3, 4, 96)))
-        assert model.output_shape == (None, 1, 3, 4, 96)
+        model.add(Reshape((2, 6, 8, 96)))
+        assert model.output_shape == (None, 2, 6, 8, 96)
 
         model.add(Conv3DTranspose(96, (5, 5, 5), strides=5, padding='same', use_bias=False))
-        assert model.output_shape == (None, 5, 15, 20, 96)
+        assert model.output_shape == (None, 10, 30, 40, 96)
         model.add(BatchNormalization())
         model.add(LeakyReLU())
 
         model.add(Conv3DTranspose(48, (5, 5, 5), strides=(2, 3, 3), padding='same', use_bias=False))
-        assert model.output_shape == (None, 10, 45, 60, 48)
+        assert model.output_shape == (None, 20, 90, 120, 48)
         model.add(BatchNormalization())
         model.add(LeakyReLU())
 
-        model.add(Conv3DTranspose(16, (5, 5, 5), strides=(2, 4, 4), padding='same', use_bias=False))
-        assert model.output_shape == (None, 20, 180, 240, 16)
-        model.add(BatchNormalization())
-        model.add(LeakyReLU())
-
-        model.add(Conv3DTranspose(3, (5, 5, 5), strides=(2, 2, 2), padding='same', use_bias=False, activation='tanh'))
+        model.add(Conv3DTranspose(3, (5, 5, 5), strides=(2, 4, 4), padding='same', use_bias=False))
         assert model.output_shape == (None, 40, 360, 480, 3)
 
         opt = tf.keras.optimizers.Adam(self.generator_learning_rate)

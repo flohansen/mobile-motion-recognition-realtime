@@ -1,53 +1,67 @@
 import os
 from models.dcgan import DCGAN
 import tensorflow as tf
+from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
-import argparse
+import pandas as pd
+from PIL import Image
 matplotlib.use('Qt5Agg')
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-parser = argparse.ArgumentParser()
-parser.add_argument('-c', '--checkpoint', type=str)
-args = parser.parse_args()
+def get_training_information(path):
+    acc = EventAccumulator(path)
+    acc.Reload()
+    df = pd.DataFrame([(w, s, tf.make_ndarray(t)) for w, s, t in acc.Tensors('generator loss')], columns=['wall_time', 'step', 'tensor'])
+
+    epochs = int(df.iloc[-1]['step']) + 1
+    estimated_time = df.iloc[-1]['wall_time']
+
+    return (epochs, estimated_time)
 
 checkpoint_dir = './checkpoints'
+checkpoint_names = sorted(os.listdir(checkpoint_dir))
 
-if args.checkpoint:
-    checkpoint_name = args.checkpoint
-else:
-    # Get the list of all checkpoints sorted by name
-    checkpoint_names = sorted(os.listdir(checkpoint_dir))
-    # Set the checkpoint to the last element, which is the latest checkpoint
-    checkpoint_name = checkpoint_names[-1]
+template_string  = '| #   | Datensatz | Epochen | Trainingszeit | Ergebnisse |\n'
+template_string += '| --- | --------- | ------- | ------------- | ---------- |\n'
 
-checkpoint_path = os.path.join('./checkpoints', checkpoint_name)
-print(f'Using checkpoint "{checkpoint_path}"')
+for i, checkpoint_name in enumerate(checkpoint_names):
+    checkpoint_path = os.path.join('./checkpoints', checkpoint_name)
 
-model = DCGAN()
-model.load_model(checkpoint_path)
+    log_dir = f'./logs/{checkpoint_name}/train'
+    evaluation_dir = f'./evaluation/{checkpoint_name}'
+    animation_file = os.path.join(evaluation_dir, 'results.gif')
 
-noise_dim = 100
-noise = tf.random.normal([10, noise_dim])
-generated_image = model.generator(noise, training=False)
+    (epochs, estimated_time) = get_training_information(log_dir)
+    template_string += f'| {i+1} | {checkpoint_name} | {epochs} | {estimated_time} | ![]({animation_file}) |\n'
 
-frames = []
-fig = plt.figure()
-fig.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=None, hspace=None)
-plt.axis('off')
+    if not os.path.isdir(evaluation_dir):
+        print(f'Checkpoint {checkpoint_name} will be evaluated.') 
+        os.makedirs(evaluation_dir)
 
-for i in range(generated_image.shape[0]):
-    for j in range(generated_image.shape[1]):
-        frames.append([plt.imshow(np.array(generated_image[i, j, :, :, :] * 127.5 + 127.5).astype('uint8'), animated=True)])
+        model = DCGAN()
+        model.load_model(checkpoint_path)
+        model.export_model_summary(evaluation_dir)
 
-evaluation_dir = f'./evaluation/{checkpoint_name}'
-if not os.path.isdir(evaluation_dir):
-    os.makedirs(evaluation_dir)
+        noise_dim = 100
+        noise = tf.random.normal([5, noise_dim])
+        frames = model.generator(noise, training=False)
 
-model.export_model_summary(evaluation_dir)
+        output_frames = []
+        for i in range(frames.shape[0]):
+            for j in range(frames.shape[1]):
+                frame = np.array(frames[i, j, :, :, :] * 127.5 + 127.5).astype('uint8')
+                img = Image.fromarray(frame)
+                img = img.resize(size=(120, 90))
+                output_frames.append(img)
 
-animation_file = os.path.join(evaluation_dir, '10_generated_videos.mp4')
-ani = animation.ArtistAnimation(fig, frames, interval=10, blit=True, repeat_delay=0)
-ani.save(animation_file, fps=30)
-plt.show()
+        output_frames[0].save(animation_file, save_all=True, append_images=output_frames[1:], duration=30, loop=0)
+
+with open('README_template.md', 'r+') as f:
+    texts = f.read()
+    texts = texts.replace('[EVALUATION_TABLE]', template_string)
+
+with open('README.md', 'w') as f:
+    f.write(texts)
