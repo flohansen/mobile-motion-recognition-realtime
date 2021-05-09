@@ -106,3 +106,5 @@ class DCGAN():
 
         with open(discriminator_filename, 'w') as f:
             self.discriminator.summary(print_fn=lambda x: f.write(x + '\n'))
+
+        return generator_filename, discriminator_filename
