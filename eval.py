@@ -25,8 +25,8 @@ def get_training_information(path):
 checkpoint_dir = './checkpoints'
 checkpoint_names = sorted(os.listdir(checkpoint_dir))
 
-template_string  = '| #   | Datensatz | Epochen | Output-Shape | Generator | Diskriminator | Ergebnisse |\n'
-template_string += '| --- | --------- | ------- | ------------ | --------- | ------------- | ---------- |\n'
+template_string  = '| #   | Datensatz | Epochen | Output-Shape | Ergebnisse |\n'
+template_string += '| --- | --------- | ------- | ------------ | ---------- |\n'
 
 for i, checkpoint_name in enumerate(checkpoint_names):
     print(f'Evaluating {checkpoint_name}...')
@@ -46,7 +46,7 @@ for i, checkpoint_name in enumerate(checkpoint_names):
         discriminator_summary = f.read()
 
     (epochs, estimated_time) = get_training_information(log_dir)
-    template_string += f'| {i+1} | {checkpoint_name} | {epochs} | {model.generator.output_shape} | `{generator_summary}` | `{discriminator_summary}` | ![]({animation_file}) |\n'
+    template_string += f'| {i+1} | {checkpoint_name} | {epochs} | {model.generator.output_shape} | ![]({animation_file}) |\n'
 
     if not os.path.isdir(evaluation_dir):
         print(f'Checkpoint {checkpoint_name} will be evaluated.') 
