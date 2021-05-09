@@ -40,25 +40,30 @@ class DCGAN():
 
     def build_generator(self):
         model = Sequential()
-        model.add(Dense(2*6*8*96, use_bias=False, input_shape=(self.latent_dim,)))
+        model.add(Dense(5*24*32*256, use_bias=False, input_shape=(self.latent_dim,)))
         model.add(BatchNormalization())
         model.add(LeakyReLU())
 
-        model.add(Reshape((2, 6, 8, 96)))
-        assert model.output_shape == (None, 2, 6, 8, 96)
+        model.add(Reshape((5, 24, 32, 256)))
+        assert model.output_shape == (None, 5, 24, 32, 256)
 
-        model.add(Conv3DTranspose(96, (5, 5, 5), strides=5, padding='same', use_bias=False))
-        assert model.output_shape == (None, 10, 30, 40, 96)
+        model.add(Conv3DTranspose(256, (5, 5, 5), strides=1, padding='same', use_bias=False))
+        assert model.output_shape == (None, 5, 24, 32, 256)
         model.add(BatchNormalization())
         model.add(LeakyReLU())
 
-        model.add(Conv3DTranspose(48, (5, 5, 5), strides=(2, 3, 3), padding='same', use_bias=False))
-        assert model.output_shape == (None, 20, 90, 120, 48)
+        model.add(Conv3DTranspose(128, (5, 5, 5), strides=2, padding='same', use_bias=False))
+        assert model.output_shape == (None, 10, 48, 64, 128)
         model.add(BatchNormalization())
         model.add(LeakyReLU())
 
-        model.add(Conv3DTranspose(3, (5, 5, 5), strides=(2, 4, 4), padding='same', use_bias=False))
-        assert model.output_shape == (None, 40, 360, 480, 3)
+        model.add(Conv3DTranspose(128, (5, 5, 5), strides=2, padding='same', use_bias=False))
+        assert model.output_shape == (None, 20, 96, 128, 128)
+        model.add(BatchNormalization())
+        model.add(LeakyReLU())
+
+        model.add(Conv3DTranspose(3, (5, 5, 5), strides=2, padding='same', use_bias=False, activation='tanh'))
+        assert model.output_shape == (None, 40, 192, 256, 3)
 
         opt = tf.keras.optimizers.Adam(self.generator_learning_rate)
         model.compile(loss=self.generator_loss, optimizer=opt)
@@ -67,11 +72,11 @@ class DCGAN():
     def build_discriminator(self):
         model = Sequential()
 
-        model.add(Conv2D(16, (4, 4), strides=2, padding='same', input_shape=[40, 360, 480, 3]))
+        model.add(Conv2D(128, (4, 4), strides=2, padding='same', input_shape=[40, 192, 256, 3]))
         model.add(LeakyReLU())
         model.add(Dropout(0.2))
 
-        model.add(Conv2D(64, (4, 4), strides=2, padding='same'))
+        model.add(Conv2D(256, (4, 4), strides=2, padding='same'))
         model.add(LeakyReLU())
         model.add(Dropout(0.2))
 

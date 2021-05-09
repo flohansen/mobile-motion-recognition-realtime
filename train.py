@@ -3,6 +3,8 @@ import argparse
 import datetime
 import progressbar
 import tensorflow as tf
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 from models.dcgan import DCGAN
 from dataset import load_video_data
 
@@ -28,8 +30,13 @@ dataset_dir = os.path.join(base_dir, args.dataset_dir)
 print(f'Using project root {base_dir}')
 
 # Read in training data and normalize its values to be in [0; 1]
-train_images = load_video_data(dataset_dir, (480, 360), 40, use_full_videos=False)
+train_images = load_video_data(dataset_dir, (256, 192), 40, use_full_videos=False)
 train_images = train_images / 127.5 - 1
+
+# # Show sample of dataset
+# plt.imshow((train_images[0, 0, :, :, :] * 127.5 + 127.5).astype('uint8'))
+# plt.show()
+# exit()
 
 # Create batches
 BUFFER_SIZE = train_images.shape[0]
