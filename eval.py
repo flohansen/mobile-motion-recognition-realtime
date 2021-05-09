@@ -46,7 +46,7 @@ for i, checkpoint_name in enumerate(checkpoint_names):
         discriminator_summary = f.read()
 
     (epochs, estimated_time) = get_training_information(log_dir)
-    template_string += f'| {i+1} | {checkpoint_name} | {epochs} | {model.generator.output_shape} | ![]({animation_file}) |\n'
+    template_string += f'| {i+1} | {checkpoint_name} <br/> [Generator]({generator_filename}) <br />[Diskriminator]({discriminator_filename}) | {epochs} | {model.generator.output_shape} | ![]({animation_file}) |\n'
 
     if not os.path.isdir(evaluation_dir):
         print(f'Checkpoint {checkpoint_name} will be evaluated.') 

@@ -18,16 +18,16 @@
 
 | #   | Datensatz | Epochen | Output-Shape | Ergebnisse |
 | --- | --------- | ------- | ------------ | ---------- |
-| 1 | 2021-05-01-164113 | 9870 | (None, 40, 80, 180, 3) | ![](./evaluation/2021-05-01-164113/results.gif) |
-| 2 | 2021-05-02-135730 | 9870 | (None, 40, 80, 180, 3) | ![](./evaluation/2021-05-02-135730/results.gif) |
-| 3 | 2021-05-03-172829 | 2000 | (None, 40, 80, 180, 3) | ![](./evaluation/2021-05-03-172829/results.gif) |
-| 4 | 2021-05-04-023451 | 4950 | (None, 40, 80, 180, 3) | ![](./evaluation/2021-05-04-023451/results.gif) |
-| 5 | 2021-05-04-064157 | 5000 | (None, 40, 80, 180, 3) | ![](./evaluation/2021-05-04-064157/results.gif) |
-| 6 | 2021-05-06-024533 | 3000 | (None, 40, 360, 480, 3) | ![](./evaluation/2021-05-06-024533/results.gif) |
-| 7 | 2021-05-07-135545 | 3000 | (None, 60, 360, 480, 3) | ![](./evaluation/2021-05-07-135545/results.gif) |
-| 8 | 2021-05-08-142259 | 3000 | (None, 60, 36, 48, 3) | ![](./evaluation/2021-05-08-142259/results.gif) |
-| 9 | 2021-05-08-154506 | 3000 | (None, 60, 36, 48, 3) | ![](./evaluation/2021-05-08-154506/results.gif) |
-| 10 | 2021-05-08-191517 | 3000 | (None, 120, 96, 128, 3) | ![](./evaluation/2021-05-08-191517/results.gif) |
+| 1 | 2021-05-01-164113 <br/> [Generator](./evaluation/2021-05-01-164113/generator.txt) <br />[Diskriminator](./evaluation/2021-05-01-164113/discriminator.txt) | 9870 | (None, 40, 80, 180, 3) | ![](./evaluation/2021-05-01-164113/results.gif) |
+| 2 | 2021-05-02-135730 <br/> [Generator](./evaluation/2021-05-02-135730/generator.txt) <br />[Diskriminator](./evaluation/2021-05-02-135730/discriminator.txt) | 9870 | (None, 40, 80, 180, 3) | ![](./evaluation/2021-05-02-135730/results.gif) |
+| 3 | 2021-05-03-172829 <br/> [Generator](./evaluation/2021-05-03-172829/generator.txt) <br />[Diskriminator](./evaluation/2021-05-03-172829/discriminator.txt) | 2000 | (None, 40, 80, 180, 3) | ![](./evaluation/2021-05-03-172829/results.gif) |
+| 4 | 2021-05-04-023451 <br/> [Generator](./evaluation/2021-05-04-023451/generator.txt) <br />[Diskriminator](./evaluation/2021-05-04-023451/discriminator.txt) | 4950 | (None, 40, 80, 180, 3) | ![](./evaluation/2021-05-04-023451/results.gif) |
+| 5 | 2021-05-04-064157 <br/> [Generator](./evaluation/2021-05-04-064157/generator.txt) <br />[Diskriminator](./evaluation/2021-05-04-064157/discriminator.txt) | 5000 | (None, 40, 80, 180, 3) | ![](./evaluation/2021-05-04-064157/results.gif) |
+| 6 | 2021-05-06-024533 <br/> [Generator](./evaluation/2021-05-06-024533/generator.txt) <br />[Diskriminator](./evaluation/2021-05-06-024533/discriminator.txt) | 3000 | (None, 40, 360, 480, 3) | ![](./evaluation/2021-05-06-024533/results.gif) |
+| 7 | 2021-05-07-135545 <br/> [Generator](./evaluation/2021-05-07-135545/generator.txt) <br />[Diskriminator](./evaluation/2021-05-07-135545/discriminator.txt) | 3000 | (None, 60, 360, 480, 3) | ![](./evaluation/2021-05-07-135545/results.gif) |
+| 8 | 2021-05-08-142259 <br/> [Generator](./evaluation/2021-05-08-142259/generator.txt) <br />[Diskriminator](./evaluation/2021-05-08-142259/discriminator.txt) | 3000 | (None, 60, 36, 48, 3) | ![](./evaluation/2021-05-08-142259/results.gif) |
+| 9 | 2021-05-08-154506 <br/> [Generator](./evaluation/2021-05-08-154506/generator.txt) <br />[Diskriminator](./evaluation/2021-05-08-154506/discriminator.txt) | 3000 | (None, 60, 36, 48, 3) | ![](./evaluation/2021-05-08-154506/results.gif) |
+| 10 | 2021-05-08-191517 <br/> [Generator](./evaluation/2021-05-08-191517/generator.txt) <br />[Diskriminator](./evaluation/2021-05-08-191517/discriminator.txt) | 3000 | (None, 120, 96, 128, 3) | ![](./evaluation/2021-05-08-191517/results.gif) |
 
 
 ## Inhalt der Thesis
