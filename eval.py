@@ -1,4 +1,5 @@
 import os
+import gc
 from models.dcgan import DCGAN
 import tensorflow as tf
 from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
@@ -24,26 +25,27 @@ def get_training_information(path):
 checkpoint_dir = './checkpoints'
 checkpoint_names = sorted(os.listdir(checkpoint_dir))
 
-template_string  = '| #   | Datensatz | Epochen | Trainingszeit | Ergebnisse |\n'
-template_string += '| --- | --------- | ------- | ------------- | ---------- |\n'
+template_string  = '| #   | Datensatz | Epochen | Output-Shape | Ergebnisse |\n'
+template_string += '| --- | --------- | ------- | ------------ | ---------- |\n'
 
 for i, checkpoint_name in enumerate(checkpoint_names):
+    print(f'Evaluating {checkpoint_name}...')
     checkpoint_path = os.path.join('./checkpoints', checkpoint_name)
 
     log_dir = f'./logs/{checkpoint_name}/train'
     evaluation_dir = f'./evaluation/{checkpoint_name}'
     animation_file = os.path.join(evaluation_dir, 'results.gif')
 
+    model = DCGAN()
+    model.load_model(checkpoint_path)
+    model.export_model_summary(evaluation_dir)
+
     (epochs, estimated_time) = get_training_information(log_dir)
-    template_string += f'| {i+1} | {checkpoint_name} | {epochs} | {estimated_time} | ![]({animation_file}) |\n'
+    template_string += f'| {i+1} | {checkpoint_name} | {epochs} | {model.generator.output_shape} | ![]({animation_file}) |\n'
 
     if not os.path.isdir(evaluation_dir):
         print(f'Checkpoint {checkpoint_name} will be evaluated.') 
         os.makedirs(evaluation_dir)
-
-        model = DCGAN()
-        model.load_model(checkpoint_path)
-        model.export_model_summary(evaluation_dir)
 
         noise_dim = 100
         noise = tf.random.normal([5, noise_dim])
@@ -58,6 +60,9 @@ for i, checkpoint_name in enumerate(checkpoint_names):
                 output_frames.append(img)
 
         output_frames[0].save(animation_file, save_all=True, append_images=output_frames[1:], duration=30, loop=0)
+
+    tf.keras.backend.clear_session()
+    gc.collect()
 
 with open('README_template.md', 'r+') as f:
     texts = f.read()
