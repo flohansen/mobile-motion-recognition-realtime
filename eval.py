@@ -45,8 +45,13 @@ for i, checkpoint_name in enumerate(checkpoint_names):
     model.load_model(checkpoint_path)
     generator_filename, discriminator_filename = model.export_model_summary(evaluation_dir)
 
+    frames = model.generator.output_shape[1]
+    width = model.generator.output_shape[3]
+    height = model.generator.output_shape[2]
+    channels = model.generator.output_shape[4]
+
     (epochs, estimated_time) = get_training_information(log_dir)
-    template_string += f'| {i+1} | {checkpoint_name} <br/> [Generator]({generator_filename}) <br />[Diskriminator]({discriminator_filename}) | {epochs} | {model.generator.output_shape} | ![]({animation_file}) |\n'
+    template_string += f'| {i+1} | {checkpoint_name} <br/> [Generator]({generator_filename}) <br/>[Diskriminator]({discriminator_filename}) | {epochs} | Frames: {frames} <br/> Größe: {width}x{height} <br/> Kanäle: {channels} | ![]({animation_file}) |\n'
 
     if generate_gif:
         print(f'Checkpoint {checkpoint_name} will be evaluated.') 
