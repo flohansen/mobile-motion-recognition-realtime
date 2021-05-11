@@ -28,6 +28,7 @@
 | 8 | 2021-05-08-142259 <br/> [Generator](./evaluation/2021-05-08-142259/generator.txt) <br />[Diskriminator](./evaluation/2021-05-08-142259/discriminator.txt) | 3000 | (None, 60, 36, 48, 3) | ![](./evaluation/2021-05-08-142259/results.gif) |
 | 9 | 2021-05-08-154506 <br/> [Generator](./evaluation/2021-05-08-154506/generator.txt) <br />[Diskriminator](./evaluation/2021-05-08-154506/discriminator.txt) | 3000 | (None, 60, 36, 48, 3) | ![](./evaluation/2021-05-08-154506/results.gif) |
 | 10 | 2021-05-08-191517 <br/> [Generator](./evaluation/2021-05-08-191517/generator.txt) <br />[Diskriminator](./evaluation/2021-05-08-191517/discriminator.txt) | 3000 | (None, 120, 96, 128, 3) | ![](./evaluation/2021-05-08-191517/results.gif) |
+| 11 | 2021-05-09-194241 <br/> [Generator](./evaluation/2021-05-09-194241/generator.txt) <br />[Diskriminator](./evaluation/2021-05-09-194241/discriminator.txt) | 1500 | (None, 120, 96, 128, 3) | ![](./evaluation/2021-05-09-194241/results.gif) |
 
 
 ## Inhalt der Thesis

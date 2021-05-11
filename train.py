@@ -30,7 +30,7 @@ dataset_dir = os.path.join(base_dir, args.dataset_dir)
 print(f'Using project root {base_dir}')
 
 # Read in training data and normalize its values to be in [0; 1]
-train_images = load_video_data(dataset_dir, (256, 192), 40, use_full_videos=False)
+train_images = load_video_data(dataset_dir, (128, 96), 120, use_full_videos=False)
 train_images = train_images / 127.5 - 1
 
 # # Show sample of dataset
@@ -49,7 +49,8 @@ checkpoint_dir = os.path.join(base_dir, 'checkpoints')
 if args.checkpoint:
     train_log_dir = os.path.join(base_dir, f'logs/{args.checkpoint}/train')
     checkpoint_path = os.path.join(checkpoint_dir, args.checkpoint)
-    model = DCGAN().load_model(checkpoint_path)
+    model = DCGAN()
+    model.load_model(checkpoint_path)
 else:
     train_log_dir = os.path.join(base_dir, f'logs/{current_time}/train')
     checkpoint_path = os.path.join(checkpoint_dir, current_time)

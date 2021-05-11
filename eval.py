@@ -35,22 +35,21 @@ for i, checkpoint_name in enumerate(checkpoint_names):
     log_dir = f'./logs/{checkpoint_name}/train'
     evaluation_dir = f'./evaluation/{checkpoint_name}'
     animation_file = os.path.join(evaluation_dir, 'results.gif')
+    generate_gif = False
+
+    if not os.path.isdir(evaluation_dir):
+        os.makedirs(evaluation_dir)
+        generate_gif = True
 
     model = DCGAN()
     model.load_model(checkpoint_path)
     generator_filename, discriminator_filename = model.export_model_summary(evaluation_dir)
 
-    with open(generator_filename, 'r+') as f:
-        generator_summary = f.read()
-    with open(generator_filename, 'r+') as f:
-        discriminator_summary = f.read()
-
     (epochs, estimated_time) = get_training_information(log_dir)
     template_string += f'| {i+1} | {checkpoint_name} <br/> [Generator]({generator_filename}) <br />[Diskriminator]({discriminator_filename}) | {epochs} | {model.generator.output_shape} | ![]({animation_file}) |\n'
 
-    if not os.path.isdir(evaluation_dir):
+    if generate_gif:
         print(f'Checkpoint {checkpoint_name} will be evaluated.') 
-        os.makedirs(evaluation_dir)
 
         noise_dim = 100
         noise = tf.random.normal([5, noise_dim])
