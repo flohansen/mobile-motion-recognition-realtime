@@ -29,6 +29,8 @@
 | 9 | 2021-05-08-154506 <br/> [Generator](./evaluation/2021-05-08-154506/generator.txt) <br/>[Diskriminator](./evaluation/2021-05-08-154506/discriminator.txt) | 3000 | Frames: 60 <br/> Größe: 48x36 <br/> Kanäle: 3 | ![](./evaluation/2021-05-08-154506/results.gif) |
 | 10 | 2021-05-08-191517 <br/> [Generator](./evaluation/2021-05-08-191517/generator.txt) <br/>[Diskriminator](./evaluation/2021-05-08-191517/discriminator.txt) | 3000 | Frames: 120 <br/> Größe: 128x96 <br/> Kanäle: 3 | ![](./evaluation/2021-05-08-191517/results.gif) |
 | 11 | 2021-05-09-194241 <br/> [Generator](./evaluation/2021-05-09-194241/generator.txt) <br/>[Diskriminator](./evaluation/2021-05-09-194241/discriminator.txt) | 1500 | Frames: 120 <br/> Größe: 128x96 <br/> Kanäle: 3 | ![](./evaluation/2021-05-09-194241/results.gif) |
+| 12 | 2021-05-12-002440 <br/> [Generator](./evaluation/2021-05-12-002440/generator.txt) <br/>[Diskriminator](./evaluation/2021-05-12-002440/discriminator.txt) | 237 | Frames: 80 <br/> Größe: 128x96 <br/> Kanäle: 3 | ![](./evaluation/2021-05-12-002440/results.gif) |
+| 13 | 2021-05-12-173806 <br/> [Generator](./evaluation/2021-05-12-173806/generator.txt) <br/>[Diskriminator](./evaluation/2021-05-12-173806/discriminator.txt) | 2200 | Frames: 40 <br/> Größe: 256x192 <br/> Kanäle: 3 | ![](./evaluation/2021-05-12-173806/results.gif) |
 
 
 ## Inhalt der Thesis

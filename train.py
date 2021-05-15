@@ -1,108 +1,35 @@
-import os
-import argparse
-import datetime
-import progressbar
-import tensorflow as tf
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-from models.dcgan import DCGAN
-from dataset import load_video_data
+from argparse import ArgumentParser
 
-parser = argparse.ArgumentParser()
-parser.add_argument('-c', '--checkpoint', type=str)
-parser.add_argument('-e', '--epochs', type=int, default=100)
-parser.add_argument('-i', '--save-interval', type=int, default=100)
-parser.add_argument('-b', '--batch-size', type=int, default=25)
-parser.add_argument('-g', '--generator-learning-rate', type=float, default=1e-4)
-parser.add_argument('-d', '--discriminator-learning-rate', type=float, default=1e-4)
-parser.add_argument('--dataset-dir', type=str, default='dataset')
-args = parser.parse_args()
+def train_step_generator(generator_model):
+    return None
 
-tf.get_logger().setLevel('INFO')
-for gpu in tf.config.experimental.list_physical_devices('GPU'):
-    tf.config.experimental.set_memory_growth(gpu, True)
+def train_step_critic(critic_model):
+    return None
 
-# Hyperparameters
-noise_dim = 100
+def train(generator_model, critic_model, n_critic):
+    # Train the critic more than the generator
+    for _ in range(n_critic):
+        train_step_critic(critic_model)
 
-base_dir = os.path.dirname(os.path.realpath(__file__))
-dataset_dir = os.path.join(base_dir, args.dataset_dir)
-print(f'Using project root {base_dir}')
+    # Train the generator model
+    train_step_generator(generator_model)
 
-# Read in training data and normalize its values to be in [0; 1]
-train_images = load_video_data(dataset_dir, (128, 96), 120, use_full_videos=False)
-train_images = train_images / 127.5 - 1
+def main(args):
+    train(None, None, args.n_critic)
 
-# # Show sample of dataset
-# plt.imshow((train_images[0, 0, :, :, :] * 127.5 + 127.5).astype('uint8'))
-# plt.show()
-# exit()
+if __name__ == "__main__":
+    # Define arguments of the script
+    parser = ArgumentParser()
+    parser.add_argument('--epochs', type=int, default=100)
+    parser.add_argument('--save-interval', type=int, default=100)
+    parser.add_argument('--batch-size', type=int, default=25)
+    parser.add_argument('--generator-learning-rate', type=float, default=1e-4)
+    parser.add_argument('--discriminator-learning-rate', type=float, default=1e-4)
+    parser.add_argument('--n-critic', type=int, default=5)
+    parser.add_argument('--dataset-dir', type=str, default='dataset')
 
-# Create batches
-BUFFER_SIZE = train_images.shape[0]
-train_dataset = tf.data.Dataset.from_tensor_slices(train_images).shuffle(BUFFER_SIZE).batch(args.batch_size)
-del train_images
+    # Parse arguments from command line
+    args = parser.parse_args()
 
-current_time = datetime.datetime.now().strftime('%Y-%m-%d-%H%M%S')
-checkpoint_dir = os.path.join(base_dir, 'checkpoints')
-
-if args.checkpoint:
-    train_log_dir = os.path.join(base_dir, f'logs/{args.checkpoint}/train')
-    checkpoint_path = os.path.join(checkpoint_dir, args.checkpoint)
-    model = DCGAN()
-    model.load_model(checkpoint_path)
-else:
-    train_log_dir = os.path.join(base_dir, f'logs/{current_time}/train')
-    checkpoint_path = os.path.join(checkpoint_dir, current_time)
-    model = DCGAN(latent_dim=noise_dim, generator_learning_rate=args.generator_learning_rate, discriminator_learning_rate=args.discriminator_learning_rate)
-
-train_gen_loss = tf.keras.metrics.Mean('train_gen_loss', dtype=tf.float32)
-train_dis_loss = tf.keras.metrics.Mean('train_dis_loss', dtype=tf.float32)
-train_summary_writer = tf.summary.create_file_writer(train_log_dir)
-
-model.generator.summary()
-model.discriminator.summary()
-
-@tf.function
-def train_step(images):
-  noise = tf.random.normal([args.batch_size, noise_dim])
-
-  with tf.GradientTape() as gen_tape, tf.GradientTape() as dis_tape:
-    generated_images = model.generator(noise, training=True)
-    real_output = model.discriminator(images, training=True)
-    fake_output = model.discriminator(generated_images, training=True)
-
-    gen_loss = model.generator_loss(fake_output)
-    dis_loss = model.discriminator_loss(real_output, fake_output)
-    train_gen_loss(gen_loss)
-    train_dis_loss(dis_loss)
-
-  gradients_of_gen = gen_tape.gradient(gen_loss, model.generator.trainable_variables)
-  gradients_of_dis = dis_tape.gradient(dis_loss, model.discriminator.trainable_variables)
-
-  model.generator.optimizer.apply_gradients(zip(gradients_of_gen, model.generator.trainable_variables))
-  model.discriminator.optimizer.apply_gradients(zip(gradients_of_dis, model.discriminator.trainable_variables))
-
-def train(dataset, epochs):
-    bar = progressbar.ProgressBar(maxval=args.epochs)
-    bar.start()
-
-    for epoch in range(epochs):
-        for image_batch in dataset:
-            train_step(image_batch)
-
-        with train_summary_writer.as_default():
-            tf.summary.scalar('generator loss', train_gen_loss.result(), step=epoch)
-            tf.summary.scalar('discriminator loss', train_dis_loss.result(), step=epoch)
-
-        if (epoch + 1) % 10 == 0:
-            dataset = dataset.shuffle(BUFFER_SIZE)
-
-        if (epoch + 1) % args.save_interval == 0:
-            model.save_model(checkpoint_path)
-
-        bar.update(epoch + 1)
-
-    bar.finish()
-
-train(train_dataset, args.epochs)
+    # Call the main function with arguments from command line
+    main(args)
