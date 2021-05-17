@@ -3,7 +3,7 @@ import tensorflow as tf
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import LeakyReLU
 from tensorflow.keras.layers import Reshape
-from tensorflow.keras.layers import Conv2DTranspose
+from tensorflow.keras.layers import Conv3DTranspose
 from tensorflow.keras.layers import Conv2D
 from tensorflow.keras.layers import Dropout
 from tensorflow.keras.layers import Flatten
@@ -26,32 +26,43 @@ class WGAN():
 
   def build_generator(self, latent_dim=100):
     model = tf.keras.Sequential()
-    model.add(Dense(7*7*256, use_bias=False, input_shape=(latent_dim,)))
-
-    model.add(Reshape((7, 7, 256)))
-    assert model.output_shape == (None, 7, 7, 256)
-
-    model.add(Conv2DTranspose(128, (5, 5), strides=1, padding='same', use_bias=False))
+    model.add(Dense(5*6*8*256, use_bias=False, input_shape=(latent_dim,)))
     model.add(LeakyReLU())
-    assert model.output_shape == (None, 7, 7, 128)
 
-    model.add(Conv2DTranspose(64, (5, 5), strides=2, padding='same', use_bias=False))
+    model.add(Reshape((5, 6, 8, 256)))
+    assert model.output_shape == (None, 5, 6, 8, 256)
+
+    model.add(Conv3DTranspose(128, (5, 5, 5), strides=2, padding='same', use_bias=False))
+    assert model.output_shape == (None, 10, 12, 16, 128)
     model.add(LeakyReLU())
-    assert model.output_shape == (None, 14, 14, 64)
 
-    model.add(Conv2DTranspose(1, (5, 5), strides=2, padding='same', use_bias=False, activation='tanh'))
-    assert model.output_shape == (None, 28, 28, 1)
+    model.add(Conv3DTranspose(64, (5, 5, 5), strides=2, padding='same', use_bias=False))
+    assert model.output_shape == (None, 20, 24, 32, 64)
+    model.add(LeakyReLU())
 
-    opt = tf.keras.optimizers.Adam(1e-4, beta_1=0, beta_2=0.9)
+    model.add(Conv3DTranspose(64, (5, 5, 5), strides=2, padding='same', use_bias=False))
+    assert model.output_shape == (None, 40, 48, 64, 64)
+    model.add(LeakyReLU())
+
+    model.add(Conv3DTranspose(3, (5, 5, 5), strides=2, padding='same', use_bias=False, activation='tanh'))
+    assert model.output_shape == (None, 80, 96, 128, 3)
+
+    opt = tf.keras.optimizers.Adam(1e-4, beta_1=0.0, beta_2=0.9)
     model.compile(optimizer=opt, loss=self.generator_loss)
     return model
 
   def build_critic(self):
     model = tf.keras.Sequential()
-    model.add(Conv2D(64, (5, 5), strides=2, padding='same', input_shape=[28, 28, 1]))
+    model.add(Conv2D(32, (5, 5), strides=2, padding='same', input_shape=[80, 96, 128, 3]))
+    model.add(LeakyReLU())
+    model.add(Dropout(0.3))
+
+    model.add(Conv2D(64, (5, 5), strides=2, padding='same'))
+    model.add(LeakyReLU())
     model.add(Dropout(0.3))
 
     model.add(Conv2D(128, (5, 5), strides=2, padding='same'))
+    model.add(LeakyReLU())
     model.add(Dropout(0.3))
 
     model.add(Flatten())
@@ -63,8 +74,8 @@ class WGAN():
 
   def gradient_penality(self, fake_sample, real_sample):
     batch_size = fake_sample.shape[0]
-    alpha = tf.random.uniform([batch_size, 1, 1, 1], 0.0, 1.0)
-    inter_sample = fake_sample * alpha + real_sample * (1 - alpha)
+    alpha = tf.random.uniform([batch_size, 1, 1, 1, 1], 0.0, 1.0)
+    inter_sample = real_sample * alpha + fake_sample * (1.0 - alpha)
 
     with tf.GradientTape() as tape_gp:
         tape_gp.watch(inter_sample)
