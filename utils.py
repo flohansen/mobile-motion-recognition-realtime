@@ -1,5 +1,16 @@
 import tensorflow as tf
+from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
 import numpy as np
+import pandas as pd
+
+def get_training_epochs(path):
+  acc = EventAccumulator(path)
+  acc.Reload()
+  df = pd.DataFrame([(w, s, tf.make_ndarray(t)) for w, s, t in acc.Tensors('generator loss')], columns=['wall_time', 'step', 'tensor'])
+
+  epochs = int(df.iloc[-1]['step']) + 1
+
+  return epochs
 
 def video_summary(name, video, step=None, fps=20):
   name = tf.constant(name).numpy().decode('utf-8')

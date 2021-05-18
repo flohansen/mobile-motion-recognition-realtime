@@ -16,7 +16,7 @@ class WGAN():
 
       self.generator = tf.keras.models.load_model(generator_path, custom_objects={'generator_loss': self.generator_loss})
       self.critic = tf.keras.models.load_model(critic_path, custom_objects={'critic_loss': self.critic_loss})
-      self.latent_dim = self.generator.input_shape[0]
+      self.latent_dim = self.generator.input_shape[1]
     else:
       self.latent_dim = latent_dim
       self.generator = self.build_generator(latent_dim)
@@ -71,6 +71,12 @@ class WGAN():
     opt = tf.keras.optimizers.Adam(1e-4, beta_1=0, beta_2=0.9)
     model.compile(optimizer=opt, loss=self.critic_loss)
     return model
+
+  def save_model(self, path):
+    generator_path = os.path.join(path, 'generator')
+    critic_path = os.path.join(path, 'critic')
+    self.generator.save(generator_path)
+    self.critic.save(critic_path)
 
   def gradient_penality(self, fake_sample, real_sample):
     batch_size = fake_sample.shape[0]
