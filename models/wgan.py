@@ -74,8 +74,9 @@ class WGAN():
 
   def save_model(self, path):
     generator_path = os.path.join(path, 'generator')
-    critic_path = os.path.join(path, 'critic')
     self.generator.save(generator_path)
+
+    critic_path = os.path.join(path, 'critic')
     self.critic.save(critic_path)
 
   def gradient_penality(self, fake_sample, real_sample):

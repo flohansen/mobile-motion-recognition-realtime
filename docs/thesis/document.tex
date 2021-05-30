@@ -13,21 +13,23 @@
   \maketitle
   \tableofcontents
 
-  \section{Einleitung}
+  \chapter{Einleitung}
 
-  \section{Generative Adversarial Networks}
+  \chapter{Generative Adversarial Networks}
   In Machine-Learning existieren viele verschiedene Modelle, die vorhandene
-  Datensätze analysieren und anhand der Daten lernen, Entscheidungen zu treffen.
-  Besitzt man beispielsweise einen Datensatz bestehend aus Fotoaufnahmen von
-  Tieren, so kann ein Klassifierer trainiert werden, um einem Bild eine
-  Tierklasse zuzuweisen. Aus diesem Grund fässt man diese Modelle unter dem
-  Begriff \textit{Bildklassifizierung} zusammen.
+  Datensätze analysieren und anhand der Daten lernen, Strukturen in den
+  Datensätzen zu erkennen.  Besitzt man beispielsweise einen Datensatz
+  bestehend aus Fotoaufnahmen von Tieren, so kann ein Klassifizierer trainiert
+  werden, um einem Bild eine Tierklasse zuzuweisen. Aus diesem Grund fässt man
+  diese Modelle unter dem Begriff \textit{Bildklassifizierung} zusammen.
 
-  Wesentlich interessanter ist das Erkennen von vielen Objekten innerhalb eines Bildes,
-  anstatt das gesamte Bild nur einer Klasse zuzuweisen. In der \textit{Objekterkennung}
-  entwickelt man Modelle, welche mehr als nur eine Klasse erkennen können. Sie liefern
-  zusätzlich zu den erkannten Klassen ihre Position und Größe innerhalb des
-  Bildes. 
+  Wesentlich interessanter ist das Erkennen von vielen Objekten innerhalb eines
+  Bildes, anstatt das gesamte Bild nur einer einzigen Klasse zuzuweisen. In der
+  \textit{Objekterkennung} entwickelt man Modelle, welche mehr als nur eine
+  Klasse erkennen können. Sie liefern zusätzlich zu den erkannten Klassen ihre
+  Position und Größe innerhalb des Bildes. Diese Modelle treffen also keine
+  Aussage über das Gesamtbild, sondern treffen Aussagen über einzelne Objekte
+  innerhalb des Bildes.
 
   Neben Modellen, die zu einem bestimmten Sachverhalt eine Aussage treffen
   können, existieren auch Modelle, welche in der Lage sind, neue Sachverhalte zu
@@ -41,29 +43,36 @@
 
   Aber nicht nur zum Erzeugen von Bildern kann diese Art von Modellen verwendet
   werden. Auch bei Aufgaben, bei denen eine Voraussagung getroffen werden soll,
-  werden generative Modelle eingesetzt. 
+  werden generative Modelle eingesetzt. Beispielsweise wurde in
+  \cite{barsoum2017hpgan} gezeigt, wie zu bereits getätigten menschlichen
+  Bewegungen unterschiedliche, darauf folgende Bewegungssequenzen aussehen
+  können. Hier hat man also versucht, eine Vorhersage zur Entwicklung von
+  menschlichen Bewegung zu tätigen.
 
-  \subsection{Mode-Collapse}
-  \subsection{Deep Convolution GAN}
-  \subsection{Wasserstein GAN}
-  \subsection{Wasserstein GAN mit Gradient Penality}
-  \subsection{Unrolled GAN}
-  \subsection{Least Squares GAN}
+  \section{Mode-Collapse}
+  \section{Deep Convolution GAN}
+  \section{Wasserstein GAN}
+  \section{Wasserstein GAN mit Gradient Penality}
+  \section{Unrolled GAN}
+  \section{Least Squares GAN}
 
-  \section{Erstellen eines Datensatzes}
-  \subsection{Rahmenbedingungen}
-  \subsection{Verwendung von GANs}
-  \subsection{Durchführung von Experimenten mit unterschiedlichen GANs}
-  \subsection{Analyse der Ergebnisse aus den Experimenten}
+  \chapter{Erstellen eines Datensatzes}
+  \section{Rahmenbedingungen}
+  \section{Verwendung von GANs}
+  \section{Durchführung von Experimenten mit unterschiedlichen GANs}
+  \section{Analyse der Ergebnisse aus den Experimenten}
 
-  \section{Bewegungserkennung}
-  \subsection{Ground-Truth}
-  \subsection{Background-Substraction}
-  \subsection{Erkennung von Geschwindigkeiten}
-  \subsection{Erkennung von Anomalien}
-  \subsection{Erkennung von Bewegungsarten}
-  \subsection{Vorhersage von Bewegungen}
-  \subsection{Architektur einer mobilen Anwendung}
+  \chapter{Bewegungserkennung}
+  \section{Ground-Truth}
+  \section{Background-Substraction}
+  \section{Erkennung von Geschwindigkeiten}
+  \section{Erkennung von Anomalien}
+  \section{Erkennung von Bewegungsarten}
+  \section{Vorhersage von Bewegungen}
+  \section{Architektur einer mobilen Anwendung}
 
-  \section{Fazit und Ausblick}
+  \chapter{Fazit und Ausblick}
+
+  \bibliography{bibliography}
+  \bibliographystyle{abbrv}
 \end{document}

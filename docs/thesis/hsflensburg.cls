@@ -1,18 +1,13 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{hsflensburg}[2020/04/13 Flensburg Document Class]
 
-\LoadClass[12pt,a4paper]{article}
+\LoadClass[12pt,a4paper]{scrreprt}
 
 \RequirePackage{graphicx}
 \RequirePackage{setspace}
 
 \newcommand{\name}[1]{{\normalsize{#1}}}
 \newcommand{\institution}[1]{{\footnotesize{#1}}}
-
-\makeatletter
-\newcommand{\subtitle}[1]{\gdef\@subtitle{#1}}
-\newcommand{\@subtitle}{\@latex@warning@no@line{No \noexpand\subtitle given}}
-\makeatother
 
 \makeatletter
 \renewcommand{\maketitle}{
