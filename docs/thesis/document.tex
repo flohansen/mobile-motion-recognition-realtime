@@ -8,6 +8,9 @@
 }
 
 \usepackage[ngerman]{babel}
+\usepackage{csquotes}
+\usepackage{biblatex}
+\addbibresource{bibliography.bib}
 
 \begin{document}
   \maketitle
@@ -50,6 +53,9 @@
   menschlichen Bewegung zu tätigen.
 
   \section{Mode-Collapse}
+  \cite{richardson2018gans}
+
+
   \section{Deep Convolution GAN}
   \section{Wasserstein GAN}
   \section{Wasserstein GAN mit Gradient Penality}
@@ -73,6 +79,5 @@
 
   \chapter{Fazit und Ausblick}
 
-  \bibliography{bibliography}
-  \bibliographystyle{abbrv}
+  \printbibliography
 \end{document}
