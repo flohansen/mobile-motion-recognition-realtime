@@ -10,6 +10,9 @@
 \usepackage[ngerman]{babel}
 \usepackage{csquotes}
 \usepackage{biblatex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
 \addbibresource{bibliography.bib}
 
 \begin{document}
@@ -37,13 +40,13 @@
   Neben Modellen, die zu einem bestimmten Sachverhalt eine Aussage treffen
   können, existieren auch Modelle, welche in der Lage sind, neue Sachverhalte zu
   erzeugen. Diese fallen unter dem Begriff \textit{Generative Adversarial
-  Networks} (GANs) und bilden das Hauptthema dieses Abschnitts. Das interessante an
-  diesen generativen Modellen ist, dass sie nicht nur die Strukturen eines
+  Networks} (GANs) und bilden das Hauptthema dieses Abschnitts. Das interessante
+  an diesen generativen Modellen ist, dass sie nicht nur die Strukturen eines
   Datensatzes lernen, sondern darüber hinaus neue Elemente der
   Ausgangsdistribution erzeugen können. Trainiert man also ein generatives
   Modell auf einen Datensatz, welcher Bilder von verschiedenen Tieren enthält,
   können neue Bilder der gleichen Art erzeugt werden.
-
+  
   Aber nicht nur zum Erzeugen von Bildern kann diese Art von Modellen verwendet
   werden. Auch bei Aufgaben, bei denen eine Voraussagung getroffen werden soll,
   werden generative Modelle eingesetzt. Beispielsweise wurde in
@@ -52,9 +55,44 @@
   können. Hier hat man also versucht, eine Vorhersage zur Entwicklung von
   menschlichen Bewegung zu tätigen.
 
-  \section{Mode-Collapse}
-  \cite{richardson2018gans}
+  Die Funktionsweise von GANs ist im Prinzip ziemlich simpel. Während beim
+  klassischen supervised-learning meistens nur ein Modell beim Training
+  involviert ist, verhält sich das bei generativen Modellen etwas anders. Zum
+  Einen wird ein Generator definiert, welcher, wie sein Name andeutet, Ausgaben
+  selbst erzeugt. Zum Anderen wird ein Diskriminator in das Training eingebaut,
+  welcher zwischen künstlich erzeugten und reellen Daten unterscheidet. Diese
+  beiden Modelle werden dann gleichermaßen Trainiert. Während der Generator
+  versucht, Fälschungen immer genauer zu erzeugen, versucht der Diskriminator
+  immer besser zwischen Fälschung und Realität unterscheiden zu können. Die
+  Ausgabe ist daher entweder 0 für Fälschung und 1 für Realität. Die beiden
+  Komponenten spielen mit anderen Worten ein Spiel, in welchem die eine Partei
+  versucht, die andere zu täuschen \cite{goodfellow2014generative}.
 
+  \[
+    \min_G \max_D V(G, D) = \mathbb{E}_{x \sim p_{data}(x)}\left[ \log D(x) \right] + \mathbb{E}_{z \sim p_z(z)}\left[ \log (1 - D(G(z))) \right]
+  \]
+
+  Im Verlauf des Trainings entwickelt sich damit ein Generator, welcher im
+  Idealfall so gute Fälschungen erzeugt, sodass sich diese nicht mehr von Daten
+  der Ausgangsdistribution unterscheiden lassen.  Der Diskriminator kann
+  bestenfalls nur raten, sollte also eine Genauigkeit von 50\% erreichen.
+  
+  \section{Das Mode-Collapse-Problem}
+  Ein großes Problem beim Trainieren von generativen neuronalen Netzen ist, dass
+  sich der Generator sehr häufig auf bestimmte Merkmale der Ausgangsdistribution
+  des Datensatzes fixiert. Das Ergebnis sind signifikant erhöht wiederkehrende
+  Ergebnisse, die sich kaum bis gar nicht von anderen Ausgaben unterscheiden.
+  Man erwartet jedoch, dass das jeweilge GAN eine vielseitige Variation aus
+  allen Elementen des Datensatzes erzeugt. Mit anderen Worten, bei einer
+  zufälligen Eingabe in das Netz, soll immer eine unterschiedliche Ausgabe
+  erzeugt werden. Bei einem Mode-Collapse ist dies nicht der Fall. Es kann
+  beispielsweise passieren, dass wenn das Netz auf das Erzeugen von neuen
+  Gesichtern trainiert wird, dass dieses ausschließlich weibliche Gesichter
+  erzeugt, weil das Netz herausgefunden hat, dass es einfacher ist, weibliche
+  Gesichtszüge zu generieren, als männliche \cite{richardson2018gans}. Dies
+  lässt sich damit erklären, dass der Generator beim Trainingsvorgang mehr
+  Erfolg beim Generieren von weiblichen Gesichtern hatte und der Diskriminator
+  es schwerer hatte, Fälschung von Realität zu unterscheiden.
 
   \section{Deep Convolution GAN}
   \section{Wasserstein GAN}
