@@ -56,17 +56,18 @@
   menschlichen Bewegung zu tätigen.
 
   Die Funktionsweise von GANs ist im Prinzip ziemlich simpel. Während beim
-  klassischen supervised-learning meistens nur ein Modell beim Training
+  klassischen supervised-learning in der Regel nur ein Modell beim Training
   involviert ist, verhält sich das bei generativen Modellen etwas anders. Zum
   Einen wird ein Generator definiert, welcher, wie sein Name andeutet, Ausgaben
   selbst erzeugt. Zum Anderen wird ein Diskriminator in das Training eingebaut,
   welcher zwischen künstlich erzeugten und reellen Daten unterscheidet. Diese
-  beiden Modelle werden dann gleichermaßen Trainiert. Während der Generator
+  beiden Modelle werden dann gleichermaßen trainiert. Während der Generator
   versucht, Fälschungen immer genauer zu erzeugen, versucht der Diskriminator
-  immer besser zwischen Fälschung und Realität unterscheiden zu können. Die
-  Ausgabe ist daher entweder 0 für Fälschung und 1 für Realität. Die beiden
-  Komponenten spielen mit anderen Worten ein Spiel, in welchem die eine Partei
-  versucht, die andere zu täuschen \cite{goodfellow2014generative}.
+  immer besser zwischen Fälschung und Realität zu unterscheiden. Die
+  Ausgabe des Diskriminators ist dementsprechend entweder 0 für Fälschung und 1
+  für Realität. Mit anderen Worten, die beiden Komponenten spielen Spiel, in
+  welchem die eine Partei versucht, die andere zu täuschen
+  \cite{goodfellow2014generative}.
 
   \[
     \min_G \max_D V(G, D) = \mathbb{E}_{x \sim p_{data}(x)}\left[ \log D(x) \right] + \mathbb{E}_{z \sim p_z(z)}\left[ \log (1 - D(G(z))) \right]
@@ -74,8 +75,13 @@
 
   Im Verlauf des Trainings entwickelt sich damit ein Generator, welcher im
   Idealfall so gute Fälschungen erzeugt, sodass sich diese nicht mehr von Daten
-  der Ausgangsdistribution unterscheiden lassen.  Der Diskriminator kann
-  bestenfalls nur raten, sollte also eine Genauigkeit von 50\% erreichen.
+  der Ausgangsdistribution unterscheiden lassen. Der Diskriminator kann hier
+  bestenfalls nur raten, kann also eine Genauigkeit von höchstens 50\%
+  erreichen. Ist dies nicht der Fall, d.h. der Diskriminator kann Fälschungen
+  mit einer höheren Wahrscheinlichkeit von realen Daten unterscheiden, so
+  entsteht ein Ungleichgewicht. Aus diesem Grund sollten die Lernparameter
+  sorgfältig ausgewählt und untersucht werden, damit ein stabil laufendes GAN
+  trainiert wird.
   
   \section{Das Mode-Collapse-Problem}
   Ein großes Problem beim Trainieren von generativen neuronalen Netzen ist, dass
@@ -92,9 +98,44 @@
   Gesichtszüge zu generieren, als männliche \cite{richardson2018gans}. Dies
   lässt sich damit erklären, dass der Generator beim Trainingsvorgang mehr
   Erfolg beim Generieren von weiblichen Gesichtern hatte und der Diskriminator
-  es schwerer hatte, Fälschung von Realität zu unterscheiden.
+  es schwerer hatte, Fälschung von Realität zu unterscheiden. Um das Problem zu
+  beseitigen wurden einige Erweiterungen an dem Standardmodell des GAN von
+  \cite{goodfellow2014generative} hinzugefügt.
 
   \section{Deep Convolution GAN}
+  Das \textit{Deep Convolution GAN} (DCGAN) ist ein Versuch,
+  \textit{Convolutional Neural Networks} (CNNs) mit GANs zu verküpfen. Nach
+  vielen Fehlschlägen in der Entwicklung von GANs mit CNNs ist die Version von
+  \cite{radford2016unsupervised} stabil und auf viele unterschiedliche
+  Datensätze anwendbar. Dafür wurden viele verschiedene Kombinationen von
+  Schichten untersucht und es wurde dabei eine Architektur ausgearbeitet, die
+  in ein stabiles Training über verschiedenste Datensätze resultierte.
+  Zusätzlich können mithilfe dieser Architektur höherere Auflösungen und tiefere
+  Netze erreicht werden.
+
+  Zusätzlich zur eigentlichen Architektur von DCGAN werden moderne Techniken
+  verwendet, um CNN-Architekturen zu vereinfachen.  Damit der Generator über
+  mehrere Schichten hinweg die räumliche Darstellung von Objekten lernen kann,
+  werden Convolutional-Layer verwendet. Anstatt, dass sogenannte
+  Max-Pooling-Layer zum Einsatz kommen, können nach
+  \cite{springenberg2015striving} einfach Convolutional-Layer mit erhöhtem
+  Stride verwendet werden, ohne dass die Genauigkeit sinkt. In Bezug zu DCGANs
+  von \cite{radford2016unsupervised} werden solche Schichten verwendet, um dem
+  Generator das Erlernen vom räumlichen Upsampling zu ermöglichen. Auch der
+  Diskriminator wird mit solchen CNN-Layer ausgestattet, um räumliches
+  Downsampling zu erlernen.
+
+  Neben dem Auslassen von Max-Pooling-Layer folgt DCGAN auch dem Trend,
+  Fully-Connected-Layer vor jedem Convolutional-Feature zu vermeiden. Dabei
+  wurde festgestellt, dass die Verknüpfung von Fully-Connected-Layer und der
+  Eingabe des Generators bzw. mit der Ausgabe des Diskriminators am besten
+  funktionieren. Die erste Schicht des Generators ist also ein
+  Fully-Connected-Layer (1-dimensional), jedoch wird die Ausgabe der Schicht in
+  einen 4-dimensionalen Tensor umgewandelt. Im Falle des Diskriminators wird die
+  Ausgabe des letzen Convolutional-Layers (4-dimensional) abgeflacht und in eine
+  1-dimensionale Schicht mit einer Sigmoid-Aktivierungsfuntion gefüttert
+  \cite{radford2016unsupervised}.
+
   \section{Wasserstein GAN}
   \section{Wasserstein GAN mit Gradient Penality}
   \section{Unrolled GAN}
