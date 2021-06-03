@@ -30,7 +30,7 @@
   Die Kullback-Leibler-Divergenz (KL-Divergenz) misst, wie sehr sich zwei
   Verteilungen voneinander unterscheiden und hat seinen Ursprung in der
   Informationstheorie. 
-  \begin{definition}[Kullback-Leibler-Divergenz nach \cite{10.1214/aoms/1177729694}]
+  \begin{definition}[Kullback-Leibler-Divergenz \cite{arjovsky2017wasserstein}]
     Seien $P$ und $Q$ zwei Wahrscheinlichkeitsfunktionen über den gleichen
     Wahrscheinlichkeitsraum $X$. Dann ist der Abstand bzw. die Divergenz der
     beiden Verteilungen definiert als
@@ -42,9 +42,27 @@
   zur Zielverteilung $Q$ an. Das Messen der Divergenz zwischen zwei
   Wahrscheinlichkeitsverteilungen findet insbesondere im Machine-Learning statt,
   um künstliche neuronale Netze und ihre Gewichte zu trainieren. Deshalb kann
-  die KL-Divergenz auch als Loss-Funktion verwendet werden. 
+  die KL-Divergenz auch als Loss-Funktion verwendet werden. Bemerkenswert ist
+  hierbei, dass die KL-Divergenz asymmetrisch ist, also $D_{KL}(P \lvert\lvert
+  Q) \neq D_{KL}(Q \lvert\lvert P)$. Die Distanz zwischen zwei Verteilungen
+  unterscheidet sich demnach je nach Ausgangsverteilung.
 
   \section{Jensen-Shannon-Divergenz}
+  \begin{definition}[Jensen-Shannon-Divergenz \cite{arjovsky2017wasserstein}]
+    Seien $P$ und $Q$ zwei Wahr\-schein\-lichkeitsfunktionen über den gleichen
+    Wahrscheinlichkeitsraum $X$. Dann ist die Jensen-Shannon-Divergenz der
+    beiden Verteilungen definiert als
+    \[
+      D_{JS}(P \lvert\lvert Q) = \frac{1}{2} D_{KL}(P \lvert\lvert M) + \frac{1}{2} D_{KL}(Q \lvert\lvert M) \quad\quad \text{mit} \;\; M = \frac{1}{2}(P + Q)
+    \]
+  \end{definition}
+  Die Jensen-Shannon-Divergenz kann als Erweiterung der
+  Kullback-Leibler-Divergenz angesehen werden. Im Gegensatz zur
+  Kullback-Leibler-Divergenz ist die Jensen-Shannon-Divergenz (JS-Divergenz)
+  symmetrisch. Das bedeutet, dass der Abstand zwischen zwei
+  Wahrscheinlichkeitsverteilungen gleich groß ist, egal von welchen er beiden
+  Distributionen aus betrachtet wird.
+
   \section{Wasserstein-Abstand}
 
   \chapter{Generative Adversarial Networks}
