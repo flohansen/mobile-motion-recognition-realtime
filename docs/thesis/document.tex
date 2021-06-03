@@ -15,11 +15,37 @@
 \usepackage{mathtools}
 \addbibresource{bibliography.bib}
 
+\newtheorem{definition}{Definition}
+
+\setcapindent{0pt}
+
 \begin{document}
   \maketitle
   \tableofcontents
 
   \chapter{Einleitung}
+
+  \chapter{Grundlagen}
+  \section{Kullback-Leibler-Divergenz}
+  Die Kullback-Leibler-Divergenz (KL-Divergenz) misst, wie sehr sich zwei
+  Verteilungen voneinander unterscheiden und hat seinen Ursprung in der
+  Informationstheorie. 
+  \begin{definition}[Kullback-Leibler-Divergenz nach \cite{10.1214/aoms/1177729694}]
+    Seien $P$ und $Q$ zwei Wahrscheinlichkeitsfunktionen über den gleichen
+    Wahrscheinlichkeitsraum $X$. Dann ist der Abstand bzw. die Divergenz der
+    beiden Verteilungen definiert als
+    \[
+      D_{KL}(P \lvert\lvert Q) = \sum_{x \in X} P(x) \log \frac{P(x)}{Q(x)}.
+    \]
+  \end{definition}
+  Dabei gibt $P \lvert\lvert Q$ eine Divergenz von der Ausgangsverteilung $P$
+  zur Zielverteilung $Q$ an. Das Messen der Divergenz zwischen zwei
+  Wahrscheinlichkeitsverteilungen findet insbesondere im Machine-Learning statt,
+  um künstliche neuronale Netze und ihre Gewichte zu trainieren. Deshalb kann
+  die KL-Divergenz auch als Loss-Funktion verwendet werden. 
+
+  \section{Jensen-Shannon-Divergenz}
+  \section{Wasserstein-Abstand}
 
   \chapter{Generative Adversarial Networks}
   In Machine-Learning existieren viele verschiedene Modelle, die vorhandene
@@ -136,10 +162,36 @@
   1-dimensionale Schicht mit einer Sigmoid-Aktivierungsfuntion gefüttert
   \cite{radford2016unsupervised}.
 
+  Um Mode-Collapse zu vermeiden, verwendet \cite{radford2016unsupervised}
+  Batch-Normalization-Layer. Dadurch wird das Training stabilisiert und Probleme
+  wie \textit{Internal-Covariate-Shifting} angegangen \cite{pmlr-v37-ioffe15}.
+  Vor allem wird dadurch aber auch verhindert, dass der Generator immer die
+  gleichen Ausgaben erzeugt. Das Anwenden der Batch-Normalisierung in allen
+  Schichten des Netzwerks führt jedoch zur Stichprobenoszillation und
+  Instabilität des Modells. Aus diesem Grund wird auf Batch-Normalization in der
+  Ausgabesschicht des Generators und in der Eingabeschicht des Diskriminators
+  verzichtet.
+
+  Als letzte Beobachtung stellt \cite{radford2016unsupervised} fest, dass das
+  Hinzufügen von ReLU-Ak\-ti\-vier\-ungs\-funk\-tio\-nen in allen Schichten des
+  Generators zu schnellerem Lernen und Abdeckung der Farbräume der
+  Trainingsdistribution führt. In der Ausgabeschicht wird jedoch anstatt von
+  ReLU-Aktivierung eine Tanh-Aktivierung verwendet. Innerhalb des Diskriminators
+  werden schließlich Leaky-ReLU-Aktivierungen angewandt.
+
+  \begin{figure}
+    \includegraphics[width=\textwidth]{images/dcgan-architecture}
+    \caption{DCGAN-Architektur des Generators von
+    \cite{radford2016unsupervised}. Als Eingabe dient ein 100-dimensionaler
+    Vektor, dessen Elemente zufällig gewählt werden. Dieser wird dann in den
+    ersten Schichten umgeformt und durch vier Convolutional-Layer auf die Form
+    3$\times$64$\times$64 gebracht. Die Strides geben dabei den
+    Vergrößerungsfaktor pro Convolution-Schicht an, während die Anzahl der
+    Filter den Farbkanälen entsprechen.}
+  \end{figure}
+
   \section{Wasserstein GAN}
   \section{Wasserstein GAN mit Gradient Penality}
-  \section{Unrolled GAN}
-  \section{Least Squares GAN}
 
   \chapter{Erstellen eines Datensatzes}
   \section{Rahmenbedingungen}
