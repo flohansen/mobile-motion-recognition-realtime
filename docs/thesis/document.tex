@@ -26,6 +26,8 @@
   \chapter{Einleitung}
 
   \chapter{Grundlagen}
+  \section{Lipschitz-Funktionen}
+
   \section{Kullback-Leibler-Divergenz}
   Die Kullback-Leibler-Divergenz (KL-Divergenz) misst, wie sehr sich zwei
   Verteilungen voneinander unterscheiden und hat seinen Ursprung in der
@@ -64,6 +66,27 @@
   Distributionen aus betrachtet wird.
 
   \section{Wasserstein-Abstand}
+  Eine weitere Methode zum Messen des Abstands zwischen zwei
+  Wahrscheinlichkeitsverteilungen ist die Berechnung des Wasserstein-Abstands.
+
+  \begin{definition}[Wasserstein-Abstand \cite{arjovsky2017wasserstein}]
+    Seien $P_r$ und $P_g$ zwei Wahrscheinlichkeitsverteilungen, dann ist der
+    Wasserstein-Abstand definiert als
+    \[
+      W(P_r, P_g) = \inf_{\gamma \in \Pi(P_r, P_g)} \mathbb{E}_{(x, y) \sim \gamma} \left[\|x - y\|\right],
+    \]
+    wobei $\Pi(P_r, P_g)$ die Menge aller gemeinsamen Verteilungen $\gamma(x,
+    y)$ darstellt, dessen Grenzen $P_r$ und $P_g$ sind.
+  \end{definition}
+
+  Der Term $\gamma(x, y)$ stellt dabei die \textit{Masse} dar, die von $x$ nach
+  $y$ transportiert wird, um schließlich die Verteilung $P_r$ in die Verteilung
+  $P_g$ umzuformen. Aus diesem Grund ist der Wasserstein-Abstand auch als
+  \textit{Earth-Mover-Abstand} (EM-Abstand) bekannt.
+
+  \[
+    W(P_r, P_\theta) = \sup_{\|f\|_L \leq 1} \mathbb{E}_{x \sim P_r}\left[f(x)\right] - \mathbb{E}_{x \sim P_\theta}\left[f(x)\right]
+  \]
 
   \chapter{Generative Adversarial Networks}
   In Machine-Learning existieren viele verschiedene Modelle, die vorhandene
@@ -112,7 +135,6 @@
   für Realität. Mit anderen Worten, die beiden Komponenten spielen Spiel, in
   welchem die eine Partei versucht, die andere zu täuschen
   \cite{goodfellow2014generative}.
-
   \[
     \min_G \max_D V(G, D) = \mathbb{E}_{x \sim p_{data}(x)}\left[ \log D(x) \right] + \mathbb{E}_{z \sim p_z(z)}\left[ \log (1 - D(G(z))) \right]
   \]
