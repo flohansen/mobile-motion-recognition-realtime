@@ -84,10 +84,6 @@
   $P_g$ umzuformen. Aus diesem Grund ist der Wasserstein-Abstand auch als
   \textit{Earth-Mover-Abstand} (EM-Abstand) bekannt.
 
-  \[
-    W(P_r, P_\theta) = \sup_{\|f\|_L \leq 1} \mathbb{E}_{x \sim P_r}\left[f(x)\right] - \mathbb{E}_{x \sim P_\theta}\left[f(x)\right]
-  \]
-
   \chapter{Generative Adversarial Networks}
   In Machine-Learning existieren viele verschiedene Modelle, die vorhandene
   Datensätze analysieren und anhand der Daten lernen, Strukturen in den
@@ -231,6 +227,19 @@
   \end{figure}
 
   \section{Wasserstein GAN}
+  Anders als andere GAN-Varianten verwendet das Wasserstein-GAN (WGAN) die
+  Was\-ser\-stein-Distanz anstelle der JS- oder KL-Divergenz, um die Gewichte von
+  generativen neuronalen Netzen zu optimieren. Da sich die Berechnung über ein
+  Infimum etwas schwierig gestaltet, formt \cite{arjovsky2017wasserstein} die
+  Definition unter Berücksichtigung der Kontorovich-Rubinstein-Dualität um,
+  sodass
+  \[
+    W(P_r, P_\theta) = \sup_{\|f\|_L \leq 1} \mathbb{E}_{x \sim P_r}\left[f(x)\right] - \mathbb{E}_{x \sim P_\theta}\left[f(x)\right]
+  \]
+
+  gilt, wobei das Supremum über alle 1-Lipschitz-Funktionen $f : X \to
+  \mathbb{R}$ ist.
+
   \section{Wasserstein GAN mit Gradient Penality}
 
   \chapter{Erstellen eines Datensatzes}
