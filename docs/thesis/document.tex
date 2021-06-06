@@ -1,5 +1,6 @@
 \documentclass{hsflensburg}
-\title{Bewegungserkennung auf mobilen Geräten mit Verwendung von GANs für eine automatische Datensatzgenerierung}
+\title{Bewegungserkennung auf mobilen Geräten mit Verwendung von GANs für eine
+automatische Datensatzgenerierung}
 \subtitle{Master-Thesis}
 
 \author{
@@ -13,6 +14,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{mathtools}
+\usepackage[ngerman,linesnumbered,algoruled,boxed,lined]{algorithm2e}
 \addbibresource{bibliography.bib}
 
 \newtheorem{definition}{Definition}
@@ -237,20 +239,101 @@
 
   \section{Wasserstein GAN}
   Anders als andere GAN-Varianten verwendet das Wasserstein-GAN (WGAN) die
-  Was\-ser\-stein-Distanz anstelle der JS- oder KL-Divergenz, um die Gewichte von
-  generativen neuronalen Netzen zu optimieren. Da sich die Berechnung über ein
-  Infimum etwas schwierig gestaltet, formt \cite{arjovsky2017wasserstein} die
-  Definition unter Berücksichtigung der Kontorovich-Rubinstein-Dualität um,
-  sodass
+  Was\-ser\-stein-Distanz anstelle der JS- oder KL-Divergenz, um die Gewichte
+  von generativen neuronalen Netzen zu optimieren. Da sich die Berechnung aller
+  möglichen gemeinsamen Verteilungen $\gamma \sim \Pi(P_r, P_\theta)$ etwas schwierig
+  gestaltet, formt \cite{arjovsky2017wasserstein} die Definition unter
+  Berücksichtigung der Kontorovich-Rubinstein-Dualität um, sodass
   \[
     W(P_r, P_\theta) = \sup_{\|f\|_L \leq 1} \mathbb{E}_{x \sim P_r}\left[f(x)\right] - \mathbb{E}_{x \sim P_\theta}\left[f(x)\right]
   \]
 
   gilt, wobei das Supremum über alle 1-Lipschitz-Funktionen $f : X \to
-  \mathbb{R}$ ist.  
+  \mathbb{R}$ ist. Zusätzlich wird ein kleiner Trick angewendet, um das Problem
+  weiter zu vereinfachen, indem K-Lipschitz-kontinuierliche Funktionen verwendet
+  werden.
   \[
-    W(P_r, P_\theta) = \max_{\|f\|_L \leq 1} \mathbb{E}_{x \sim P_r}\left[f(x)\right] - \mathbb{E}_{x \sim P_\theta}\left[f(x)\right]
+    K \cdot W(P_r, P_\theta) = \sup_{\|f\|_L \leq K} \mathbb{E}_{x \sim P_r}\left[f(x)\right] - \mathbb{E}_{x \sim P_\theta}\left[f(x)\right]
   \]
+
+  Nehmen wir nun an, dass die Abbildung $f \in \left\{f_w\right\}_{w \in W}$
+  parametrisiert durch $w$ existiert, wobei $W$ die Menge aller möglichen
+  Parameter darstellt, so können die Parameter $w$ und damit die Abbildung $f_w$
+  von einem neuronalen Netz erlernt werden, um so die Wasserstein-Distanz
+  effizient abzuschätzen. Hier bildet der Wasserstein-Abstand also gleichzeitig
+  die Loss-Funktion des Critics mit
+  \[
+    W(P_r, P_\theta) = \max_{w \in W} \mathbb{E}_{x \sim P_r}\left[f_w(x)\right]
+    - \mathbb{E}_{z \sim P_r(z)}\left[f_w(g_\theta(z))\right].
+  \]
+
+  Trotzdem darf nicht vergessen werden, dass dies nur gültig ist, falls die
+  Funktion K-Lipschitz-kontinuierlich ist. Um dies zu erzwingen, werden die
+  Werte der aktualisierten Gewichte des Critics zwischen $\left[-c; c\right]$
+  gehalten. Dabei muss laut \cite{arjovsky2017wasserstein} $c$ relativ klein
+  sein.
+
+  \begin{algorithm}
+    \SetAlgoLined
+    \KwIn{Lernrate $\alpha$, Clipping-Parameter $c$, Batch-Size
+    $m$, Anzahl von Critic-Iterationen $n_{critic}$.}
+    \KwResult{Trainieren der Generator-Parameter $\theta$ und Critic-Parameter
+    $w$.}
+    \caption{Wasserstein GAN nach \cite{arjovsky2017wasserstein}. Standardwerte
+    für die Eingabeparameter sind $\alpha = 5\cdot10^{-5}, c = 0.01, m = 64$
+    und $n_{critic} = 5$.}
+    \label{alg:wgan}
+    \BlankLine
+
+    \While{$\theta$ ist nicht konvergiert}{
+      \For{$t = 0, ..., n_{critic}$}{
+        Erzeuge Batch $\left\{x_i \;\lvert\; 1 \leq i \leq m\right\} \sim
+        \mathbb{P}_r$ aus realen Daten\;
+        Erzeuge Batch $\left\{z_i \;\lvert\; 1 \leq i \leq m\right\} \sim
+        \mathbb{P}_z$ aus latenten Vektoren\;
+        \BlankLine
+        $g_w \leftarrow
+        \nabla_w \left[ \frac{1}{m}\sum_{i=1}^{m} f_w(x_i) -
+        \frac{1}{m}\sum_{i=1}^{m} f_w(g_\theta(z_i)\right]$\;
+        \BlankLine
+        $w \leftarrow w + \alpha \cdot \mathrm{RMSProp}(w,
+        g_w)$\;
+        $w \leftarrow \mathrm{clip}(w, -c, c)$\;
+      }
+      \BlankLine
+      Erzeuge Batch $\left\{z_i \;\lvert\; 1 \leq i \leq m\right\} \sim
+      \mathbb{P}_z$ aus latenten Vektoren\;
+      $g_\theta \leftarrow -\nabla_\theta \left[\frac{1}{m} \sum_{i=1}^{m}
+      f_w(g_\theta(z_i))\right]$\;
+      $\theta \leftarrow \theta - \alpha \cdot \mathrm{RMSProp}(\theta,
+      g_\theta)$\;
+    }
+  \end{algorithm}
+
+  Zu Beginn von Algorithmus \ref{alg:wgan} werden die Parameter $w$ für den
+  Critic und $\theta$ für den Generator initialisiert. Anschließend werden $m$
+  Datenpunkte bzw. ein Batch aus dem reellen Datensatz (Verteilung
+  $\mathbb{P}_r$) gezogen. Dies muss nicht unbedingt zufällig sein. Auch werden
+  $m$ zufällige Vektoren erzeugt, die als Eingabe für den Generator dienen,
+  welcher wiederum Fake-Daten erzeugt. Dabei bilden die Ausgaben des Generators
+  eine eigene Verteilung $\mathbb{P}_\theta$. Ziel des Generators ist es nun,
+  die Distanz zwischen den beiden Verteilungen $\mathbb{P}_r, \mathbb{P}_\theta$
+  zu minimieren, um möglichst realitätsnahe Ausgaben erzeugen zu können. Als
+  nächstes werden die Gradienten $g_w$ für Parameter $w$ mithilfe von
+  Gradient-Descent, dargestellt als $\nabla_w$, berechnet. Hierfür wird die
+  Wasserstein-Distanz als Loss-Funktion verwendet. Der nächste Schritt besteht
+  daraus, die Parameter $w$ des Critic-Netzwerks mithilfe des
+  RMSprop-Algorithmus zu aktualisieren und die aktualisierten Gewichte so gering
+  wie möglich zu halten, um die K-Lipschitz-Kontinuität zu gewährleisten. Dies
+  wird mithilfe der Funktion $\mathrm{clip}$ umgesetzt, welche die
+  Parameterwerte in einem bestimmten Intervall $\left[-c; c\right]$ festsetzt.
+  Die bis hier erläuterten Schritte werden $n_{critic}$-mal durchgeführt, sodass
+  das Critic-Netzwerk immer öfter trainiert wird, als der Generator. Dieser wird
+  nun optimiert, indem wieder $m$ Vektoren zufällig erzeugt und als Eingabe für
+  das Generator-Netzwerk verwendet werden. Der Generator erzeugt damit $m$
+  zufällige Ausgaben, die wiederum als Eingaben in das Critic-Netzwerk gegeben
+  werden. Aus den Ausgaben wird dann der Mittelwert gebildet und zum Bestimmen
+  der Gradienten von den Generator-Parametern $\theta$ verwendet.
 
   \section{Wasserstein GAN mit Gradient Penality}
 
