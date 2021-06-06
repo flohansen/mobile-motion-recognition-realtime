@@ -26,6 +26,15 @@
   \chapter{Einleitung}
 
   \chapter{Grundlagen}
+  \section{Notationen}
+  In dieser Arbeit werden verschiedene Notationen aus der Statistik und dem
+  Machine-Learning-Umfeld verwendet und sollen hier aufgrund der Les- und
+  Verständlichkeit aufgelistet werden.
+
+  Der Term $\mathbb{E}_{x \sim P}\left[f(x)\right]$ stellt den Erwartungswert
+  einer Verteilung $P$ dar und liest sich als \textit{erwarteter Wert von
+  $f(x)$ unter $x$ verteilt als $P$}.
+
   \section{Lipschitz-Funktionen}
 
   \section{Kullback-Leibler-Divergenz}
@@ -238,7 +247,7 @@
   \]
 
   gilt, wobei das Supremum über alle 1-Lipschitz-Funktionen $f : X \to
-  \mathbb{R}$ ist.
+  \mathbb{R}$ ist.  
   \[
     W(P_r, P_\theta) = \max_{\|f\|_L \leq 1} \mathbb{E}_{x \sim P_r}\left[f(x)\right] - \mathbb{E}_{x \sim P_\theta}\left[f(x)\right]
   \]
