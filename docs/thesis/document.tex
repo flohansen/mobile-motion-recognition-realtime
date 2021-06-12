@@ -33,11 +33,25 @@ automatische Datensatzgenerierung}
   Machine-Learning-Umfeld verwendet und sollen hier aufgrund der Les- und
   Verständlichkeit aufgelistet werden.
 
+  \paragraph{Erwartungswert.}
   Der Term $\mathbb{E}_{x \sim P}\left[f(x)\right]$ stellt den Erwartungswert
   einer Verteilung $P$ dar und liest sich als \textit{erwarteter Wert von
   $f(x)$ unter $x$ verteilt als $P$}.
 
-  \section{Lipschitz-Funktionen}
+  \paragraph{Berechnung von Gradienten.}
+  Der Term $\nabla_w\left[f(x)\right]$ stellt die Berechnung der Gradienten von
+  den Parametern $w$ mithilfe der Loss-Funktion $f$ dar.
+
+  \section{Lipschitzstetigkeit}
+  \begin{definition}[K-Lipschitzstetigkeit]
+    Seien $(X, d_X)$ und $(Y, d_Y)$ metrische Räume. Eine Abbildung $f: X \to Y$
+    wird als K-lipschitzstetig bezeichnet, wenn
+    \[
+      d_Y(f(x_1), f(x_2)) \leq K \cdot d_X(x_1, x_2)
+    \]
+    für alle $x_1, x_2 \in X$ gilt. $K$ wird hierbei als Lipschitzkonstante
+    bezeichnet und muss immer $K \geq 0$ erfüllen.
+  \end{definition}
 
   \section{Kullback-Leibler-Divergenz}
   Die Kullback-Leibler-Divergenz (KL-Divergenz) misst, wie sehr sich zwei
@@ -335,7 +349,45 @@ automatische Datensatzgenerierung}
   werden. Aus den Ausgaben wird dann der Mittelwert gebildet und zum Bestimmen
   der Gradienten von den Generator-Parametern $\theta$ verwendet.
 
+  Im direkten Vergleich zu dem originalen GAN \cite{goodfellow2014generative}
+  werden einige Änderungen in der Architektur vorgenommen. Während in dem
+  originalen Anstatz fast nach jeder Schicht eine Batch-Normalization
+  vorgenommen wird, können diese bei WGANs entfallen. Standard-GANs würden
+  hierbei kaum interpretierbare Resultate erzeugen, WGANs hingegen produzieren
+  trotzdem gute Ergebnisse, wie Experimente von \cite{arjovsky2017wasserstein}
+  zeigen (siehe Abbildung \ref{fig:wgan-gan-no-batchnorm}).
+
+  \begin{figure}
+    \includegraphics[width=0.5\textwidth]{images/image-022.png}
+    \includegraphics[width=0.5\textwidth]{images/image-024.png}
+    \caption{Vergleich von WGAN und Standard-GAN \cite{arjovsky2017wasserstein}.
+      Links sind Ausgaben vom WGAN-Algorithmus zu sehen während rechts Ausgaben
+      eines Standard-GANs dargestellt sind. In beiden Generator-Modellen wurden
+      Batch-Normalization-Layer entfernt. Klar zu erkennen ist, dass WGAN immer
+      noch interpretierbare Ergebnisse liefert während bei Standard-GANs Probleme
+      erkennbar sind.}
+    \label{fig:wgan-gan-no-batchnorm}
+  \end{figure}
+
+  Das Wasserstein-GAN hat zusätzlich noch einige nützliche Eigenschaften. So
+  wird unter anderem durch Annäherung des Wasserstein-Abstandes zwischen
+  Generator- und Ausgangsdistribution das Problem des Mode-Collapse gelöst.
+  Durch den Wasserstein-Abstand wird der Abstand zwischen den Verteilung
+  wesentlich besser minimiert (im Falle des Generator-Modells) als bei der KL-
+  oder JS-Divergenz.  Des Weiteren wird das Diskriminator-Modell durch einen
+  Critic ausgetauscht.  Der Unterschied liegt darin, dass ein Diskriminator
+  entweder \textit{Fake} oder \textit{Real} als Ausgabe erzeugt und der Critic
+  einen realen Wert aus $\mathbb{R}$. Die Ausgabe eines Critics stellt damit
+  eine Bewertung der Eingabe dar, anstatt diese einer Klasse zuzuweisen und
+  besitzt deshalb mehr Aussagekraft.
+
   \section{Wasserstein GAN mit Gradient Penality}
+  Ein großes Problem von Wasserstein-GANs ist das Clippen der Gewichte in ein
+  fest definiertes Intervall, um die K-Lipschitzstetigkeit zu erfüllen. Das dies
+  keine elegante Lösung ist, liegt auf der Hand. In \cite{gulrajani2017improved}
+  wurde speziell dieses Problem genauer untersucht und es wurde festgestellt,
+  dass das Beschneiden der Gewichte den Kritisierer dazu verleitet, nur extrem
+  einfache Funktionen zu erlernen.
 
   \chapter{Erstellen eines Datensatzes}
   \section{Rahmenbedingungen}
