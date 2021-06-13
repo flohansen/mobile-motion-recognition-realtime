@@ -381,13 +381,29 @@ automatische Datensatzgenerierung}
   eine Bewertung der Eingabe dar, anstatt diese einer Klasse zuzuweisen und
   besitzt deshalb mehr Aussagekraft.
 
-  \section{Wasserstein GAN mit Gradient Penality}
+  \section{Wasserstein-GAN mit Gradient-Penalty}
   Ein großes Problem von Wasserstein-GANs ist das Clippen der Gewichte in ein
   fest definiertes Intervall, um die K-Lipschitzstetigkeit zu erfüllen. Das dies
   keine elegante Lösung ist, liegt auf der Hand. In \cite{gulrajani2017improved}
   wurde speziell dieses Problem genauer untersucht und es wurde festgestellt,
   dass das Beschneiden der Gewichte den Kritisierer dazu verleitet, nur extrem
-  einfache Funktionen zu erlernen.
+  einfache Funktionen zu erlernen, wie der Vergleich in Abbildung
+  \ref{fig:problems-of-weight-clipping} zeigt. 
+
+  Um das Problem des Weight-Clippings anzugehen, stellt
+  \cite{gulrajani2017improved} eine alternative Lösung vor, die auf anderem Wege
+  die Lipschitzstetigkeit in WGANs sicherstellen soll.
+
+  \begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{images/problems_of_weight_clipping}
+    \caption{Vergleich zwischen Weight-Clipping (oben) und Gradient-Penalty
+    (unten). Man erkennt deutlich, dass die Separierung der Ausgangsverteilung,
+    dargestellt durch orangene Punkte, durch Weight-Clipping in sehr
+    vereinfachte Funktionen resultiert. Gradient-Penalty lässt hingegen
+    komplexere Strukturen von Verteilungen zu \cite{gulrajani2017improved}.}
+    \label{fig:problems-of-weight-clipping}
+  \end{figure}
 
   \chapter{Erstellen eines Datensatzes}
   \section{Rahmenbedingungen}
