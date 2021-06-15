@@ -289,17 +289,17 @@ automatische Datensatzgenerierung}
 
   \begin{algorithm}
     \SetAlgoLined
-    \KwIn{Lernrate $\alpha$, Clipping-Parameter $c$, Batch-Size
+    \KwIn{Lernrate $\alpha$, Clipping-Parameter $c$, Batch-Größe
     $m$, Anzahl von Critic-Iterationen $n_{critic}$.}
-    \KwResult{Trainieren der Generator-Parameter $\theta$ und Critic-Parameter
-    $w$.}
+    \KwResult{Trainieren der Critic-Parameter
+    $w$ und Generator-Parameter $\theta$.}
     \caption{Wasserstein GAN nach \cite{arjovsky2017wasserstein}. Standardwerte
     für die Eingabeparameter sind $\alpha = 5\cdot10^{-5}, c = 0.01, m = 64$
     und $n_{critic} = 5$.}
     \label{alg:wgan}
     \BlankLine
 
-    \While{$\theta$ ist nicht konvergiert}{
+    \While{$\theta$ \textnormal{ist nicht konvergiert}}{
       \For{$t = 0, ..., n_{critic}$}{
         Erzeuge Batch $\left\{x_i \;\lvert\; 1 \leq i \leq m\right\} \sim
         \mathbb{P}_r$ aus realen Daten\;
@@ -383,7 +383,7 @@ automatische Datensatzgenerierung}
 
   \section{Wasserstein-GAN mit Gradient-Penalty}
   Ein großes Problem von Wasserstein-GANs ist das Clippen der Gewichte in ein
-  fest definiertes Intervall, um die K-Lipschitzstetigkeit zu erfüllen. Das dies
+  fest definiertes Intervall, um die 1-Lipschitzstetigkeit zu erfüllen. Das dies
   keine elegante Lösung ist, liegt auf der Hand. In \cite{gulrajani2017improved}
   wurde speziell dieses Problem genauer untersucht und es wurde festgestellt,
   dass das Beschneiden der Gewichte den Kritisierer dazu verleitet, nur extrem
@@ -392,7 +392,53 @@ automatische Datensatzgenerierung}
 
   Um das Problem des Weight-Clippings anzugehen, stellt
   \cite{gulrajani2017improved} eine alternative Lösung vor, die auf anderem Wege
-  die Lipschitzstetigkeit in WGANs sicherstellen soll.
+  die 1-Lipschitzstetigkeit in WGANs sicherstellen soll. Hierbei soll
+  Gradient-Penalty helfen und wird als
+  \[
+    (\|\nabla_{\hat{x}} D(\hat{x})\| - 1)^2
+  \]
+  berechnet, wobei $\hat{x} =  x \epsilon + \tilde{x}(1 - \epsilon)$ eine
+  zufällige Gewichtung zwischen realen ($x$) und generierten Daten ($\tilde{x}$)
+  darstellt. Das $\epsilon$ wird dabei zufällig aus $\left[0, 1\right]$ gewählt.
+  Daraus resultierend gestaltet sich die neue Loss-Funktion des Kritisierers wie
+  folgt.
+  \[
+    L = \mathbb{E}_{\tilde{x} \sim \mathbb{P}_g}\left[D(\tilde{x})\right] -
+        \mathbb{E}_{x \sim \mathbb{P}_r}\left[D(x)\right] +
+        \lambda \cdot \mathbb{E}_{\hat{x} \sim \mathbb{P}_{\hat{x}}}\left[(\|\nabla_{\hat{x}} D(\hat{x})\| - 1)^2\right]
+  \]
+  Der Kritisierer ist durch diese Änderung nun wesentlich besser dazu in der
+  Lage, komplexere Verteilungen zu erlernen.
+
+  \begin{algorithm}
+    \caption{WGAN mit Gradient-Penalty \cite{gulrajani2017improved}.}
+    \KwIn{Gradient-Penalty-Koeffizient $\lambda$, Anzahl von Critic-Iterationen
+    $n_{critic}$, Batch-Größe $m$, Adam-Hyperparameter $\alpha, \beta_1,
+    \beta_2$.}
+    \KwResult{Trainieren der Critic-Parameter $w$ und Generator-Parameter
+    $\theta$.}
+    \BlankLine
+    \While{$\theta$ \textnormal{ist nicht konvergiert}}{
+      \For{$t = 1, ..., n_{critic}$}{
+        \For{$i = 1, ..., m$}{
+          Wähle reale Probe $x \sim \mathbb{P}_r$, latenten Vektor $\vec{z} \sim
+          \mathbb{P}_z$, zufällige Zahl $\epsilon \in \left[0, 1\right]$\;
+          $\tilde{x} \leftarrow G_\theta(\vec{z})$\;
+          $\hat{x} \leftarrow x\epsilon + \tilde{x}(1 - \epsilon)$\;
+          $L_i = D_w(\tilde{x}) - D_w(x) + \lambda(\|\nabla_{\hat{x}}
+          D_w(\hat{x})\| - 1)^2$\;
+        }
+        \BlankLine
+        $w \leftarrow \mathrm{Adam}(\nabla_w \frac{1}{m} \sum_{i=1}^m L_i, w,
+        \alpha, \beta_1, \beta_2)$\;
+      }
+      \BlankLine
+      Wähle einen Batch aus latenten Vektoren $\{\vec{z}_i\}_{i=1}^m \sim
+      \mathbb{P}_z$\;
+      $\theta \leftarrow \mathrm{Adam}(\nabla_{\theta} \frac{1}{m} \sum_{i=1}^m
+      - D_w(G_\theta(\vec{z}_i)), \theta, \alpha, \beta_1, \beta_2)$\;
+    }
+  \end{algorithm}
 
   \begin{figure}
     \centering
