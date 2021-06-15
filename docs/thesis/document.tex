@@ -275,23 +275,23 @@ automatische Datensatzgenerierung}
   Parameter darstellt, so können die Parameter $w$ und damit die Abbildung $f_w$
   von einem neuronalen Netz erlernt werden, um so die Wasserstein-Distanz
   effizient abzuschätzen. Hier bildet der Wasserstein-Abstand also gleichzeitig
-  die Loss-Funktion des Critics mit
+  die Loss-Funktion des Kritisierer mit
   \[
     W(P_r, P_\theta) = \max_{w \in W} \mathbb{E}_{x \sim P_r}\left[f_w(x)\right]
     - \mathbb{E}_{z \sim P_r(z)}\left[f_w(g_\theta(z))\right].
   \]
 
   Trotzdem darf nicht vergessen werden, dass dies nur gültig ist, falls die
-  Funktion K-Lipschitz-kontinuierlich ist. Um dies zu erzwingen, werden die
-  Werte der aktualisierten Gewichte des Critics zwischen $\left[-c; c\right]$
+  Funktion 1-Lipschitz-kontinuierlich ist. Um dies zu erzwingen, werden die
+  Werte der aktualisierten Gewichte des Kritisierer zwischen $\left[-c; c\right]$
   gehalten. Dabei muss laut \cite{arjovsky2017wasserstein} $c$ relativ klein
   sein.
 
   \begin{algorithm}
     \SetAlgoLined
     \KwIn{Lernrate $\alpha$, Clipping-Parameter $c$, Batch-Größe
-    $m$, Anzahl von Critic-Iterationen $n_{critic}$.}
-    \KwResult{Trainieren der Critic-Parameter
+    $m$, Anzahl von Kritisierer-Iterationen $n_{critic}$.}
+    \KwResult{Trainieren der Kritisierer-Parameter
     $w$ und Generator-Parameter $\theta$.}
     \caption{Wasserstein GAN nach \cite{arjovsky2017wasserstein}. Standardwerte
     für die Eingabeparameter sind $\alpha = 5\cdot10^{-5}, c = 0.01, m = 64$
@@ -324,30 +324,37 @@ automatische Datensatzgenerierung}
     }
   \end{algorithm}
 
-  Zu Beginn von Algorithmus \ref{alg:wgan} werden die Parameter $w$ für den
-  Critic und $\theta$ für den Generator initialisiert. Anschließend werden $m$
-  Datenpunkte bzw. ein Batch aus dem reellen Datensatz (Verteilung
+  Zusätzlich ist bei Wasserstein-GANs von einem Kritisierer (Critic) anstatt
+  eines Diskriminators die Rede. Der Grund dafür ist, dass ein Diskriminator
+  zwischen \textit{fake} und \textit{real} unterscheidet, mehr nicht. Der
+  Kritisierer führt diese Unterteilung der Eingabeparameter nicht durch, sondern
+  bewertet bzw. kritisiert diese viel mehr. Mathematisch ausgedrückt sprechen
+  wir hierbei von einer linearen Ausgabe in $\mathbb{R}$ im Falle des
+  Kritisierers, während der Diskriminator eine binäre Ausgabe erzeugt.  Zu
+  Beginn von Algorithmus \ref{alg:wgan} werden die Parameter $w$ für den
+  Kritisierer und $\theta$ für den Generator initialisiert. Anschließend werden
+  $m$ Datenpunkte bzw. ein Batch aus dem reellen Datensatz (Verteilung
   $\mathbb{P}_r$) gezogen. Dies muss nicht unbedingt zufällig sein. Auch werden
   $m$ zufällige Vektoren erzeugt, die als Eingabe für den Generator dienen,
   welcher wiederum Fake-Daten erzeugt. Dabei bilden die Ausgaben des Generators
-  eine eigene Verteilung $\mathbb{P}_\theta$. Ziel des Generators ist es nun,
+  eine eigene Verteilung $\mathbb{P}_\theta$.  Ziel des Generators ist es nun,
   die Distanz zwischen den beiden Verteilungen $\mathbb{P}_r, \mathbb{P}_\theta$
   zu minimieren, um möglichst realitätsnahe Ausgaben erzeugen zu können. Als
   nächstes werden die Gradienten $g_w$ für Parameter $w$ mithilfe von
   Gradient-Descent, dargestellt als $\nabla_w$, berechnet. Hierfür wird die
-  Wasserstein-Distanz als Loss-Funktion verwendet. Der nächste Schritt besteht
-  daraus, die Parameter $w$ des Critic-Netzwerks mithilfe des
+  Wasserstein-Distanz als Loss-Funktion verwendet.  Der nächste Schritt besteht
+  daraus, die Parameter $w$ des Kritisierer-Netzwerks mithilfe des
   RMSprop-Algorithmus zu aktualisieren und die aktualisierten Gewichte so gering
   wie möglich zu halten, um die K-Lipschitz-Kontinuität zu gewährleisten. Dies
   wird mithilfe der Funktion $\mathrm{clip}$ umgesetzt, welche die
   Parameterwerte in einem bestimmten Intervall $\left[-c; c\right]$ festsetzt.
   Die bis hier erläuterten Schritte werden $n_{critic}$-mal durchgeführt, sodass
-  das Critic-Netzwerk immer öfter trainiert wird, als der Generator. Dieser wird
-  nun optimiert, indem wieder $m$ Vektoren zufällig erzeugt und als Eingabe für
-  das Generator-Netzwerk verwendet werden. Der Generator erzeugt damit $m$
-  zufällige Ausgaben, die wiederum als Eingaben in das Critic-Netzwerk gegeben
-  werden. Aus den Ausgaben wird dann der Mittelwert gebildet und zum Bestimmen
-  der Gradienten von den Generator-Parametern $\theta$ verwendet.
+  das Kritisierer-Netzwerk immer öfter trainiert wird, als der Generator. Dieser
+  wird nun optimiert, indem wieder $m$ Vektoren zufällig erzeugt und als Eingabe
+  für das Generator-Netzwerk verwendet werden. Der Generator erzeugt damit $m$
+  zufällige Ausgaben, die wiederum als Eingaben in das Kritisierer-Netzwerk
+  gegeben werden. Aus den Ausgaben wird dann der Mittelwert gebildet und zum
+  Bestimmen der Gradienten von den Generator-Parametern $\theta$ verwendet.
 
   Im direkten Vergleich zu dem originalen GAN \cite{goodfellow2014generative}
   werden einige Änderungen in der Architektur vorgenommen. Während in dem
@@ -355,7 +362,14 @@ automatische Datensatzgenerierung}
   vorgenommen wird, können diese bei WGANs entfallen. Standard-GANs würden
   hierbei kaum interpretierbare Resultate erzeugen, WGANs hingegen produzieren
   trotzdem gute Ergebnisse, wie Experimente von \cite{arjovsky2017wasserstein}
-  zeigen (siehe Abbildung \ref{fig:wgan-gan-no-batchnorm}).
+  zeigen (siehe Abbildung \ref{fig:wgan-gan-no-batchnorm}). Das Wasserstein-GAN
+  hat zusätzlich noch einige nützliche Eigenschaften. So wird unter anderem
+  durch Annäherung des Wasserstein-Abstandes zwischen Generator- und
+  Ausgangsdistribution das Problem des Mode-Collapse gelöst.  Durch den
+  Wasserstein-Abstand wird der Abstand zwischen den Verteilung wesentlich besser
+  minimiert (im Falle des Generator-Modells) als bei der KL- oder JS-Divergenz.
+  Die Ausgabe eines Kritisierers stellt damit eine Bewertung der Eingabe dar,
+  anstatt diese einer Klasse zuzuweisen und besitzt deshalb mehr Aussagekraft.
 
   \begin{figure}
     \includegraphics[width=0.5\textwidth]{images/image-022.png}
@@ -368,18 +382,6 @@ automatische Datensatzgenerierung}
       erkennbar sind.}
     \label{fig:wgan-gan-no-batchnorm}
   \end{figure}
-
-  Das Wasserstein-GAN hat zusätzlich noch einige nützliche Eigenschaften. So
-  wird unter anderem durch Annäherung des Wasserstein-Abstandes zwischen
-  Generator- und Ausgangsdistribution das Problem des Mode-Collapse gelöst.
-  Durch den Wasserstein-Abstand wird der Abstand zwischen den Verteilung
-  wesentlich besser minimiert (im Falle des Generator-Modells) als bei der KL-
-  oder JS-Divergenz.  Des Weiteren wird das Diskriminator-Modell durch einen
-  Critic ausgetauscht.  Der Unterschied liegt darin, dass ein Diskriminator
-  entweder \textit{Fake} oder \textit{Real} als Ausgabe erzeugt und der Critic
-  einen realen Wert aus $\mathbb{R}$. Die Ausgabe eines Critics stellt damit
-  eine Bewertung der Eingabe dar, anstatt diese einer Klasse zuzuweisen und
-  besitzt deshalb mehr Aussagekraft.
 
   \section{Wasserstein-GAN mit Gradient-Penalty}
   Ein großes Problem von Wasserstein-GANs ist das Clippen der Gewichte in ein
@@ -412,10 +414,10 @@ automatische Datensatzgenerierung}
 
   \begin{algorithm}
     \caption{WGAN mit Gradient-Penalty \cite{gulrajani2017improved}.}
-    \KwIn{Gradient-Penalty-Koeffizient $\lambda$, Anzahl von Critic-Iterationen
+    \KwIn{Gradient-Penalty-Koeffizient $\lambda$, Anzahl von Kritisierer-Iterationen
     $n_{critic}$, Batch-Größe $m$, Adam-Hyperparameter $\alpha, \beta_1,
     \beta_2$.}
-    \KwResult{Trainieren der Critic-Parameter $w$ und Generator-Parameter
+    \KwResult{Trainieren der Kritisierer-Parameter $w$ und Generator-Parameter
     $\theta$.}
     \BlankLine
     \While{$\theta$ \textnormal{ist nicht konvergiert}}{
