@@ -289,3 +289,4 @@ __pycache__/
 checkpoints/
 logs/
 .vim/
+.vscode/

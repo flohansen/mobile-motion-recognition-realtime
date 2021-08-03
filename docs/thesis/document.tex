@@ -23,11 +23,64 @@ automatische Datensatzgenerierung}
 
 \begin{document}
   \maketitle
+  \newpage \ \newpage
   \tableofcontents
+  \newpage \ \newpage
 
   \chapter{Einleitung}
+  Künstliche Intelligenz hat bereits in vielen verschiedenen Bereichen eine
+  unterstützende Rolle eingenommen. Dementsprechend ist das Feld in den letzten
+  Jahren stetig gewachsen und hat an Interesse gewonnen. Viele Anwendungen
+  funktionieren nur deshalb, weil sie durch Modelle des Machine-Learnings
+  unterstützt werden. Vor allem in der Computer-Vision findet diese Technologie
+  Anwendung. Beispiele hierfür sind Bildklassifizierer und Objekt-Detektoren,
+  die entsprechend Bilder eine Klasse zuordnen bzw. viele Objekte innerhalb
+  eines Bildes erkennen. Neben der Bildverarbeitung ist die Erkennung von
+  menschlichen Posen bzw. von Bewegungen mit künstlichen neuronalen Netzen (KNN)
+  ein weiteres, aktuelles Forschungsthema. Diese Art von Detektoren werden unter
+  anderem dazu verwendet, um Schlüs\-sel\-punkte des menschlichen Körpers zu
+  identifizieren. Die Arbeit von \cite{barsoum2017hpgan} zeigt z.B. eine
+  interessante Möglichkeit, Schlüsselpunkte von Personen zu verwenden, um
+  mögliche zukünftige Posen zu erkennen.
+  
+  Während solche Modelle bereits im Desktopbereich mit weniger Einschränkungen
+  ausgeführt werden können, sind diese eher schwierig auf ressourcenarme Geräte
+  übertragbar. Oft müssen abgewandelte, verkürzte Varianten erstellt werden, um
+  die benötigte Rechenleistung so gering wie möglich zu halten -- die meisten
+  Smartphones haben zur Zeit leider nicht die gleichen Rechen- und
+  Speicherkapazitäten wie die meisten Desktopmaschinen, ganz zu schweigen von
+  diversen anderen Geräten des Internet-of-Things (IoT) wie Haushaltsgeräte und
+  Sensoren. Aus diesem Grund soll sich diese Arbeit insbesondere damit
+  beschäftigen, wie die Bewegungserkennung auf mobilen Geräten ausgeführt werden
+  kann. Zusätzlich wird untersucht, welche Anpassungen vorhandene
+  Machine-Learning-Modelle benötigen, um auf mobile Geräte ausgeführt werden zu
+  können.
 
-  \chapter{Grundlagen}
+  Kapitel \ref{chapter:basics} beschäftigt sich mit den Grundlagen der in dieser
+  Arbeit verwendeten Technologien. Dabei wird unter anderem darauf eingegangen,
+  wie Unterschiede zwischen Distributionen gemessen werden können, um damit den
+  Grundstein für spätere Loss-Funktionen zu schaffen. Diese werden dann vor
+  allem für das Trainieren von Generative-Adversarial-Networks (GANs) verwendet.
+
+  Kapitel \ref{chapter:gans} erläutert anschließend die Funktionsweise von GANs
+  und entsprechende Loss-Funktionen zum Trainieren dieser Netzwerke. Zusätzlich
+  werden Probleme der einzelnen Architekturen besprochen und Lösungen
+  vorgestellt.
+
+  Kapitel \ref{chapter:dataset} stellt Methoden vor, die zum Erstellen eines
+  Datensatzes verwendet werden. Dieser Datensatz wird anschließend verwendet, um
+  die Bewegungserkennung aus dem nächsten Kapitel zu implementieren und die
+  Modelle damit zu trainieren. Besonders wird in diesem Kapitel der Aufbau des
+  Datensatzes erläutert und inwiefern dieser mithilfe von GANs erweitert werden
+  kann.
+
+  Kapitel \ref{chapter:motion-detection} führt die Bewegungserkennung ein und
+  vergleicht unter anderem verschiedene Ansätze zum Erkennen von menschlichen
+  Schlüsselpunkten. Dabei wird auf Single- und Multi-Pose-Detection eingangen
+  und mit dessen Hilfe eine neue Netzwerkarchitektur definiert, die in der Lage
+  ist, eine Folge von menschlichen Posen zu klassifizieren und analysieren.
+
+  \chapter{Grundlagen}\label{chapter:basics}
   \section{Notationen}
   In dieser Arbeit werden verschiedene Notationen aus der Statistik und dem
   Machine-Learning-Umfeld verwendet und sollen hier aufgrund der Les- und
@@ -109,7 +162,7 @@ automatische Datensatzgenerierung}
   $P_g$ umzuformen. Aus diesem Grund ist der Wasserstein-Abstand auch als
   \textit{Earth-Mover-Abstand} (EM-Abstand) bekannt.
 
-  \chapter{Generative Adversarial Networks}
+  \chapter{Generative Adversarial Networks}\label{chapter:gans}
   In Machine-Learning existieren viele verschiedene Modelle, die vorhandene
   Datensätze analysieren und anhand der Daten lernen, Strukturen in den
   Datensätzen zu erkennen.  Besitzt man beispielsweise einen Datensatz
@@ -175,7 +228,7 @@ automatische Datensatzgenerierung}
   sich der Generator sehr häufig auf bestimmte Merkmale der Ausgangsdistribution
   des Datensatzes fixiert. Das Ergebnis sind signifikant erhöht wiederkehrende
   Ergebnisse, die sich kaum bis gar nicht von anderen Ausgaben unterscheiden.
-  Man erwartet jedoch, dass das jeweilge GAN eine vielseitige Variation aus
+  Man erwartet jedoch, dass das jeweilige GAN eine vielseitige Variation aus
   allen Elementen des Datensatzes erzeugt. Mit anderen Worten, bei einer
   zufälligen Eingabe in das Netz, soll immer eine unterschiedliche Ausgabe
   erzeugt werden. Bei einem Mode-Collapse ist dies nicht der Fall. Es kann
@@ -191,13 +244,13 @@ automatische Datensatzgenerierung}
 
   \section{Deep Convolution GAN}
   Das \textit{Deep Convolution GAN} (DCGAN) ist ein Versuch,
-  \textit{Convolutional Neural Networks} (CNNs) mit GANs zu verküpfen. Nach
+  \textit{Convolutional Neural Networks} (CNNs) mit GANs zu verknüpfen. Nach
   vielen Fehlschlägen in der Entwicklung von GANs mit CNNs ist die Version von
   \cite{radford2016unsupervised} stabil und auf viele unterschiedliche
   Datensätze anwendbar. Dafür wurden viele verschiedene Kombinationen von
   Schichten untersucht und es wurde dabei eine Architektur ausgearbeitet, die
   in ein stabiles Training über verschiedenste Datensätze resultierte.
-  Zusätzlich können mithilfe dieser Architektur höherere Auflösungen und tiefere
+  Zusätzlich können mithilfe dieser Architektur höhere Auflösungen und tiefere
   Netze erreicht werden.
 
   Zusätzlich zur eigentlichen Architektur von DCGAN werden moderne Techniken
@@ -453,18 +506,16 @@ automatische Datensatzgenerierung}
     \label{fig:problems-of-weight-clipping}
   \end{figure}
 
-  \chapter{Erstellen eines Datensatzes}
+  \chapter{Erstellen eines Datensatzes}\label{chapter:dataset}
   \section{Rahmenbedingungen}
   \section{Verwendung von GANs}
   \section{Durchführung von Experimenten mit unterschiedlichen GANs}
   \section{Analyse der Ergebnisse aus den Experimenten}
 
-  \chapter{Bewegungserkennung}
-  \section{Ground-Truth}
-  \section{Background-Substraction}
-  \section{Erkennung von Geschwindigkeiten}
-  \section{Erkennung von Anomalien}
+  \chapter{Bewegungserkennung}\label{chapter:motion-detection}
   \section{Erkennung von Bewegungsarten}
+  \section{Erkennung von Anomalien}
+  \section{Erkennung von Eigenschaften}
   \section{Vorhersage von Bewegungen}
   \section{Architektur einer mobilen Anwendung}
 
