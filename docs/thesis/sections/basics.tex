@@ -1,0 +1,81 @@
+\chapter{Grundlagen}\label{chapter:basics}
+\section{Notationen}
+In dieser Arbeit werden verschiedene Notationen aus der Statistik und dem
+Machine-Learning-Umfeld verwendet und sollen hier aufgrund der Les- und
+Verständlichkeit aufgelistet werden.
+
+\paragraph{Erwartungswert.}
+Der Term $\mathbb{E}_{x \sim P}\left[f(x)\right]$ stellt den Erwartungswert
+einer Verteilung $P$ dar und liest sich als \textit{erwarteter Wert von
+$f(x)$ unter $x$ verteilt als $P$}.
+
+\paragraph{Berechnung von Gradienten.}
+Der Term $\nabla_w\left[f(x)\right]$ stellt die Berechnung der Gradienten von
+den Parametern $w$ mithilfe der Loss-Funktion $f$ dar.
+
+\section{Lipschitzstetigkeit}
+\begin{definition}[K-Lipschitzstetigkeit]
+Seien $(X, d_X)$ und $(Y, d_Y)$ metrische Räume. Eine Abbildung $f: X \to Y$
+wird als K-lipschitzstetig bezeichnet, wenn
+\[
+    d_Y(f(x_1), f(x_2)) \leq K \cdot d_X(x_1, x_2)
+\]
+für alle $x_1, x_2 \in X$ gilt. $K$ wird hierbei als Lipschitzkonstante
+bezeichnet und muss immer $K \geq 0$ erfüllen.
+\end{definition}
+
+\section{Kullback-Leibler-Divergenz}
+Die Kullback-Leibler-Divergenz (KL-Divergenz) misst, wie sehr sich zwei
+Verteilungen voneinander unterscheiden und hat seinen Ursprung in der
+Informationstheorie. 
+\begin{definition}[Kullback-Leibler-Divergenz \cite{arjovsky2017wasserstein}]
+Seien $P$ und $Q$ zwei Wahrscheinlichkeitsfunktionen über den gleichen
+Wahrscheinlichkeitsraum $X$. Dann ist der Abstand bzw. die Divergenz der
+beiden Verteilungen definiert als
+\[
+    D_{KL}(P \lvert\lvert Q) = \sum_{x \in X} P(x) \log \frac{P(x)}{Q(x)}.
+\]
+\end{definition}
+Dabei gibt $P \lvert\lvert Q$ eine Divergenz von der Ausgangsverteilung $P$
+zur Zielverteilung $Q$ an. Das Messen der Divergenz zwischen zwei
+Wahrscheinlichkeitsverteilungen findet insbesondere im Machine-Learning statt,
+um künstliche neuronale Netze und ihre Gewichte zu trainieren. Deshalb kann
+die KL-Divergenz auch als Loss-Funktion verwendet werden. Bemerkenswert ist
+hierbei, dass die KL-Divergenz asymmetrisch ist, also $D_{KL}(P \lvert\lvert
+Q) \neq D_{KL}(Q \lvert\lvert P)$. Die Distanz zwischen zwei Verteilungen
+unterscheidet sich demnach je nach Ausgangsverteilung.
+
+\section{Jensen-Shannon-Divergenz}
+\begin{definition}[Jensen-Shannon-Divergenz \cite{arjovsky2017wasserstein}]
+Seien $P$ und $Q$ zwei Wahr\-schein\-lichkeitsfunktionen über den gleichen
+Wahrscheinlichkeitsraum $X$. Dann ist die Jensen-Shannon-Divergenz der
+beiden Verteilungen definiert als
+\[
+    D_{JS}(P \lvert\lvert Q) = \frac{1}{2} D_{KL}(P \lvert\lvert M) + \frac{1}{2} D_{KL}(Q \lvert\lvert M) \quad\quad \text{mit} \;\; M = \frac{1}{2}(P + Q)
+\]
+\end{definition}
+Die Jensen-Shannon-Divergenz kann als Erweiterung der
+Kullback-Leibler-Divergenz angesehen werden. Im Gegensatz zur
+Kullback-Leibler-Divergenz ist die Jensen-Shannon-Divergenz (JS-Divergenz)
+symmetrisch. Das bedeutet, dass der Abstand zwischen zwei
+Wahrscheinlichkeitsverteilungen gleich groß ist, egal von welchen er beiden
+Distributionen aus betrachtet wird.
+
+\section{Wasserstein-Abstand}
+Eine weitere Methode zum Messen des Abstands zwischen zwei
+Wahrscheinlichkeitsverteilungen ist die Berechnung des Wasserstein-Abstands.
+
+\begin{definition}[Wasserstein-Abstand \cite{arjovsky2017wasserstein}]
+Seien $P_r$ und $P_g$ zwei Wahrscheinlichkeitsverteilungen, dann ist der
+Wasserstein-Abstand definiert als
+\[
+    W(P_r, P_g) = \inf_{\gamma \in \Pi(P_r, P_g)} \mathbb{E}_{(x, y) \sim \gamma} \left[\|x - y\|\right],
+\]
+wobei $\Pi(P_r, P_g)$ die Menge aller gemeinsamen Verteilungen $\gamma(x,
+y)$ darstellt, dessen Grenzen $P_r$ und $P_g$ sind.
+\end{definition}
+
+Der Term $\gamma(x, y)$ stellt dabei die \textit{Masse} dar, die von $x$ nach
+$y$ transportiert wird, um schließlich die Verteilung $P_r$ in die Verteilung
+$P_g$ umzuformen. Aus diesem Grund ist der Wasserstein-Abstand auch als
+\textit{Earth-Mover-Abstand} (EM-Abstand) bekannt.

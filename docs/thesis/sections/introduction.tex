@@ -1,0 +1,53 @@
+\chapter{Einleitung}
+Wie können komplexe Machine-Learning-Modelle effizient und in Echtzeit auf
+mobilen Geräten wie Smartphones ausgeführt werden? Mit dieser Frage soll sich
+diese Arbeit beschäftigen. Speziell wird sich dabei auf die Erkennung und
+Analyse von Bewegungen bezogen. Dabei müssen bereits vorhandene Modelle
+umgewandelt werden, um auf mobilen Geräten eine Echtzeiterkennung durchführen zu
+können. Künstliche Intelligenz hat bereits in vielen verschiedenen Bereichen
+eine unterstützende Rolle eingenommen.  Dementsprechend ist das Feld in den
+letzten Jahren stetig gewachsen und hat an Interesse gewonnen. Viele Anwendungen
+funktionieren nur deshalb, weil sie durch Modelle des Machine-Learnings
+unterstützt werden. Vor allem in der Computer-Vision findet diese Technologie
+Anwendung. Beispiele hierfür sind Bildklassifizierer und Objekt-Detektoren, die
+entsprechend Bilder eine Klasse zuordnen bzw. viele Objekte innerhalb eines
+Bildes erkennen. Neben der Bildverarbeitung ist die Erkennung von menschlichen
+Posen bzw. von Bewegungen mit künstlichen neuronalen Netzen (KNN) ein weiteres,
+aktuelles Forschungsthema. Diese Art von Detektoren werden unter anderem dazu
+verwendet, um Schlüs\-sel\-punkte des menschlichen Körpers zu identifizieren.
+
+Während solche Modelle bereits im Desktopbereich mit weniger Einschränkungen
+ausgeführt werden können, sind diese eher schwierig auf ressourcenarme Geräte
+übertragbar. Oft müssen abgewandelte, verkürzte Varianten erstellt werden, um
+die benötigte Rechenleistung so gering wie möglich zu halten -- die meisten
+Smartphones haben zur Zeit leider nicht die gleichen Rechen- und
+Speicherkapazitäten wie die meisten Desktopmaschinen, ganz zu schweigen von
+diversen anderen Geräten des Internet-of-Things (IoT) wie Haushaltsgeräte und
+Sensoren. Aus diesem Grund soll sich diese Arbeit insbesondere damit
+beschäftigen, wie die Bewegungserkennung auf mobilen Geräten ausgeführt werden
+kann. Zusätzlich wird untersucht, welche Anpassungen vorhandene
+Machine-Learning-Modelle benötigen, um auf mobile Geräte ausgeführt werden zu
+können.
+
+Kapitel \ref{chapter:basics} beschäftigt sich mit den Grundlagen der in dieser
+Arbeit verwendeten Technologien. Dabei wird unter anderem darauf eingegangen,
+wie Unterschiede zwischen Distributionen gemessen werden können, um damit den
+Grundstein für spätere Loss-Funktionen zu schaffen. Diese werden dann vor allem
+für das Trainieren von Generative-Adversarial-Networks (GANs) verwendet.
+
+Kapitel \ref{chapter:gans} erläutert anschließend die Funktionsweise von GANs
+und entsprechende Loss-Funktionen zum Trainieren dieser Netzwerke. Zusätzlich
+werden Probleme der einzelnen Architekturen besprochen und Lösungen vorgestellt.
+
+Kapitel \ref{chapter:dataset} stellt Methoden vor, die zum Erstellen eines
+Datensatzes verwendet werden. Dieser Datensatz wird anschließend verwendet, um
+die Bewegungserkennung aus dem nächsten Kapitel zu implementieren und die
+Modelle damit zu trainieren. Besonders wird in diesem Kapitel der Aufbau des
+Datensatzes erläutert und inwiefern dieser mithilfe von GANs erweitert werden
+kann.
+
+Kapitel \ref{chapter:motion-detection} führt die Bewegungserkennung ein und
+vergleicht unter anderem verschiedene Ansätze zum Erkennen von menschlichen
+Schlüsselpunkten. Dabei wird auf Single- und Multi-Pose-Detection eingangen und
+mit dessen Hilfe eine neue Netzwerkarchitektur definiert, die in der Lage ist,
+eine Folge von menschlichen Posen zu klassifizieren und analysieren.
