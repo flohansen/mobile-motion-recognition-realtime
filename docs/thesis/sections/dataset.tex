@@ -11,9 +11,54 @@ MNIST-Beispiels bedeutet eine große Varianz, dass eine Ziffer durch viele
 verschiedene Bilder repräsentiert wird, die alle eine andere Perspektive des
 gleichen Kontexts darstellen.
 
-In diesem Abschnitt soll nun ein Datensatz eingeführt werden, welcher die Bewegungserkennung unterstützt. Um diesen Datensatz zu erstellen, muss vorab geklärt werden, was eine Bewegung eigentlich ist. Betrachtet man einen Punkt im Raum, dann beschreibt eine Bewegung die Änderung des Ortes eines Objekts über die Zeit.
+In diesem Abschnitt soll nun ein Datensatz eingeführt werden, welcher Daten für
+die Bewegungserkennung unterstützt. Um diesen Datensatz zu erstellen, muss vorab
+geklärt werden, was eine Bewegung eigentlich ist. Betrachtet man einen Punkt im
+Raum, dann beschreibt eine Bewegung die Änderung des Ortes eines Objekts über
+die Zeit. Bezogen auf den zu erstellenden Datensatz bedeutet dies, dass einfache
+Bildaufnahmen von beweglichen (dynamischen) Objekten nicht ausreichen. Um eine
+Bewegung aufzuzeichnen, müssen zeitlich aufeinander folgende Bilder aufgenommen
+werden, die letzlich Videos darstellen. Da der Datensatz später dazu verwendet
+werden soll, um ein neuronales Netz zu trainieren, welches Bewegungen erkennt,
+müssen die zu erlernenden Bewegungen auch in diesem Datensatz als Videos
+vertreten sein.
 
-\section{Rahmenbedingungen}
-\section{Verwendung von GANs}
-\section{Durchführung von Experimenten mit unterschiedlichen GANs}
-\section{Analyse der Ergebnisse aus den Experimenten}
+Bevor ein Modell für die Bewegungserkennung und -analyse trainiert wird, soll
+zusätzlich untersucht werden, ob ein relativ kleiner Datensatz ausreichend ist,
+um trotzdem gute Resultate beim Trainieren von neuronalen Netzen zu erzeugen. Da
+diese Netze jedoch auf einen vielseitigen Datensatz zurückgreifen müssen, um
+entsprechend gute Erkennungsraten zu erzeugen, ist die Idee, diesen kleinen
+Datensatz künstlich zu erweitern. Interessant hierbei ist, ob ein künstlich
+gedehnter Datensatz genau so gut geeignet ist, wie ein aufwändig erstellter
+Datensatz bestehend aus realen Daten. Falls sich das Experiment als erfolgreich
+herausstellt, liegt der Vorteil auf der Hand. Nämlich dass künstlich erzeugte
+Datensätze wesentlich schneller auszuheben sind als Datensätze mit
+ausschließlich realen Daten. Dies würde den Arbeitsaufwand für das Erstellen von
+neuen komplexen Datensätzen um ein vielfaches verringern und gleichzeitig den
+Fokus auf die eigentliche Forschungsarbeit verbessern.
+
+Nun stellt sich natürlich die Frage, wie ein kleiner Datensatz künstlich
+vergrößert werden kann. Künstlich bedeutet hier, dass das Vergrößern des
+Datensatzes mithilfe von Algorithmen geschiet und vom Computer anstatt vom
+Menschen durchgeführt wird. Eine Möglichkeit ist es, die Daten zu augmentieren.
+Dies wird bereits häufig während des Trainings von neuronalen Netzen
+durchgeführt, indem simple Transformationen wie Rotation, Translation und
+Verzerrung an den Daten durchgeführt werden. Aber auch das Verändern des
+Gamma-Wertes eines Bildes reicht in einigen Fällen aus, um eine Variation im
+Datensatz künstlich zu erzeugen. Eine weitere Möglichkeit ist es, anderen
+neuronalen Netzen diese Arbeit übernehmen zu lassen. Hierbei werden generative
+Modelle wie GANs verwendet, um neue, bisher unbekannte Samples eines Datensatzes
+zu erzeugen. Auch diese Idee ist nicht neu, jedoch beziehen sich die meisten
+Beispiele auf das Generieren von einfachen Bildern. Da es sich bei dem zu
+erstellenden Datensatz um Videos handelt, müssen die Techniken auf dieses
+Problem angewandt werden. Neben den Inhalt von einzelnen Bildern muss das GAN
+als zusätzliche Dimension also die Semantik zwischen einzelnen Frames bzw.
+Bildern erlernen und neu generieren können, da es keinen Sinn ergibt, dass der
+Kontext pro Videoframe zufällig wechselt. Stattdessen wird gefordert, dass jeder
+erzeugte Frame von dem vorherigen abhängt, sodass die Folge der Frames ein
+sinnvolles Video ergibt.
+
+\section{Architektur von ViGAN}
+In diesem Abschnitt wird die Architektur von ViGAN und die Gedankengänge erläutert. ViGAN steht für Video-Generative-Adversarial-Network und dient zum Erzeugen von neuen Videos aus einem bestehendem Datensatz.
+
+\section{Experimente und Diskussion der Ergebnisse}
