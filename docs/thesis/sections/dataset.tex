@@ -59,6 +59,50 @@ erzeugte Frame von dem vorherigen abhängt, sodass die Folge der Frames ein
 sinnvolles Video ergibt.
 
 \section{Architektur von ViGAN}
-In diesem Abschnitt wird die Architektur von ViGAN und die Gedankengänge erläutert. ViGAN steht für Video-Generative-Adversarial-Network und dient zum Erzeugen von neuen Videos aus einem bestehendem Datensatz.
+In diesem Abschnitt wird die Architektur von ViGAN vorgestellt und die
+Idee dahinter erläutert. ViGAN steht für Video-Generative-Adversarial-Network
+und dient zum Erzeugen von neuen Videos aus einem bestehendem Datensatz. Gerade
+das Erstellen von Videos und das Labeln der Bewegungen nimmt enorm viel Zeit in
+Anspruch. Mithilfe von ViGAN soll der Aufwand reduziert werden. Hierbei wird
+untersucht, ob ein künstlich erweiterter Datensatz für das Trainieren von
+neuronalen Netzen geeignet ist. In Kapitel \ref{chapter:gans} werden
+verschiedene GANs und deren Probleme bzw. Vorteile vorgestellt. Aufgrund der
+Vorteile von Wasserstein-GANs, nämlich die Interpretationsmöglichkeit des Losses
+während des Trainings und die Mode-Collapse-Resistenz, wird dieses als
+Grundarchitektur gewählt. Da häufig GANs nur in Verbindung mit einzelnen Bildern
+verwendet werden, muss das WGAN entsprechend angepasst werden, um Videos anstatt
+von Bildern zu erzeugen. Wie im vorherigen Abschnitt besprochen, ist es wichtig,
+dass die Frames des Videos zueinander passen und nicht aus dem Kontext gerissen
+werden. Wie in Abbildung \ref{fig:vigan} dargestellt unterscheidet sich ViGAN
+nicht allzu sehr vom WGAN. Der größte Unterschied besteht darin, dass
+3D-Convolutional-Layer anstelle der 2D-Convolutional-Layer verwendet werden.
+Dies ermöglicht nicht nur ein Upsampling des Bildes, sondern auch die Anzahl der
+Frames. Die Idee dabei ist, dass das Netzwerk dadurch lernt, zusammenhängende
+Frames zu generieren. Als Eingabe wird ein zufälliger Vektor $z$ gewählt. Dann
+muss das Netzwerk die eindimensionale Eingabe in eine vierdimensionale Struktur
+umwandeln. Dies geschieht beim ViGAN mithilfe eines Fully-Connected-Layers mit
+$5 \cdot 6 \cdot 8 \cdot 256$ Neuronen und einem Reshape-Layer, welcher die
+Ausgabe des Fully-Connected-Layers in einen 4D-Tensor mit den Dimensionen $(5,
+6, 8, 256)$ umstrukturiert. Die erste Dimension beschreibt dabei immer die
+Anzahl der Frames, die zweite die Höhe, die dritte die Breite und die vierte die
+Anzahl der Farbkanäle. Anschließend wird der Tensor mithilfe eines
+Convolutional-Layers vergrößert und die Frameanzahl erhöht. Der Stride beträgt
+dabei 2, sodass eine Verdoppelung der Dimensionen stattfindet. Insgesamt werden
+vier solcher Schichten hinereinander gereiht. Dabei entsteht ein Ausgabevideo
+mit 80 Frames, wobei jeder Frame jeweils $96 \times 128 \times 3$ Pixelwerte
+besitzt.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{images/ViGAN.pdf}
+    \caption{Architektur von ViGAN. Als Eingabe dient ein zufälliger Vektor $z
+    \in \mathbb{R}^{100}$. Dieser wird anschließend in fünf 6x8x256 Features
+    umgewandelt. Um die relativ kleinen Frames in eine größere Auflösung zu
+    skalieren, werden vier 3D-Convolutional-Layer verwendet. Jedes dieser
+    Schichten verwendet eine Kernelgröße von 5x5x5 und einen Stride von 2.
+    Insgesamt ergibt sich also ein Stride von $2^4 = 16$, sodass die
+    Eingabegröße von 5x6x8x256 auf 80x96x128x3 hochskaliert wird.}
+    \label{fig:vigan}
+\end{figure}
 
 \section{Experimente und Diskussion der Ergebnisse}
