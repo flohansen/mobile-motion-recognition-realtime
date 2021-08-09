@@ -3,13 +3,13 @@ import tensorflow as tf
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import LeakyReLU
 from tensorflow.keras.layers import Reshape
-from tensorflow.keras.layers import Conv3DTranspose
+from tensorflow.keras.layers import Conv2DTranspose
 from tensorflow.keras.layers import Conv2D
 from tensorflow.keras.layers import Dropout
 from tensorflow.keras.layers import Flatten
 from tensorflow.keras.layers import BatchNormalization
 
-class WGAN():
+class WGAN_Motion():
   def __init__(self, path=None, latent_dim=100, gp_lambda=10):
     if path is not None:
       generator_path = os.path.join(path, 'generator')
@@ -27,29 +27,27 @@ class WGAN():
 
   def build_generator(self, latent_dim=100):
     model = tf.keras.Sequential()
-    model.add(Dense(5*6*8*256, use_bias=False, input_shape=(latent_dim,)))
+    model.add(Dense(7*2*256, use_bias=False, input_shape=(latent_dim,)))
     model.add(LeakyReLU())
 
-    model.add(Reshape((5, 6, 8, 256)))
-    assert model.output_shape == (None, 5, 6, 8, 256)
+    model.add(Reshape((7, 2, 256)))
+    assert model.output_shape == (None, 7, 2, 256)
 
-    model.add(Conv3DTranspose(128, (5, 5, 5), strides=2, padding='same', use_bias=False))
-    model.add(BatchNormalization())
-    assert model.output_shape == (None, 10, 12, 16, 128)
+    model.add(Conv2DTranspose(128, (3, 2), strides=2, padding='valid', use_bias=True))
+    # model.add(Conv2DTranspose(128, (3, 2), strides=2, padding='valid', use_bias=False))
+    # model.add(BatchNormalization())
+    assert model.output_shape == (None, 15, 4, 128)
     model.add(LeakyReLU())
 
-    model.add(Conv3DTranspose(128, (5, 5, 5), strides=2, padding='same', use_bias=False))
-    model.add(BatchNormalization())
-    assert model.output_shape == (None, 20, 24, 32, 128)
+    model.add(Conv2DTranspose(64, (5, 5), strides=2, padding='same', use_bias=True))
+    # model.add(Conv2DTranspose(64, (5, 5), strides=2, padding='same', use_bias=False))
+    # model.add(BatchNormalization())
+    assert model.output_shape == (None, 30, 8, 64)
     model.add(LeakyReLU())
 
-    model.add(Conv3DTranspose(64, (5, 5, 5), strides=2, padding='same', use_bias=False))
-    model.add(BatchNormalization())
-    assert model.output_shape == (None, 40, 48, 64, 64)
-    model.add(LeakyReLU())
-
-    model.add(Conv3DTranspose(3, (5, 5, 5), strides=2, padding='same', use_bias=False, activation='tanh'))
-    assert model.output_shape == (None, 80, 96, 128, 3)
+    model.add(Conv2DTranspose(3, (2, 3), strides=2, padding='valid', use_bias=True, activation='tanh'))
+    # model.add(Conv2DTranspose(3, (2, 3), strides=2, padding='valid', use_bias=False, activation='tanh'))
+    assert model.output_shape == (None, 60, 17, 3)
 
     opt = tf.keras.optimizers.Adam(1e-4, beta_1=0.0, beta_2=0.9)
     model.compile(optimizer=opt, loss=self.generator_loss)
@@ -57,7 +55,7 @@ class WGAN():
 
   def build_critic(self):
     model = tf.keras.Sequential()
-    model.add(Conv2D(32, (5, 5), strides=2, padding='same', input_shape=[80, 96, 128, 3]))
+    model.add(Conv2D(32, (5, 5), strides=2, padding='same', input_shape=[60, 17, 3]))
     model.add(LeakyReLU())
     model.add(Dropout(0.3))
 
@@ -85,7 +83,7 @@ class WGAN():
 
   def gradient_penality(self, fake_sample, real_sample):
     batch_size = fake_sample.shape[0]
-    alpha = tf.random.uniform([batch_size, 1, 1, 1, 1], 0.0, 1.0)
+    alpha = tf.random.uniform([batch_size, 1, 1, 1], 0.0, 1.0)
     inter_sample = real_sample * alpha + fake_sample * (1.0 - alpha)
 
     with tf.GradientTape() as tape_gp:

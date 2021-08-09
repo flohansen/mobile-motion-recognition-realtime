@@ -96,13 +96,15 @@ besitzt.
     \centering
     \includegraphics[width=\textwidth]{images/ViGAN.pdf}
     \caption{Architektur von ViGAN. Als Eingabe dient ein zufälliger Vektor $z
-    \in \mathbb{R}^{100}$. Dieser wird anschließend in fünf 6x8x256 Features
-    umgewandelt. Um die relativ kleinen Frames in eine größere Auflösung zu
-    skalieren, werden vier 3D-Convolutional-Layer verwendet. Jedes dieser
-    Schichten verwendet eine Kernelgröße von 5x5x5 und einen Stride von 2.
-    Insgesamt ergibt sich also ein Stride von $2^4 = 16$, sodass die
-    Eingabegröße von 5x6x8x256 auf 80x96x128x3 hochskaliert wird.}
+    \in \mathbb{R}^{100}$. Dieser wird anschließend in fünf $6 \times 8 \times
+    256$ Features umgewandelt. Um die relativ kleinen Frames in eine größere
+    Auflösung zu skalieren, werden vier 3D-Convolutional-Layer verwendet. Jedes
+    dieser Schichten verwendet eine Kernelgröße von $5 \times 5 \times 5$ und
+    einen Stride von 2.  Insgesamt ergibt sich also ein Stride von $2^4 = 16$,
+    sodass die Eingabegröße von $5 \times 6 \times 8 \times 256$ auf 80x96x128x3
+    hochskaliert wird.}
     \label{fig:vigan}
 \end{figure}
 
 \section{Experimente und Diskussion der Ergebnisse}
+Um die Brauchbarkeit vom ViGAN zu testen, werden einige Experimente durchgeführt, die 

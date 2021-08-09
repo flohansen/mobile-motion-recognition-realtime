@@ -290,3 +290,5 @@ checkpoints/
 logs/
 .vim/
 .vscode/
+experiments/
+dataset/

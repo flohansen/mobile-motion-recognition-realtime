@@ -1,7 +1,10 @@
 import os
+import cv2
 import datetime
+import glob
 from argparse import ArgumentParser
 from models.wgan import WGAN
+from models.wgan_motion import WGAN_Motion
 from dataset import load_video_data
 from utils import *
 import tensorflow as tf
@@ -62,24 +65,34 @@ def train(gan, dataset, start_epoch=0, epochs=100, save_interval=100, batch_size
         gan.save_model(checkpoint_path)
 
     if summary_writer is not None:
-      frames = gan.generator(z)
-      frames = (np.array(frames) * 127.5 + 127.5).astype('uint8')
+      generated_motion = gan.generator(z)
+      generated_motion = ((generated_motion + 1.0) * 127.5) / 255.0
 
       with summary_writer.as_default():
         tf.summary.scalar('generator loss', generator_loss.result(), step=epoch)
         tf.summary.scalar('critic loss', critic_loss.result(), step=epoch)
-        video_summary('frames sample', frames, fps=20, step=epoch)
+        tf.summary.image('motion', generated_motion, step=epoch)
+        # video_summary('frames sample', frames, fps=20, step=epoch)
 
     generator_loss.reset_states()
     critic_loss.reset_states()
+    print(f'Epoch {epoch+1} - critic_loss: {critic_loss.result()}, generator_loss: {generator_loss.result()}')
     bar.update(epoch + 1)
 
   bar.finish()
 
-def read_dataset(path, buffer_size, batch_size):
+def read_dataset_videos(path, buffer_size, batch_size):
   train_images = load_video_data(path, (128, 96), 80, use_full_videos=True)
   train_images = train_images.astype('float32')
   train_images = (train_images - 127.5) / 127.5
+  train_dataset = tf.data.Dataset.from_tensor_slices(train_images).shuffle(buffer_size).batch(batch_size)
+  return train_dataset
+
+def read_dataset_keypoints(path, buffer_size, batch_size):
+  motion_images = glob.glob(os.path.join(path, '*.png'))
+
+  train_images = (np.array([cv2.cvtColor(cv2.imread(img_path), cv2.COLOR_BGR2RGB) for img_path in motion_images], dtype=np.float32) -127.5) / 127.5
+  # train_images = np.array([cv2.cvtColor(cv2.imread(img_path), cv2.COLOR_BGR2RGB) for img_path in motion_images], dtype=np.float32) / 255.0
   train_dataset = tf.data.Dataset.from_tensor_slices(train_images).shuffle(buffer_size).batch(batch_size)
   return train_dataset
 
@@ -122,9 +135,13 @@ def main(args):
     wgan = WGAN(path=checkpoint_path)
     print(f'Loaded model from {checkpoint_path}')
   else:
-    wgan = WGAN(latent_dim=100)
+    wgan = WGAN_Motion(latent_dim=100)
 
-  dataset = read_dataset(dataset_dir, 1000, args.batch_size)
+  if isinstance(wgan, WGAN):
+    dataset = read_dataset_videos(dataset_dir, 1000, args.batch_size)
+  else:
+    dataset = read_dataset_keypoints('dataset/push_ups', 1000, 32)
+
   summary_writer = tf.summary.create_file_writer(train_log_dir)
 
   train(

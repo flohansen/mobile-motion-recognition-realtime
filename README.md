@@ -16,21 +16,18 @@
 
 ## Experimente und Messungen
 
-| #   | Datensatz | Epochen | Output-Shape | Ergebnisse |
+| #   | Datensatz | Epochen | Image | Motion |
 | --- | --------- | ------- | ------------ | ---------- |
-| 1 | 2021-05-01-164113 <br/> [Generator](./evaluation/2021-05-01-164113/generator.txt) <br/>[Diskriminator](./evaluation/2021-05-01-164113/discriminator.txt) | 9870 | Frames: 40 <br/> Größe: 180x80 <br/> Kanäle: 3 | ![](./evaluation/2021-05-01-164113/results.gif) |
-| 2 | 2021-05-02-135730 <br/> [Generator](./evaluation/2021-05-02-135730/generator.txt) <br/>[Diskriminator](./evaluation/2021-05-02-135730/discriminator.txt) | 9870 | Frames: 40 <br/> Größe: 180x80 <br/> Kanäle: 3 | ![](./evaluation/2021-05-02-135730/results.gif) |
-| 3 | 2021-05-03-172829 <br/> [Generator](./evaluation/2021-05-03-172829/generator.txt) <br/>[Diskriminator](./evaluation/2021-05-03-172829/discriminator.txt) | 2000 | Frames: 40 <br/> Größe: 180x80 <br/> Kanäle: 3 | ![](./evaluation/2021-05-03-172829/results.gif) |
-| 4 | 2021-05-04-023451 <br/> [Generator](./evaluation/2021-05-04-023451/generator.txt) <br/>[Diskriminator](./evaluation/2021-05-04-023451/discriminator.txt) | 4950 | Frames: 40 <br/> Größe: 180x80 <br/> Kanäle: 3 | ![](./evaluation/2021-05-04-023451/results.gif) |
-| 5 | 2021-05-04-064157 <br/> [Generator](./evaluation/2021-05-04-064157/generator.txt) <br/>[Diskriminator](./evaluation/2021-05-04-064157/discriminator.txt) | 5000 | Frames: 40 <br/> Größe: 180x80 <br/> Kanäle: 3 | ![](./evaluation/2021-05-04-064157/results.gif) |
-| 6 | 2021-05-06-024533 <br/> [Generator](./evaluation/2021-05-06-024533/generator.txt) <br/>[Diskriminator](./evaluation/2021-05-06-024533/discriminator.txt) | 3000 | Frames: 40 <br/> Größe: 480x360 <br/> Kanäle: 3 | ![](./evaluation/2021-05-06-024533/results.gif) |
-| 7 | 2021-05-07-135545 <br/> [Generator](./evaluation/2021-05-07-135545/generator.txt) <br/>[Diskriminator](./evaluation/2021-05-07-135545/discriminator.txt) | 3000 | Frames: 60 <br/> Größe: 480x360 <br/> Kanäle: 3 | ![](./evaluation/2021-05-07-135545/results.gif) |
-| 8 | 2021-05-08-142259 <br/> [Generator](./evaluation/2021-05-08-142259/generator.txt) <br/>[Diskriminator](./evaluation/2021-05-08-142259/discriminator.txt) | 3000 | Frames: 60 <br/> Größe: 48x36 <br/> Kanäle: 3 | ![](./evaluation/2021-05-08-142259/results.gif) |
-| 9 | 2021-05-08-154506 <br/> [Generator](./evaluation/2021-05-08-154506/generator.txt) <br/>[Diskriminator](./evaluation/2021-05-08-154506/discriminator.txt) | 3000 | Frames: 60 <br/> Größe: 48x36 <br/> Kanäle: 3 | ![](./evaluation/2021-05-08-154506/results.gif) |
-| 10 | 2021-05-08-191517 <br/> [Generator](./evaluation/2021-05-08-191517/generator.txt) <br/>[Diskriminator](./evaluation/2021-05-08-191517/discriminator.txt) | 3000 | Frames: 120 <br/> Größe: 128x96 <br/> Kanäle: 3 | ![](./evaluation/2021-05-08-191517/results.gif) |
-| 11 | 2021-05-09-194241 <br/> [Generator](./evaluation/2021-05-09-194241/generator.txt) <br/>[Diskriminator](./evaluation/2021-05-09-194241/discriminator.txt) | 1500 | Frames: 120 <br/> Größe: 128x96 <br/> Kanäle: 3 | ![](./evaluation/2021-05-09-194241/results.gif) |
-| 12 | 2021-05-12-002440 <br/> [Generator](./evaluation/2021-05-12-002440/generator.txt) <br/>[Diskriminator](./evaluation/2021-05-12-002440/discriminator.txt) | 237 | Frames: 80 <br/> Größe: 128x96 <br/> Kanäle: 3 | ![](./evaluation/2021-05-12-002440/results.gif) |
-| 13 | 2021-05-12-173806 <br/> [Generator](./evaluation/2021-05-12-173806/generator.txt) <br/>[Diskriminator](./evaluation/2021-05-12-173806/discriminator.txt) | 2200 | Frames: 40 <br/> Größe: 256x192 <br/> Kanäle: 3 | ![](./evaluation/2021-05-12-173806/results.gif) |
+| 1 | 2021-08-09-123241 <br/> Activation: **sigmoid** | 3000 | ![](evaluation/2021-08-09-123241/keypoints.png) | ![](evaluation/2021-08-09-123241/motion.gif) |
+| 2 | 2021-08-09-124721 <br/> Activation: **sigmoid** | 3000 | ![](evaluation/2021-08-09-124721/keypoints.png) | ![](evaluation/2021-08-09-124721/motion.gif) |
+| 3 | 2021-08-09-125332 <br/> Activation: **sigmoid** | 3000 | ![](evaluation/2021-08-09-125332/keypoints.png) | ![](evaluation/2021-08-09-125332/motion.gif) |
+| 4 | 2021-08-09-125723 <br/> Activation: **sigmoid** | 3000 | ![](evaluation/2021-08-09-125723/keypoints.png) | ![](evaluation/2021-08-09-125723/motion.gif) |
+| 5 | 2021-08-09-131039 <br/> Activation: **tanh** | 3000 | ![](evaluation/2021-08-09-131039/keypoints.png) | ![](evaluation/2021-08-09-131039/motion.gif) |
+| 6 | 2021-08-09-131550 <br/> Activation: **tanh** | 3000 | ![](evaluation/2021-08-09-131550/keypoints.png) | ![](evaluation/2021-08-09-131550/motion.gif) |
+| 7 | 2021-08-09-131930 <br/> Activation: **tanh** | 3000 | ![](evaluation/2021-08-09-131930/keypoints.png) | ![](evaluation/2021-08-09-131930/motion.gif) |
+| 8 | 2021-08-09-132311 <br/> Activation: **tanh** | 3000 | ![](evaluation/2021-08-09-132311/keypoints.png) | ![](evaluation/2021-08-09-132311/motion.gif) |
+| 9 | 2021-08-09-150217 <br/> Activation: **sigmoid** | 6000 | ![](evaluation/2021-08-09-150217/keypoints.png) | ![](evaluation/2021-08-09-150217/motion.gif) |
+| 10 | 2021-08-09-151550 <br/> Activation: **tanh** | 6000 | ![](evaluation/2021-08-09-151550/keypoints.png) | ![](evaluation/2021-08-09-151550/motion.gif) |
 
 
 ## Inhalt der Thesis
