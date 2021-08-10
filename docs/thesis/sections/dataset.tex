@@ -106,5 +106,53 @@ besitzt.
     \label{fig:vigan}
 \end{figure}
 
-\section{Experimente und Diskussion der Ergebnisse}
-Um die Brauchbarkeit vom ViGAN zu testen, werden einige Experimente durchgeführt, die 
+\section{Training und Diskussion der Ergebnisse}
+Um ViGAN zu testen, werden einige Experimente durchgeführt, die untersuchen
+sollen, ob die Ausgaben des GANs brauchbar sind. Unter anderem wird durch
+Experimente herausgefunden, welcher Aufbau von Generator und Diskriminator (in
+diesem Fall ist der Diskriminator ein Kritisierer) in einem stabilen Training
+resultieren. Das Training wird auf eine GeForce RTX 3080 ausgelagert und dauert
+im Schnitt 12 Stunden für 9000 Epochen bei einem Datensatz von 3 Videoclips mit
+jeweils 840 Frames. Das größte Problem während des Trainings besteht darin, die
+Trainigsdaten in den Speicher der Grafikkarte zu laden, da das Modell und die
+Daten entsprechend groß sind. Daher kann nur mit einer Batch-Größe von 4
+gearbeitet werden. Insgesamt wurden 8 Experimente durchgeführt, wobei sich die
+Architektur aus Tabelle \ref{table:stable-experiment} am stabilsten
+herausstellte. Trotz des stabilen Trainings weisen die Ausgaben des
+Generator-Netzwerkes einige Makel auf. Es entstehen zwar Videos, in denen eine
+Bewegung stattfindet, jedoch sind auch Transitionen in der Inneneinrichtung
+vorhanden. So verschwindet während des Videoclips beispielsweise eine Tür und es
+erscheint ein Sofa. Auf jeden Fall entstehen aber Räume, die so in der Art nicht
+im Datensatz vorhanden sind. Leider wird auch nicht immer eine menschliche
+Bewegung erzeugt, sodass sich zwar der Raum über die Zeit ändert, die Person
+aber regungslos in diesem steht.
+
+\begin{table}
+    \footnotesize
+    \label{table:stable-experiment}
+    \begin{tabularx}{\textwidth}{lXXXXll}
+        \hline
+        Input-Shape & Conv1 & Conv2 & Conv3 & Conv4 & Output-Shape & Parameter \\ \hline
+        $5 \times 12 \times 16 \times 256$ & c=128 \newline s=2,2,2 & c=64 \newline s=2,2,2 & c=64 \newline s=2,2,2 & c=3 \newline s=1,2,2 & $40 \times 192 \times 256 \times 3$ & \num{3,07e7} \\ \hline
+
+        $1 \times 3 \times 4 \times 96$ & c=96 \newline s=5,5,5 & c=48 \newline s=2,3,3 & c=16 \newline s=2,4,4 & c=3 \newline s=2,2,2 & $40 \times 360 \times 480 \times 3$ & \num{0,20e7} \\ \hline
+
+        $1 \times 6 \times 8 \times 96$ & c=96 \newline s=5,5,5 & c=48 \newline s=3,3,3 & - & c=3 \newline s=4,4,4 & $40 \times 360 \times 480 \times 3$ & \num{0,22e7} \\ \hline
+
+        $10 \times 20 \times 45 \times 256$ & c=128 \newline s=1,1,1 & c=64 \newline s=2,2,2 & - & c=3 \newline s=2,2,2 & $40 \times 80 \times 180 \times 3$ & \num{2,40e8} \\ \hline
+
+        $5 \times 3 \times 4 \times 256$ & c=256 \newline s=1,1,1 & c=128 \newline s=2,2,2 & c=128 \newline s=2,2,2 & c=3 \newline s=3,3,3 & $60 \times 36 \times 48 \times 3$ & \num{1,60e7} \\ \hline
+
+        $5 \times 3 \times 4 \times 512$ & c=256 \newline s=2,2,2 & c=128 \newline s=2,2,2 & - & c=3 \newline s=3,3,3 & $60 \times 36 \times 48 \times 3$ & \num{2,37e7} \\ \hline
+
+        $5 \times 6 \times 8 \times 256$ & c=128 \newline s=2,2,2 & c=64 \newline s=2,2,2 & c=32 \newline s=2,2,2 & c=3 \newline s=2,2,2 & $80 \times 96 \times 128 \times 3$ & \num{1,17e7} \\ \hline
+
+        $15 \times 12 \times 16 \times 256$ & c=128 \newline s=2,2,2 & c=64 \newline s=2,2,2 & - & c=3 \newline s=2,2,2 & $120 \times 96 \times 128 \times 3$ & \num{8,03e7} \\ \hline
+    \end{tabularx}
+    \caption{Experimente mit ViGAN. Es wurde untersucht, welche Konfigurationen
+    zu einem stabilen Training führen. Außerdem wurde versucht, die Anzahl der
+    erzeugten Frames so hoch wie möglich zu halten. Die Convolutional-Layer
+    besitzen alle $5 \times 5 \times 5$ Kernels. Die Parameter $c$ und $s$ beschreiben entsprechend die Channels und Strides der Convolutional-Layer.}
+\end{table}
+
+\section{Architektur von MotionGAN}

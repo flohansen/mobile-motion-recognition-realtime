@@ -14,8 +14,17 @@ automatische Datensatzgenerierung}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage[locale=DE]{siunitx}
 \usepackage[ngerman,linesnumbered,algoruled,boxed,lined]{algorithm2e}
 \addbibresource{bibliography.bib}
+
+\sisetup{
+  group-digits=true,
+  group-separator=\, ,
+  group-minimum-digits=5,
+  detect-all
+}
 
 \newtheorem{definition}{Definition}
 
