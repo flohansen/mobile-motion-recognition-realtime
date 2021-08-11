@@ -117,8 +117,8 @@ jeweils 840 Frames. Das größte Problem während des Trainings besteht darin, d
 Trainigsdaten in den Speicher der Grafikkarte zu laden, da das Modell und die
 Daten entsprechend groß sind. Daher kann nur mit einer Batch-Größe von 4
 gearbeitet werden. Insgesamt wurden 8 Experimente durchgeführt, wobei sich die
-Architektur aus Tabelle \ref{table:stable-experiment} am stabilsten
-herausstellte. Trotz des stabilen Trainings weisen die Ausgaben des
+Architekturen aus Tabelle \ref{table:stable-experiment} am stabilsten
+herausstellten. Trotz des stabilen Trainings weisen die Ausgaben des
 Generator-Netzwerkes einige Makel auf. Es entstehen zwar Videos, in denen eine
 Bewegung stattfindet, jedoch sind auch Transitionen in der Inneneinrichtung
 vorhanden. So verschwindet während des Videoclips beispielsweise eine Tür und es
@@ -128,7 +128,7 @@ Bewegung erzeugt, sodass sich zwar der Raum über die Zeit ändert, die Person
 aber regungslos in diesem steht.
 
 \begin{table}
-    \footnotesize
+    \scriptsize
     \label{table:stable-experiment}
     \begin{tabularx}{\textwidth}{lXXXXll}
         \hline
@@ -155,4 +155,35 @@ aber regungslos in diesem steht.
     besitzen alle $5 \times 5 \times 5$ Kernels. Die Parameter $c$ und $s$ beschreiben entsprechend die Channels und Strides der Convolutional-Layer.}
 \end{table}
 
-\section{Architektur von MotionGAN}
+\section{GAN für Schlüsselpunktanimationen}
+Da das ViGAN einige Probleme aufgewiesen hat, wurde eine alternative Methode
+entwickelt, um Bewegungen effizienter und genauer zu generieren. Auch in dieser
+Methode wird ein GAN verwendet, nur diesmal wird die Information einer Bewegung
+wesentlich genauer betrachtet. Das Ziel ist ein schnelleres Training des
+Netzwerks sowie ein geringerer Speicherverbrauch. Ein großer Nachteil beim ViGAN
+ist, dass viele unnötige Informationen mit generiert werden. Anstatt also Videos
+herkömmlicher Art zu erzeugen, sollen nun Animationen bestehend aus
+Schlüsselpunkten des menschlichen Körpers generiert werden. Die Folge dieser
+Schlüsselpunkte soll schließlich eine Bewegung darstellen. Extrahiert man die
+Schlüsselpunkte aus entsprechenden Videos, die eine Bewegungsart beinhalten, so
+wird der eigentliche Datensatz um ein vielfaches reduziert, jedoch bleibt die
+zu betrachtene Information gleich -- bei der Bewegungserkennung interessiert nur
+die Bewegung und nicht die Umgebung. Genau wie beim ViGAN wird hier ebenfalls
+ein WGAN als Grundarchitektur verwendet. Im Grunde verhält sich das Netzwerk
+ähnlich, außer dass es lediglich einzelne Bilder anstatt Videos generiert.
+
+Eine Bewegung bestehend aus $N$ Frames und $k$ Schlüsselpunkten, welche jeweils
+eine Position im zweidimensionalen Raum und eine Auftrittswahrscheinlichkeit
+besitzen, können mithilfe eines Bildes repräsentiert werden. Ein solches Bild
+besitzt damit eine Größe von $N \times k \times 3$. Da später Modelle verwendet
+werden, welche auf dem \textit{COCO Keypoints Dataset} trainiert sind und 17
+Schlüsselpunkte von Menschen in Bildern erkennen, wird $k = 17$ gewählt. Zudem
+wird die Anzahl an Frames auf $N = 60$ gesetzt, es wird also angenommen, dass
+entsprechende Bewegungen innerhalb von 60 Frames eindeutig erkennbar sind. Die
+Ausgaben des GANs sind dementsprechend im Format $60 \times 17 \times 3$. Das gute daran ist, dass ein solches Bild repräsentativ für eine Bewegung ist.
+
+\begin{figure}
+    \includegraphics[width=\textwidth]{images/motion_image.png}
+    \caption{Die Frames von Schlüsselpunktanimationen können als zweidimensionale Bilder repräsentiert werden. Die erste Reihe stellt eine Liegestütz-, die zweite eine Bankpress- und die dritte eine Hantelbewegung dar. Die erste Spalte zeigt jeweils das kodierte Bild, während die restlichen Spalten die ersten 10 Frames der Bewegung zeigen.}
+    \label{fig:motion-images}
+\end{figure}
