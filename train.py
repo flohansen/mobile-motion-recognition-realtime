@@ -27,12 +27,11 @@ def train_step_generator(gan: WGAN, batch_size):
   return loss
 
 @tf.function
-def train_step_critic(gan: WGAN, real_samples):
-  noise = tf.random.uniform([real_samples.shape[0], gan.latent_dim], -1.0, 1.0)
+def train_step_critic(gan: WGAN, real_sample):
+  noise = tf.random.uniform([real_sample.shape[0], gan.latent_dim], -1.0, 1.0)
 
   with tf.GradientTape() as tape:
     fake_sample = gan.generator(noise)
-    real_sample = real_samples
 
     fake_score = gan.critic(fake_sample)
     real_score = gan.critic(real_sample)

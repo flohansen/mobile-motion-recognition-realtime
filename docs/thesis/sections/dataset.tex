@@ -58,7 +58,7 @@ Kontext pro Videoframe zufällig wechselt. Stattdessen wird gefordert, dass jede
 erzeugte Frame von dem vorherigen abhängt, sodass die Folge der Frames ein
 sinnvolles Video ergibt.
 
-\section{Architektur von ViGAN}
+\section{GAN für Videos}
 In diesem Abschnitt wird die Architektur von ViGAN vorgestellt und die
 Idee dahinter erläutert. ViGAN steht für Video-Generative-Adversarial-Network
 und dient zum Erzeugen von neuen Videos aus einem bestehendem Datensatz. Gerade
@@ -106,7 +106,7 @@ besitzt.
     \label{fig:vigan}
 \end{figure}
 
-\section{Training und Diskussion der Ergebnisse}
+\section{Training vom ViGAN}
 Um ViGAN zu testen, werden einige Experimente durchgeführt, die untersuchen
 sollen, ob die Ausgaben des GANs brauchbar sind. Unter anderem wird durch
 Experimente herausgefunden, welcher Aufbau von Generator und Diskriminator (in
@@ -114,7 +114,7 @@ diesem Fall ist der Diskriminator ein Kritisierer) in einem stabilen Training
 resultieren. Das Training wird auf eine GeForce RTX 3080 ausgelagert und dauert
 im Schnitt 12 Stunden für 9000 Epochen bei einem Datensatz von 3 Videoclips mit
 jeweils 840 Frames. Das größte Problem während des Trainings besteht darin, die
-Trainigsdaten in den Speicher der Grafikkarte zu laden, da das Modell und die
+Trainingsdaten in den Speicher der Grafikkarte zu laden, da das Modell und die
 Daten entsprechend groß sind. Daher kann nur mit einer Batch-Größe von 4
 gearbeitet werden. Insgesamt wurden 8 Experimente durchgeführt, wobei sich die
 Architekturen aus Tabelle \ref{table:stable-experiment} am stabilsten
@@ -167,23 +167,74 @@ Schlüsselpunkten des menschlichen Körpers generiert werden. Die Folge dieser
 Schlüsselpunkte soll schließlich eine Bewegung darstellen. Extrahiert man die
 Schlüsselpunkte aus entsprechenden Videos, die eine Bewegungsart beinhalten, so
 wird der eigentliche Datensatz um ein vielfaches reduziert, jedoch bleibt die
-zu betrachtene Information gleich -- bei der Bewegungserkennung interessiert nur
-die Bewegung und nicht die Umgebung. Genau wie beim ViGAN wird hier ebenfalls
-ein WGAN als Grundarchitektur verwendet. Im Grunde verhält sich das Netzwerk
-ähnlich, außer dass es lediglich einzelne Bilder anstatt Videos generiert.
+zu betrachtende Information gleich -- bei der Bewegungserkennung interessiert
+nur die Bewegung und nicht die Umgebung. Genau wie beim ViGAN wird hier
+ebenfalls ein WGAN als Grundarchitektur verwendet. Im Grunde verhält sich das
+Netzwerk ähnlich, außer dass es lediglich einzelne Bilder anstatt Videos
+generiert.
 
 Eine Bewegung bestehend aus $N$ Frames und $k$ Schlüsselpunkten, welche jeweils
 eine Position im zweidimensionalen Raum und eine Auftrittswahrscheinlichkeit
 besitzen, können mithilfe eines Bildes repräsentiert werden. Ein solches Bild
 besitzt damit eine Größe von $N \times k \times 3$. Da später Modelle verwendet
-werden, welche auf dem \textit{COCO Keypoints Dataset} trainiert sind und 17
-Schlüsselpunkte von Menschen in Bildern erkennen, wird $k = 17$ gewählt. Zudem
-wird die Anzahl an Frames auf $N = 60$ gesetzt, es wird also angenommen, dass
-entsprechende Bewegungen innerhalb von 60 Frames eindeutig erkennbar sind. Die
-Ausgaben des GANs sind dementsprechend im Format $60 \times 17 \times 3$. Das gute daran ist, dass ein solches Bild repräsentativ für eine Bewegung ist.
+werden, welche auf dem \textit{COCO Keypoints Dataset} \cite{lin2015microsoft}
+trainiert sind und 17 Schlüsselpunkte von Menschen in Bildern erkennen, wird $k
+= 17$ gewählt. Zudem wird die Anzahl an Frames auf $N = 60$ gesetzt, es wird
+also angenommen, dass entsprechende Bewegungen innerhalb von 60 Frames eindeutig
+erkennbar sind. Die Ausgaben des GANs sind dementsprechend im Format $60 \times
+17 \times 3$. In Abbildung \ref{fig:motion-images} wurden beispielhaft drei
+Bewegungsarten zu Bilder kodiert und deren ersten 10 Frames dargestellt, die
+durch die ersten 10 Reihen des jeweiligen Bildes repräsentiert werden. Auf Basis
+dieser Bilder wird nun ein GAN entwickelt, welches neue Bewegungen des gleichen
+Typs erzeugen soll. Mit anderen Worten, das GAN soll lernen, ähnliche Bilder zu
+erzeugen, die wiederum in Schlüsselpunktanimationen dekodiert werden können.
+Wenn dieses Experiment erfolgreich ist, dann kann der Generator als
+Datensatzerzeuger für die Bewegungserkennung verwendet werden.
 
 \begin{figure}
     \includegraphics[width=\textwidth]{images/motion_image.png}
-    \caption{Die Frames von Schlüsselpunktanimationen können als zweidimensionale Bilder repräsentiert werden. Die erste Reihe stellt eine Liegestütz-, die zweite eine Bankpress- und die dritte eine Hantelbewegung dar. Die erste Spalte zeigt jeweils das kodierte Bild, während die restlichen Spalten die ersten 10 Frames der Bewegung zeigen.}
+    \caption{Die Frames von Schlüsselpunktanimationen können als
+    zweidimensionale Bilder repräsentiert werden. Die erste Reihe stellt eine
+    Liegestütz-, die zweite eine Bankpress- und die dritte eine Hantelbewegung
+    dar. Die erste Spalte zeigt jeweils das kodierte Bild, während die
+    restlichen Spalten die ersten 10 Frames der Bewegung zeigen.}
     \label{fig:motion-images}
+\end{figure}
+
+\section{Training vom KpGAN}
+Für das Training wurde der UCF-101-Datensatz \cite{ucf101} verwendet. Dieser
+enthält sportliche Aktivitäten in Form von Videos, sodass diese vorerst in
+Schlüsselpunktanimationen umgewandelt werden müssen. Anstatt jeden Frames jedes
+Videos per Hand zu bearbeiten und Schlüsselpunkte zu annotieren, wird dies
+mithilfe von MoveNet \cite{movenet} automatisiert erledigt. Die Schlüsselpunkte
+der jeweiligen Frames werden in Bilder wie in Abbildung \ref{fig:motion-images}
+kodiert und als Eingabe in das KpGAN gegeben. Die Experimente verlaufen ähnlich
+wie beim ViGAN, es werden jedoch andere Parameter gewählt, die pro Experiment
+verändert werden. Im ersten Schritt wurde untersucht, welche Netzkonfiguration
+stabil beim Training ist. Das Resultat ist in Abbildung \ref{fig:kpgan} zu
+sehen und wurde wie beim ViGAN durch unterschiedliche Versuche herausgefunden.
+Anschließend wurde untersucht, wie sich das Verhalten während des Trainings
+ändert, wenn wahlweise Batch-Normalisierung- und Bias-Layer hinzugefügt werden.
+Außerdem wurde geschaut, welche Aktivierungsfunktion in der letzten Schicht zu
+den besten Ergebnissen führt. Dafür wurden Aktivierungen durch Sigmoid- und
+Tangens-Hyperbolicus-Funktionen realisiert. Konfigurationen mit Bias-Layer, aber
+ohne Batch-Normalisierung führten zu den besten Ergebnissen. Abbildung
+\ref{fig:kpgan-example} zeigt eine zufällige Liegestützbewegung, die vom KpGAN
+erzeugt wurde. Für das Training stand eine RTX 3080 zur Verfügung und 3000
+Epochen dauerten $< 1$ Minuten. Grundsätzlich sind die Ergebnisse
+zufriedenstellend, sodass dieses GAN verwendet werden kann, um verschiedene
+Bewegungen zu erzeugen.
+
+\begin{figure}
+    \includegraphics[width=\textwidth]{images/kpgan-example.png}
+    \caption{Beispielausgabe vom KpGAN. Links ist die direkte Ausgabe des
+    Netzwerks. Von links nach rechts werden chronologisch die ersten 10
+    dekodierten Frames dargestellt.}
+    \label{fig:kpgan-example}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=\textwidth]{images/KpGAN.pdf}
+    \caption{Architektur von KpGAN zum Generieren von Schlüs\-sel\-punkt\-anima\-tionen. Die Eingabe ist ein Vektor, welcher zunächst in das Format $7 \times 2 \times 256$ gebracht wird. Anschließend wird mithilfe von insgesamt drei Convolutional-Layer eine Ausgabe im Format $60 \times 17 \times 3$ erzeugt. Es werden entsprechend 256, 128 und 64 Filter für die Layer verwendet.}
+    \label{fig:kpgan}
 \end{figure}
