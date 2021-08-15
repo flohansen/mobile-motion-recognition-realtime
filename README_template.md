@@ -7,6 +7,7 @@
 * X. Mao, Q. Li, H. Xie, R. Y.K. Lau, Z. Wang, S. P. Smolley: **Least Squares Generative Adversarial Networks** ([PDF](https://arxiv.org/pdf/1611.04076.pdf), [BibTeX](https://arxiv.org/abs/1611.04076))
 * M. Arjovsky, S. Chintala, L. Bottou: **Wasserstein GAN** ([PDF](https://arxiv.org/pdf/1701.07875) [BibTeX](https://arxiv.org/abs/1701.07875))
 * I. Gulrajani, F. Ahmed, M. Arjovsky, V. Dumoulin, A. Courville: **Improved Training of Wasserstein GANs**, ([PDF](https://arxiv.org/pdf/1704.00028), [BibTeX](https://arxiv.org/abs/1704.00028))
+* https://arxiv.org/pdf/2012.13392.pdf#:~:text=HUMAN%20pose%20estimation%20(HPE)%2C,videos.
 
 ## Videos
 * [Creating Videos with Neural Networks using GAN](https://www.youtube.com/watch?v=CIua95jUD_I)

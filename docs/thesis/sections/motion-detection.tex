@@ -1,4 +1,78 @@
 \chapter{Bewegungserkennung}\label{chapter:motion-detection}
+In diesem Kapitel sollen die Ergebnisse aus Kapitel \ref{chapter:dataset}
+verwendet werden, um eine Bewegungserkennung zu entwickeln. Genauer gesagt soll
+auch hier ein Modell entworfen werden, um diese Bewegungen zu erkennen und
+klassifizieren. Zudem soll ein Ausblick auf Techniken gegeben werden, um weitere
+bewegungsabhängige Eigenschaften mithilfe von KNNs zu extrahieren. Zum Beispiel
+ist beim Ausüben von sportlichen Aktivitäten neben der Art auch die Frage, ob
+die Bewegung richtig ausgeführt wurde, interessant. Aber auch das Vorhersagen
+von zukünftigen Bewegungen anhand kürzlich getätigten Posen kann für einige
+Anwendungen hilfreich sein. So auch zum Beispiel beim vorzeitigen Erkennen von
+aggressiven Verhaltensmustern, sodass Eingegriffen werden kann, bevor die
+kriminelle Tätigkeit ausgeführt werden kann. Da sich diese Arbeit vor allem mit
+dem Problem beschäftigen soll, wie solche Modelle auf mobilen Plattformen
+überführt werden können, soll schließlich eine Android-App entwickelt werden, um
+die Ergebnisse zusammenzufassend zu präsentieren. Android wird als Plattform
+gewählt, da es zur Zeit die am häufigsten vertretene mobile Plattform ist und
+ein entsprechendes Gerät leicht zur Verfügung steht. Zum Vergleich, Android
+besitzt einen Marktanteil von 72,84\%, iOS einen von 26,34\% und 0,82\% werden
+von sonstigen Plattformen
+gehalten\footnote{https://www.statista.com/statistics/272698/global-market-share-held-by-mobile-operating-systems-since-2009/
+(besucht am 13.08.2021)}.
+
+Eine Bewegung ist beschreibbar durch die Änderung des Ortes über die Zeit. Das
+bedeutet, dass eine Fotoaufnahme einer sich bewegenden Person nicht ausreicht,
+um die Bewegung aufzuzeichnen. Entsprechend müssen Bilder über Zeit aufgenommen
+werden. Die nächste Frage, die sich ergibt ist, wie viele Bildaufnahmen nötig
+sind, um eine Bewegung erkennen zu können. Dies hängt natürlich von der Art der
+Bewegung und der Bewegungsgeschwindigkeit ab. Möchte man beispielsweise einen
+Jumping-Jack aufnehmen und die Person bewegt sich viel zu langsam, dann sind
+wesentlich mehr Aufnahmen nötig, als wenn diese sich in einem normalen Tempo
+bewegt. In der Informationstheorie wird dies mithilfe der Abtastrate
+beschrieben, die angibt, wie oft pro Sekunde abgetastet werden soll. Damit in
+Verbindung kann man die minimale Rate durch das Niquist-Shannon-Abtasttheorem
+bestimmen, welches aussagt, dass ein Signal exakt rekonstruierbar ist, wenn eine
+Frequenz mit der doppelten Abtastrate abgetastet wird.
+\[
+    f_{abtast} = 2 \cdot f_{max}
+\]
+Ein durchschnittlicher Fahrradfahrer schafft eine Trittfrequenz von maximal 60
+Umdrehungen pro Minute während Leistungssportler bis zu 110 Umdrehungen pro
+Minute schaffen \cite{smolik}. Das würde bedeuten, dass die Abtastrate
+mindestens 2 Hz betragen muss, um das Signal rekonstruierbar aufzuzeichnen.
+Betrachtet man nun eine Beinpressbewegung, die ebenfalls mit 60 Tritten pro
+Minute ausgeführt wird, ergibt sich ebenfalls eine Abtastfrequenz von 2 Hz. Hier
+wird folgendes Problem ersichtlich. Tastet man beide Signale mit 2 Hz ab, so
+kann man nicht zwischen Kreisbewegung und Linearbewegung unterscheiden, wenn
+sich die abgetasteten Punkte überschneiden. Würde man hingegen mit 3 Hz
+abtasten, so wären die Bewegungen eindeutig voneinander unterscheidbar. Dies hat
+unter anderem damit zu tun, dass eine lineare Funktion durch zwei Punkte und ein
+Kreis stets durch drei sich nicht auf einer Geraden befindenden Punkte
+beschreibbar ist. Damit also eine mobile App eine Bewegungserkennung durchführen
+kann, ist es wichtig, dass diese mit möglichst vielen Frames pro Sekunde (FPS)
+ausgeführt wird, um verschiedenste Bewegungen zu erkennen.
+
+Für die Bewegungserkennung ist auch die Erkennung von menschlichen Posen
+wichtig, die Schlüsselpunkte des Körpers aus Bildern extrahiert. Aus diesen
+Informationen können bereits einige Eigenschaften einer Pose bzw. Bewegung
+abgeleitet oder berechnet werden. So ist zum Beispiel die Berechnung des Winkels
+zwischen Oberschenkel und Wade relativ simpel, wenn die entsprechenden
+Schlüsselpunkte bekannt sind. Dem Benutzer kann dadurch berechnet werden, ob
+eine Übung, die abhängig von diesem Winkel ist, richtig ausgeführt wird oder
+nicht. Grundsätzlich werden folgende Methoden zum Erkennen bzw. Analysieren von
+Bewegungen in Betracht gezogen. Erstens, es werden die von der mobilen Kamera
+aufgenommenen Bilder als Eingabe für einen Bildklassifizierer verwendet, welcher
+die Art der Bewegung ausgibt. Zweitens, die aufgenommenen Bilder werden als
+Eingabe in einen Pose-Detektor gegeben, welcher zunächst die in dem Eingabebild
+enthaltenen Schlüsselpunkte ausgibt. Diese werden dann anschließend in einen
+angehängten Prediction-Head gegeben, welcher aus den Schlüsselpunkten z.B. die
+Bewegungsart erkennt oder andere Aufgaben übernimmt. Das Ziel dieses Abschnitts
+ist es also, die beiden Methoden miteinander zu vergleichen und festzustellen,
+welche für eine mobile Anwendung geeignet ist.
+
+\section{Erkennung von menschlichen Posen}
+Das Erkennen von menschlichen Posen hat in den letzten Jahren viel Aufmerksamkeit bekommen.
+
 \section{Erkennung von Bewegungsarten}
 \section{Erkennung von Anomalien}
 \section{Erkennung von Eigenschaften}
