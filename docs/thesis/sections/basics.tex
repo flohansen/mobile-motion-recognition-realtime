@@ -79,3 +79,45 @@ Der Term $\gamma(x, y)$ stellt dabei die \textit{Masse} dar, die von $x$ nach
 $y$ transportiert wird, um schließlich die Verteilung $P_r$ in die Verteilung
 $P_g$ umzuformen. Aus diesem Grund ist der Wasserstein-Abstand auch als
 \textit{Earth-Mover-Abstand} (EM-Abstand) bekannt.
+
+\section{Feature-Pyramid-Networks}
+Bei der Objekterkennung ist beim Erlernen der Features eines Bildes die
+Auflösung dieser Features sehr gering. Feature-Pyramid-Networks (FPN) haben die
+Aufgabe, eine hohe Semantik bei einer hohen Auflösung zu generieren. Häufig sind
+diese Netzwerke nur Teil eines Backbones bzw. werden dahinter geschaltet. Als
+Backbone-Modell kann zum Beispiel AlexNet, MobileNet und ResNet dienen. In
+Kombination mit einem FPN werden diese Netze damit zu einem Feature-Extractor
+umgewandelt, der eine hohe Semantik bei einer hohen Auflösung der Features
+erlernen kann. Der Weg von der Eingabe über das Backbone-Modell wird auch als
+\textit{Bottom-Up-Pathway} bezeichnet, während der Weg vom Backbone über die
+Feature-Pyramid als \textit{Top-Down-Pathway} bezeichnet wird
+\cite{lin2017feature}.
+
+Anfänglich wurden FPNs in Verbindung mit ResNet-Backbones eingeführt (siehe
+Abbildung \ref{fig:resnet-fpn}). Die Eingabe ist ein $224 \times 224 \times 3$
+Bild und wird mithilfe der ersten ResNet-Schicht (C1) in $112 \times 112 \times
+64$ Filter mithilfe eines Convolutional-Layers mit einem Stride von 2 und einem
+$7 \times 7$ Kernel umgeformt. Anschließend wird die Ausgabe in ein
+Max-Pooling-Block gegeben, welcher die Eingabe in $56 \times 56 \times 128$
+Filter umwandelt. Die nächsten Blöcke sind für die Einbettung von FPNs am
+wichtigsten. Der folgende Block (C2) besteht aus mehreren Residual-Blocks,
+welche zusammen einen Stride von 1 ergeben und 256 Filter erzeugen. Diese Blöcke
+werden zusammengefasst auch \textit{Bottlenecks} genannt. Darauf folgen drei
+weitere Bottleneck-Blöcke (C3, C4, C5) mit einem Stride von 2. Nach C5 ensteht
+somit eine Ausgabe von $7 \times 7 \times 2048$. Soweit zum Aufbau des
+Bottom-Up-Pathways. Der Top-Down-Pathway wird mithilfe von Verbindungsschichten
+(Laterals) mit dem Backbone verbunden. Diese haben die Aufgabe, die Anzahl der
+Filter aus dem Bottom-Up-Pathway zu umzuformen, sodass diese im Top-Down-Pathway
+miteinander addiert werden können. Hierfür werden Convolutional-Layer mit einem
+$1 \times 1$ Kernel und 256 Filtern verwendet, sodass lediglich die Anzahl der
+Filter transformiert werden. Im Konkreten bedeutet dies, dass die Ausgabe von C5
+von $7 \times 7 \times 2048$ auf die Form $7 \times 7 \times 256$ gebracht wird.
+Die Größe dieser Ausgabe wird nun mithilfe von Upsampling (M5) verdoppelt und
+mit der Ausgabe der Lateralverbindung von C4 addiert (M4). Dies wird mit den übrigen Lateralverbindungen und Bottleneck-Blöcken verkettet wiederholt, sodass das FPN schließlich eine Ausgabe $56 \times 56 \times 256$ ausgibt. 
+
+\begin{figure}
+    \includegraphics[width=\textwidth]{images/ResNet_FPN.pdf}
+    \caption{Architektur eines Feature-Extractors als Feature-Pyramid-Network
+    mit ResNet als Backbone.}
+    \label{fig:resnet-fpn}
+\end{figure}
