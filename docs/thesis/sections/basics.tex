@@ -80,6 +80,37 @@ $y$ transportiert wird, um schließlich die Verteilung $P_r$ in die Verteilung
 $P_g$ umzuformen. Aus diesem Grund ist der Wasserstein-Abstand auch als
 \textit{Earth-Mover-Abstand} (EM-Abstand) bekannt.
 
+\section{Residual-Neural-Networks}
+Mit \cite{he2015deep} wurde ein neues Framework zum Trainieren von tiefen
+neuronalen Netzen vorgestellt. Ein großes Problem mit sehr tiefen neuronalen
+Netzen ist, dass diese zu einem größeren Fehler im Training führen. Dies führt
+ebenfalls zu einem erhöhten Test-Fehler. Diese Fehler werden überraschenderweise
+immer größer, je tiefer das Netzwerk ist und das Phänomen wird als
+\textit{Degradation} bezeichnet. Dies ist auch bei der Genauigkeit solcher Netze
+beobachtbar. Ist die Genauigkeit gesättigt und erhöht man nun die Tiefe des
+Netzes, so degradiert die Genauigkeit schnell. Laut \cite{he2015deep} liegt dies
+nicht am Overfitting (Überanpassung). Overfitting beschreibt die
+Überspezialisierung eines Machine-Learning-Modells, welches sich zu sehr an den
+dahinterliegenden Datensatz angepasst hat. Ein solches Modell kann nicht mehr
+zuverlässig mit Daten außerhalb des zum Trainieren verwendeten Datensatzes
+betrieben werden. Anders ausgedrückt besitzt das Netzwerk eine sehr hohe
+Genauigkeit beim Arbeiten mit dem Trainingsdatensatz, aber eine signifikant
+niedrigere Genauigkeit beim Arbeiten mit dem Testdatensatz.
+
+Abhilfe für Degradation sollen die Residual-Networks (ResNet) mithilfe von
+\textit{Building-Blocks} schaffen. Anstatt die Abbildung $F(x)$ bei normalen
+gestapelten Schichten zu optimieren, wird bei ResNet das Residuum $F(x) + x$
+modelliert. Dies kann mithilfe von Shortcut-Connections (Abkürzungsverbindungen)
+realisiert werden (siehe Abbildung \ref{fig:resnet-building-block}).
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.4\textwidth]{images/resnet_building_block.png}
+    \caption{Schema für ein Building-Block eines ResNets \cite{he2015deep}. Die
+    Shortcut-Connection ist die Identität von dem Eingabeparameter $x$.}
+    \label{fig:resnet-building-block}
+\end{figure}
+
 \section{Feature-Pyramid-Networks}
 Bei der Objekterkennung ist beim Erlernen der Features eines Bildes die
 Auflösung dieser Features sehr gering. Feature-Pyramid-Networks (FPN) haben die
@@ -113,7 +144,17 @@ $1 \times 1$ Kernel und 256 Filtern verwendet, sodass lediglich die Anzahl der
 Filter transformiert werden. Im Konkreten bedeutet dies, dass die Ausgabe von C5
 von $7 \times 7 \times 2048$ auf die Form $7 \times 7 \times 256$ gebracht wird.
 Die Größe dieser Ausgabe wird nun mithilfe von Upsampling (M5) verdoppelt und
-mit der Ausgabe der Lateralverbindung von C4 addiert (M4). Dies wird mit den übrigen Lateralverbindungen und Bottleneck-Blöcken verkettet wiederholt, sodass das FPN schließlich eine Ausgabe $56 \times 56 \times 256$ ausgibt. 
+mit der Ausgabe der Lateralverbindung von C4 addiert (M4). Dies wird mit den
+übrigen Lateralverbindungen und Bottleneck-Blöcken verkettet wiederholt, sodass
+das FPN schließlich vier Ausgaben mit den Größen $56 \times 56 \times 256$, $28
+\times 28 \times 256$, $14 \times 14 \times 256$ und $7 \times 7 \times 256$
+(M5, M4, M3, M2) ausgibt. Das Problem beim Vergrößern der Filter ist, dass dabei
+ein Alias-Effekt auftritt, das Bild also verschwommen wirkt. Hierfür dienen
+Smoothing-Layer, welche wiederum nichts weiter als Convolutional-Layer mit einem
+$3 \times 3$ Kernel und einem Stride von 1 sind. Entsprechend werden die
+Ausgaben M5 - M2 geschärft und ergeben Features mit einer hohen Auflösung und
+einer hohen Semantik, die nun wahlweise für die Objekterkennung verwendet werden
+können.
 
 \begin{figure}
     \includegraphics[width=\textwidth]{images/ResNet_FPN.pdf}
