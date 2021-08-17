@@ -98,10 +98,11 @@ Genauigkeit beim Arbeiten mit dem Trainingsdatensatz, aber eine signifikant
 niedrigere Genauigkeit beim Arbeiten mit dem Testdatensatz.
 
 Abhilfe für Degradation sollen die Residual-Networks (ResNet) mithilfe von
-\textit{Building-Blocks} schaffen. Anstatt die Abbildung $F(x)$ bei normalen
-gestapelten Schichten zu optimieren, wird bei ResNet das Residuum $F(x) + x$
-modelliert. Dies kann mithilfe von Shortcut-Connections (Abkürzungsverbindungen)
-realisiert werden (siehe Abbildung \ref{fig:resnet-building-block}).
+\textit{Building-Blocks} schaffen. Anstatt die Abbildung
+$F(x)$ bei normalen gestapelten Schichten zu optimieren, wird bei ResNet das
+Residuum $F(x) + x$ modelliert. Dies kann mithilfe von Shortcut-Connections
+(Abkürzungsverbindungen) realisiert werden (siehe Abbildung
+\ref{fig:resnet-building-block}).
 
 \begin{figure}
     \centering
@@ -110,6 +111,34 @@ realisiert werden (siehe Abbildung \ref{fig:resnet-building-block}).
     Shortcut-Connection ist die Identität von dem Eingabeparameter $x$.}
     \label{fig:resnet-building-block}
 \end{figure}
+
+Abhängig von den Anforderungen können nun entsprechend tiefe Netze eingesetzt
+werden, indem die Building-Blocks gestapelt eingesetzt werden. In
+\cite{he2015deep} werden außerdem ein paar Architekturen vorgestellt, die
+erfolgreich auf den ImageNet-Datensatz \cite{deng2009imagenet} evaluiert wurden.
+Diese unterscheiden sich hauptsächlich in der Anzahl der verwendeten Schichten
+und sind in Tabelle \ref{table:resnets} zu sehen. Die Ergebnisse nach dem
+Trainieren dieser Netze haben gezeigt, dass das Degradation-Problem gelöst
+werden konnte, sodass tiefere Netze mithilfe von Residual-Blocks auch einen
+geringeren Fehler erzeugen, also genauer arbeiten als weniger tiefe Netze.
+
+\begin{table}
+    \scriptsize
+    \begin{tabularx}{\textwidth}{X|X|c|c|c|c|c}
+        \hline
+        layer name & output size & 18-layer & 34-layer & 50-layer & 101-layer & 152-layer \\ \hline
+        conv1 & $112 \times 112$ & \multicolumn{5}{c}{$7 \times 7$, 64, stride 2} \\ \hline
+        \multirow{2}{*}{conv2\_x} & \multirow{2}{*}{$56 \times 56$} & \multicolumn{5}{c}{$3 \times 3$, max pool, stride 2} \\ \cline{3-7}
+        & & \resnetblocksimple{64}{64}{2} & \resnetblocksimple{64}{64}{3} & \resnetbottleneck{64}{256}{3} & \resnetbottleneck{64}{256}{3} & \resnetbottleneck{64}{256}{3} \\ \hline
+        conv3\_x & $28 \times 28$ & \resnetblocksimple{128}{128}{2} & \resnetblocksimple{128}{128}{4} & \resnetbottleneck{128}{512}{4} & \resnetbottleneck{128}{512}{4} & \resnetbottleneck{128}{512}{8} \\ \hline
+        conv4\_x & $14 \times 14$ & \resnetblocksimple{256}{256}{2} & \resnetblocksimple{256}{256}{6} & \resnetbottleneck{256}{1024}{6} & \resnetbottleneck{256}{1024}{23} & \resnetbottleneck{256}{1024}{36} \\ \hline
+        conv5\_x & $7 \times 7$ & \resnetblocksimple{512}{512}{2} & \resnetblocksimple{512}{512}{3} & \resnetbottleneck{512}{2048}{3} & \resnetbottleneck{512}{2048}{3} & \resnetbottleneck{512}{2048}{3} \\ \hline
+        & $1 \times 1$ & \multicolumn{5}{c}{average pool, 1000-d fc, softmax} \\ \hline
+        \multicolumn{2}{c|}{FLOPs} & \num{1.8e9} & \num{3.6e9} & \num{3.8e9} & \num{7.6e9} & \num{11.3e9} \\ \hline
+    \end{tabularx}
+    \caption{Architekturen für ImageNet \cite{he2015deep}. Es werden die gestapelten Schichten bzw. Building-Blocks für ResNet-18, -34, -50, -101 und -152 aufgelistet.}
+    \label{table:resnets}
+\end{table}
 
 \section{Feature-Pyramid-Networks}
 Bei der Objekterkennung ist beim Erlernen der Features eines Bildes die
@@ -138,18 +167,19 @@ weitere Bottleneck-Blöcke (C3, C4, C5) mit einem Stride von 2. Nach C5 ensteht
 somit eine Ausgabe von $7 \times 7 \times 2048$. Soweit zum Aufbau des
 Bottom-Up-Pathways. Der Top-Down-Pathway wird mithilfe von Verbindungsschichten
 (Laterals) mit dem Backbone verbunden. Diese haben die Aufgabe, die Anzahl der
-Filter aus dem Bottom-Up-Pathway zu umzuformen, sodass diese im Top-Down-Pathway
-miteinander addiert werden können. Hierfür werden Convolutional-Layer mit einem
-$1 \times 1$ Kernel und 256 Filtern verwendet, sodass lediglich die Anzahl der
-Filter transformiert werden. Im Konkreten bedeutet dies, dass die Ausgabe von C5
-von $7 \times 7 \times 2048$ auf die Form $7 \times 7 \times 256$ gebracht wird.
-Die Größe dieser Ausgabe wird nun mithilfe von Upsampling (M5) verdoppelt und
-mit der Ausgabe der Lateralverbindung von C4 addiert (M4). Dies wird mit den
-übrigen Lateralverbindungen und Bottleneck-Blöcken verkettet wiederholt, sodass
-das FPN schließlich vier Ausgaben mit den Größen $56 \times 56 \times 256$, $28
-\times 28 \times 256$, $14 \times 14 \times 256$ und $7 \times 7 \times 256$
-(M5, M4, M3, M2) ausgibt. Das Problem beim Vergrößern der Filter ist, dass dabei
-ein Alias-Effekt auftritt, das Bild also verschwommen wirkt. Hierfür dienen
+Filter aus dem Bottom-Up-Pathway so umzuformen bzw. anzugleichen, sodass diese
+im Top-Down-Pathway miteinander addiert werden können. Hierfür werden
+Convolutional-Layer mit einem $1 \times 1$ Kernel und 256 Filtern verwendet,
+sodass lediglich die Anzahl der Filter transformiert werden. Im Konkreten
+bedeutet dies, dass die Ausgabe von C5 von $7 \times 7 \times 2048$ auf die Form
+$7 \times 7 \times 256$ gebracht wird.  Die Größe dieser Ausgabe wird nun
+mithilfe von Upsampling (M5) verdoppelt und mit der Ausgabe der
+Lateralverbindung von C4 addiert (M4). Dies wird mit den übrigen
+Lateralverbindungen und Bottleneck-Blöcken verkettet wiederholt, sodass das FPN
+schließlich vier Ausgaben mit den Größen $56 \times 56 \times 256$, $28 \times
+28 \times 256$, $14 \times 14 \times 256$ und $7 \times 7 \times 256$ (M5, M4,
+M3, M2) ausgibt. Das Problem beim Vergrößern der Filter ist, dass dabei ein
+Alias-Effekt auftritt, das Bild also verschwommen wirkt. Hierfür dienen
 Smoothing-Layer, welche wiederum nichts weiter als Convolutional-Layer mit einem
 $3 \times 3$ Kernel und einem Stride von 1 sind. Entsprechend werden die
 Ausgaben M5 - M2 geschärft und ergeben Features mit einer hohen Auflösung und

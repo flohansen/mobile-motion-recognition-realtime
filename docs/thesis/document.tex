@@ -16,6 +16,7 @@ automatische Datensatzgenerierung}
 \usepackage{mathtools}
 \usepackage{tabularx}
 \usepackage{amssymb}
+\usepackage{multirow}
 \usepackage[locale=DE]{siunitx}
 \usepackage[ngerman,linesnumbered,algoruled,boxed,lined]{algorithm2e}
 \addbibresource{bibliography.bib}
@@ -30,6 +31,10 @@ automatische Datensatzgenerierung}
 \newtheorem{definition}{Definition}
 
 \setcapindent{0pt}
+\newcommand{\plh}{{\mkern-0.3mu\times\mkern-0.3mu}}
+
+\newcommand{\resnetblocksimple}[3]{$\begin{bmatrix}3 \plh 3, #1 \\ 3 \plh 3, #2\end{bmatrix} \plh #3$}
+\newcommand{\resnetbottleneck}[3]{$\begin{bmatrix}1 \plh 1, #1 \\ 3 \plh 3, #1 \\ 1 \plh 1, #2\end{bmatrix} \plh #3$}
 
 \begin{document}
   \maketitle
