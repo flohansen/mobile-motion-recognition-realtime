@@ -178,13 +178,14 @@ Lateralverbindung von C4 addiert (M4). Dies wird mit den übrigen
 Lateralverbindungen und Bottleneck-Blöcken verkettet wiederholt, sodass das FPN
 schließlich vier Ausgaben mit den Größen $56 \times 56 \times 256$, $28 \times
 28 \times 256$, $14 \times 14 \times 256$ und $7 \times 7 \times 256$ (M5, M4,
-M3, M2) ausgibt. Das Problem beim Vergrößern der Filter ist, dass dabei ein
-Alias-Effekt auftritt, das Bild also verschwommen wirkt. Hierfür dienen
-Smoothing-Layer, welche wiederum nichts weiter als Convolutional-Layer mit einem
-$3 \times 3$ Kernel und einem Stride von 1 sind. Entsprechend werden die
-Ausgaben M5 - M2 geschärft und ergeben Features mit einer hohen Auflösung und
-einer hohen Semantik, die nun wahlweise für die Objekterkennung verwendet werden
-können.
+M3, M2) ausgibt. Betrachtet man nun die letzte Ausgabe M5 relativ zum
+Eingabeformat, so besitzt diese Architektur einen Stride von 4. Das Problem beim
+Vergrößern der Filter ist, dass dabei ein Alias-Effekt auftritt, das Bild also
+verschwommen wirkt. Hierfür dienen Smoothing-Layer, welche wiederum nichts
+weiter als Convolutional-Layer mit einem $3 \times 3$ Kernel und einem Stride
+von 1 sind. Entsprechend werden die Ausgaben M5 - M2 verschärft und ergeben
+Features mit einer hohen Auflösung und einer hohen Semantik, die nun wahlweise
+für die Objekterkennung verwendet werden können.
 
 \begin{figure}
     \includegraphics[width=\textwidth]{images/ResNet_FPN.pdf}

@@ -122,9 +122,29 @@ Ein Forschungsteam von Google hat ein neues Machine-Learning-Modell namens
 Geräten ausgeführt werden kann und dabei eine Echtzeiterkennung von menschlichen
 Posen ermöglicht. Die Architektur besteht aus einem MobileNetV2-Backbone mit
 angehängtem Feature-Pyramid-Network (FPN) und insgesamt vier Prediction-Heads,
-die dem CenterNet ähneln. Trainiert wurde das Netzwerk auf den COCO-Datensatz und erreicht laut den Autoren 30 oder mehr FPS auf modernen Computern, Laptops und Smartphones. 
+die CenterNets \cite{zhou2019objects} sind. Trainiert wurde das Netzwerk
+auf den COCO-Datensatz und erreicht laut den Autoren 30 oder mehr FPS auf
+modernen Computern, Laptops und Smartphones. Auch dieses Modell verwendet
+Wärmekarten, um mögliche Positionen von menschlichen Schlüsselpunkten zu
+bestimmen und wird von einem Prediction-Head übernommen. Ein weiterer ist dafür
+zuständig, den Abstand (Offset) jedes Pixels als Vektor von der geschätzten
+Schlüsselpunktposition zu bestimmen. Ein anderer Kopf übernimmt die Gruppierung
+der Schlüsselpunkte und ordnet diesen Personeninstanzen zu. Der vierte Kopf
+schätzt das Zentrum der Instanzen. Die vollständige Architektur von MoveNet ist
+in Abbildung \ref{fig:movenet-architecture} zu sehen.
+
+\begin{figure}
+    \includegraphics[width=\textwidth]{images/movenet_architecture.png}
+    \caption{Architektur von MoveNet \cite{movenet}. Der Feature-Extractor
+    besteht aus einem vortrainierten MobileNetV2-Backbone mit angehängtem FPN.
+    Insgesamt werden vier Prediction-Heads zum Bestimmen von Schlüsselpunkten
+    verwendet.}
+    \label{fig:movenet-architecture}
+\end{figure}
 
 \section{Erkennung von Bewegungsarten}
+Bei der Erkennung von Bewegungsarten handelt es sich um ein Klassifizierungsproblem, bei der es darum handelt, eine Bewegungsaufzeichnung einer Klasse zuzuordnen. Zu einer beliebigen Bewegungssequenz soll also eine Aussage getroffen werden, ob es zum Beispiel Hantelübungen sind. Im Laufe dieses Abschnitts soll dementsprechend ein Machine-Learning-Modell entworfen werden, welches auf diese Aufgabe trainiert wird. Hierzu muss vorerst definiert werden, welche Daten zur Verfügung stehen und wie diese für das Training vorbereitet werden können.
+
 \section{Erkennung von Anomalien}
 \section{Erkennung von Eigenschaften}
 \section{Vorhersage von Bewegungen}
