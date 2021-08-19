@@ -143,9 +143,43 @@ in Abbildung \ref{fig:movenet-architecture} zu sehen.
 \end{figure}
 
 \section{Erkennung von Bewegungsarten}
-Bei der Erkennung von Bewegungsarten handelt es sich um ein Klassifizierungsproblem, bei der es darum handelt, eine Bewegungsaufzeichnung einer Klasse zuzuordnen. Zu einer beliebigen Bewegungssequenz soll also eine Aussage getroffen werden, ob es zum Beispiel Hantelübungen sind. Im Laufe dieses Abschnitts soll dementsprechend ein Machine-Learning-Modell entworfen werden, welches auf diese Aufgabe trainiert wird. Hierzu muss vorerst definiert werden, welche Daten zur Verfügung stehen und wie diese für das Training vorbereitet werden können.
+Bei der Erkennung von Bewegungsarten handelt es sich um ein
+Klassifizierungsproblem, bei der es darum handelt, eine Bewegungsaufzeichnung
+einer Klasse zuzuordnen. Zu einer beliebigen Bewegungssequenz soll also eine
+Aussage getroffen werden, ob es zum Beispiel Hantelübungen sind. Im Laufe dieses
+Abschnitts soll dementsprechend ein Machine-Learning-Modell entworfen werden,
+welches auf diese Aufgabe trainiert wird. Hierzu muss vorerst definiert werden,
+welche Daten verwendet werden und wie diese für das Training vorbereitet werden
+können. Damit eine Ortsänderung eines zu betrachtenden Objektes aufgezeichnet
+werden kann, müssen mehrere Bilder bzw. Videos aufgezeichnet werden. Eine
+Bewegung anhand eines einzelnen Bildes ist nicht möglich, da die Information
+über die Ortsänderung dann nicht vorhanden ist. Es gilt also einen Datensatz zu
+finden, welcher verschiedene Bewegungen im Videoformat bereitstellt. Alternativ
+muss ein entsprechender Datensatz ausgehoben werden, was einen relativ hohen
+Zeitaufwand bedeuten würde. Es wird aufgrund seiner Einfachheit der
+UCF101-Datensatz \cite{ucf101} verwendet. Dieser besteht aus 101 Bewegungsarten
+in Form von Videos, die öffentlich auf der Plattform YouTube zur Verfügung
+stehen. Ein Videoclip ist dabei eindeutig einer Bewegungsklasse zugeordnet. Um
+den Datensatz künstlich zu erweitern bzw. um eine Augmentation durchzuführen,
+wird das KpGAN aus Kapitel \ref{chapter:gans} verwendet. Dieses erzeugt während des Trainings Schlüsselpunktdaten auf Nachfrage.
 
-\section{Erkennung von Anomalien}
+Es wird nun ein Modell entworfen, welches $n$ Frames eines Videos einliest und
+die geschätzte Bewegungsklasse für diese Frames ausgibt. Dabei soll das Netzwerk
+lernen, menschliche Posen aus den Frames zu extrahieren und anschließend zu
+klassifizieren. Da das Neutrainieren der Posenerkennung zu lange dauern würde,
+wird ein vortrainiertes MoveNet als Backbone verwendet. Für die Klassifizierung
+werden verschiedene Köpfe implementiert, die anschließend miteinander verglichen
+werden. Ziel ist es herauszufinden, welche Architekturen für den Gebrauch auf
+mobilen Plattformen geeignet sind. Als Testplattform wird, wie einleitend beschrieben, Android verwendet.
+
+Die zu betrachtenen Metriken sind Genauigkeit und
+Aus\-führ\-ungs\-ge\-schwin\-dig\-keit. Als erstes werden einfache
+Fully-Connected-Layer verwendet und evaluiert. Es wurden dabei Schritt für
+Schritt Änderungen an der Anzahl der Neuronen und Schichten vorgenommen.
+Anschließend wird untersucht, ob das Verwenden CNNs ähnliche oder bessere
+Ergebnisse liefert -- besonders in Hinblick auf die Performance.
+
+\section{Erkennung von Anomalien in Bewegungen}
 \section{Erkennung von Eigenschaften}
 \section{Vorhersage von Bewegungen}
 \section{Architektur einer mobilen Anwendung}
