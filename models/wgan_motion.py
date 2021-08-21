@@ -7,7 +7,6 @@ from tensorflow.keras.layers import Conv2DTranspose
 from tensorflow.keras.layers import Conv2D
 from tensorflow.keras.layers import Dropout
 from tensorflow.keras.layers import Flatten
-from tensorflow.keras.layers import BatchNormalization
 
 class WGAN_Motion():
   def __init__(self, path=None, latent_dim=100, gp_lambda=10):

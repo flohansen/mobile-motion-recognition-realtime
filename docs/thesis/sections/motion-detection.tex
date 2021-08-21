@@ -177,7 +177,21 @@ Aus\-führ\-ungs\-ge\-schwin\-dig\-keit. Als erstes werden einfache
 Fully-Connected-Layer verwendet und evaluiert. Es wurden dabei Schritt für
 Schritt Änderungen an der Anzahl der Neuronen und Schichten vorgenommen.
 Anschließend wird untersucht, ob das Verwenden CNNs ähnliche oder bessere
-Ergebnisse liefert -- besonders in Hinblick auf die Performance.
+Ergebnisse liefert, besonders in Hinblick auf die Performance.
+
+\begin{table}
+    \footnotesize
+    \begin{tabularx}{\textwidth}{l|X|l|l}
+        \hline
+        name & layers & accuracy & inference speed \\ \hline
+        \multirow{3}{*}{linear} & Dense, 128 \newline ReLU \newline Dense, 17 & 0.00 & 100ms \\ \cline{2-4}
+        & Dense, 256 \newline ReLU \newline Dense, 17 & 0.00 & 100ms \\ \cline{2-4}
+        & Dense, 256 \newline ReLU \newline Dense, 128 \newline ReLU \newline Dense, 17 & 0.00 & 100ms \\ \hline
+        \multirow{3}{*}{conv} & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Dense, 17 & 0.00 & 100ms \\ \cline{2-4}
+        & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Conv2D, 64, $3 \plh 3$, stride 2 \newline Dense, 17 & 0.00 & 100ms \\ \cline{2-4}
+        & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Conv2D, 64, $3 \plh 3$, stride 2 \newline Conv2D, 128, $3 \plh 3$, stride 2 \newline Dense, 17 & 0.00 & 100ms \\ \hline
+    \end{tabularx}
+\end{table}
 
 \section{Erkennung von Anomalien in Bewegungen}
 \section{Erkennung von Eigenschaften}
