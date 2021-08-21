@@ -177,20 +177,42 @@ Aus\-führ\-ungs\-ge\-schwin\-dig\-keit. Als erstes werden einfache
 Fully-Connected-Layer verwendet und evaluiert. Es wurden dabei Schritt für
 Schritt Änderungen an der Anzahl der Neuronen und Schichten vorgenommen.
 Anschließend wird untersucht, ob das Verwenden CNNs ähnliche oder bessere
-Ergebnisse liefert, besonders in Hinblick auf die Performance.
+Ergebnisse liefert, besonders in Hinblick auf die Performance. In Tabelle
+\ref{table:motion-detection} sind die durchgeführten Experimente aufgelistet.
+Als Schlussfolgerung kann aufgeführt werden, dass CNNs die Bewegungen wesentlich
+besser erkennen können als die Fully-Connected-Modelle. Nicht nur, dass sie eine
+höhere Genauigkeit aufweisen, sie lernen die Verteilung auch wesentlich
+schneller. Während die Fully-Connected-Modelle 300 Epochen für eine Genauigkeit
+von 90-97\% benötigen, benötigen die CNNs lediglich 9-80 Epochen für bessere
+Resultate. Der einzige Nachteil besteht in ihrer Ausführungsgeschwindigkeit, die
+bis zu vier mal langsamer ist.
 
 \begin{table}
     \footnotesize
-    \begin{tabularx}{\textwidth}{l|X|l|l}
+    \begin{tabularx}{\textwidth}{l|X|l|l|l}
         \hline
-        name & layers & accuracy & inference speed \\ \hline
-        \multirow{3}{*}{linear} & Dense, 128 \newline ReLU \newline Dense, 17 & 0.00 & 100ms \\ \cline{2-4}
-        & Dense, 256 \newline ReLU \newline Dense, 17 & 0.00 & 100ms \\ \cline{2-4}
-        & Dense, 256 \newline ReLU \newline Dense, 128 \newline ReLU \newline Dense, 17 & 0.00 & 100ms \\ \hline
-        \multirow{3}{*}{conv} & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Dense, 17 & 0.00 & 100ms \\ \cline{2-4}
-        & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Conv2D, 64, $3 \plh 3$, stride 2 \newline Dense, 17 & 0.00 & 100ms \\ \cline{2-4}
-        & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Conv2D, 64, $3 \plh 3$, stride 2 \newline Conv2D, 128, $3 \plh 3$, stride 2 \newline Dense, 17 & 0.00 & 100ms \\ \hline
+        name & layers & epochs & accuracy & inference speed \\ \hline
+
+        \multirow{3}{*}{linear} & Dense, 128 \newline ReLU \newline Dense, 3 & 300 & 0.90 & \num{0.59e-6}s \\ \cline{2-5}
+
+        & Dense, 256 \newline ReLU \newline Dense, 3 & 300 & 0.94 & \num{0.61e-6}s \\ \cline{2-5}
+
+        & Dense, 256 \newline ReLU \newline Dense, 128 \newline ReLU \newline Dense, 3 & 300 & 0.97 & \num{0.83e-6}s \\ \hline
+
+        \multirow{3}{*}{conv} & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Dense, 3 & 81 & 0.99 & \num{1.25e-6}s \\ \cline{2-5}
+
+        & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Conv2D, 64, $3 \plh 3$, stride 2 \newline Dense, 3 & 44 & 0.99 & \num{1.74e-6}s \\ \cline{2-5}
+
+        & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Conv2D, 64, $3 \plh 3$, stride 2 \newline Conv2D, 128, $3 \plh 3$, stride 2 \newline Dense, 3 & 9 & 0.99 & \num{2.27e-6}s \\ \hline
     \end{tabularx}
+    \caption{Durgeführte Experimente mit verschiedenen Architekturen für die
+    Bewegungserkennung. Die Eingabe besteht aus 60 Frames einer
+    Bewegungsanimation aus 17 Schlüsselpunkten mit jeweils 3 Eigenschaften (x-,
+    y-Koordinaten und Wahrscheinlichkeitsscore) kodiert als Bild (siehe
+    Abbildung \ref{fig:motion-images}). Klar zu erkennen ist, dass die Netzwerke
+    bestehend aus Convolutional-Layer wesentlich schneller lernen, Bewegungen zu
+    erkennen bei einer etwas höheren Ausführungsdauer.}
+    \label{table:motion-detection}
 \end{table}
 
 \section{Erkennung von Anomalien in Bewegungen}
