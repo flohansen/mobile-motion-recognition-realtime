@@ -20,7 +20,7 @@ def critic_loss(fake_score, real_score, gp, gp_lambda):
     return tf.reduce_mean(fake_score) - tf.reduce_mean(real_score) + gp * gp_lambda
 
 class Generator(tf.keras.Model):
-  def __init__(self, classes):
+  def __init__(self):
     super(Generator, self).__init__()
     # self.embed = tf.keras.layers.Embedding(classes, embedding_dim)
     self.dense1 = tf.keras.layers.Dense(7*2*256)
@@ -43,7 +43,7 @@ class Generator(tf.keras.Model):
     return x
 
 class Critic(tf.keras.Model):
-  def __init__(self, classes):
+  def __init__(self):
     super(Critic, self).__init__()
     # self.embed = tf.keras.layers.Embedding(classes, embedding_dim)
 
@@ -56,7 +56,8 @@ class Critic(tf.keras.Model):
 
   def call(self, x, label):
     # label = self.embed(label)
-    x = tf.concat([x, label])
+    print(x.shape)
+    x = tf.concat([x, label], 1)
 
     x = tf.nn.dropout(tf.nn.leaky_relu(self.conv1(x), 0.3), 0.3)
     x = tf.nn.dropout(tf.nn.leaky_relu(self.conv2(x), 0.3), 0.3)
