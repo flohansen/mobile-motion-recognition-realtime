@@ -7,7 +7,7 @@ def gradient_penality(critic, fake_samples, real_samples, labels):
 
     with tf.GradientTape() as tape_gp:
         tape_gp.watch(inter_sample)
-        inter_score = critic(inter_sample, labels)
+        inter_score = critic((inter_sample, labels))
 
     gp_gradients = tape_gp.gradient(inter_score, inter_sample)
     gp_gradients_norm = tf.sqrt(tf.reduce_sum(tf.square(gp_gradients), axis=[1, 2, 3]))
@@ -20,47 +20,70 @@ def critic_loss(fake_score, real_score, gp, gp_lambda):
     return tf.reduce_mean(fake_score) - tf.reduce_mean(real_score) + gp * gp_lambda
 
 class Generator(tf.keras.Model):
-  def __init__(self):
+  def __init__(self, classes):
     super(Generator, self).__init__()
-    # self.embed = tf.keras.layers.Embedding(classes, embedding_dim)
+    # Image generation input
     self.dense1 = tf.keras.layers.Dense(7*2*256)
-    self.reshape = tf.keras.layers.Reshape((7, 2, 256))
-    self.conv1 = tf.keras.layers.Conv2DTranspose(128, 3, strides=2, padding='valid', use_bias=True)
-    self.conv2 = tf.keras.layers.Conv2DTranspose(64, 3, strides=2, padding='same', use_bias=True)
-    self.conv3 = tf.keras.layers.Conv2DTranspose(3, 3, strides=2, padding='valid', use_bias=True)
+    self.reshape1 = tf.keras.layers.Reshape((7, 2, 256))
+
+    # Label embedding input
+    self.embed = tf.keras.layers.Embedding(classes, 10)
+    self.dense2 = tf.keras.layers.Dense(7*2)
+    self.reshape2 = tf.keras.layers.Reshape((7, 2, classes))
+
+    # Convolutional upsampling layers
+    self.conv1 = tf.keras.layers.Conv2DTranspose(256, (3, 2), strides=2, padding='valid', use_bias=True)
+    self.conv2 = tf.keras.layers.Conv2DTranspose(128, (3, 3), strides=2, padding='same', use_bias=True)
+    self.conv3 = tf.keras.layers.Conv2DTranspose( 64, (3, 3), strides=1, padding='same', use_bias=True)
+    self.conv4 = tf.keras.layers.Conv2DTranspose(  3, (2, 3), strides=2, padding='valid', use_bias=True)
     
-  def call(self, x, label):
-    # label = self.embed(label)
-    x = tf.concat([x, label], 1)
+  def call(self, inputs):
+    x = inputs[0]
+    label = inputs[1]
 
-    x = tf.nn.leaky_relu(self.dense1(x), 0.3)
-    x = self.reshape(x)
+    x = tf.nn.leaky_relu(self.dense1(x))
+    x = self.reshape1(x)
 
-    x = tf.nn.leaky_relu(self.conv1(x), 0.3)
-    x = tf.nn.leaky_relu(self.conv2(x), 0.3)
-    x = tf.nn.tanh(self.conv3(x))
+    label = self.embed(label)
+    label = self.dense2(label)
+    label = self.reshape2(label)
+
+    x = tf.concat([x, label], -1)
+
+    x = tf.nn.leaky_relu(self.conv1(x))
+    x = tf.nn.leaky_relu(self.conv2(x))
+    x = tf.nn.leaky_relu(self.conv3(x))
+    x = tf.nn.tanh(self.conv4(x))
 
     return x
 
 class Critic(tf.keras.Model):
-  def __init__(self):
+  def __init__(self, classes):
     super(Critic, self).__init__()
-    # self.embed = tf.keras.layers.Embedding(classes, embedding_dim)
+    self.embed = tf.keras.layers.Embedding(classes, 10)
+    self.dense2 = tf.keras.layers.Dense(60*17)
+    self.reshape2 = tf.keras.layers.Reshape((60, 17, classes))
 
-    self.conv1 = tf.keras.layers.Conv2D(32, (5, 5), strides=2, padding='same', input_shape=[60, 17, 3])
+    self.conv1 = tf.keras.layers.Conv2D(32, (5, 5), strides=2, padding='same')
     self.conv2 = tf.keras.layers.Conv2D(64, (5, 5), strides=2, padding='same')
     self.conv3 = tf.keras.layers.Conv2D(128, (5, 5), strides=2, padding='same')
 
     self.flatten = tf.keras.layers.Flatten()
     self.dense = tf.keras.layers.Dense(1)
 
-  def call(self, x, label):
-    # label = self.embed(label)
-    print(x.shape)
-    x = tf.concat([x, label], 1)
+  def call(self, inputs):
+    x = inputs[0]
+    label = inputs[1]
+
+    label = self.embed(label)
+    label = self.dense2(label)
+    label = self.reshape2(label)
+
+    x = tf.concat([x, label], -1)
 
     x = tf.nn.dropout(tf.nn.leaky_relu(self.conv1(x), 0.3), 0.3)
     x = tf.nn.dropout(tf.nn.leaky_relu(self.conv2(x), 0.3), 0.3)
     x = tf.nn.dropout(tf.nn.leaky_relu(self.conv3(x), 0.3), 0.3)
 
-    x = tf.nn.softmax(self.dense(self.flatten(x)))
+    x = self.dense(self.flatten(x))
+    return x

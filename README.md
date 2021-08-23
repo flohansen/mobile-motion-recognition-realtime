@@ -7,6 +7,7 @@
 * X. Mao, Q. Li, H. Xie, R. Y.K. Lau, Z. Wang, S. P. Smolley: **Least Squares Generative Adversarial Networks** ([PDF](https://arxiv.org/pdf/1611.04076.pdf), [BibTeX](https://arxiv.org/abs/1611.04076))
 * M. Arjovsky, S. Chintala, L. Bottou: **Wasserstein GAN** ([PDF](https://arxiv.org/pdf/1701.07875) [BibTeX](https://arxiv.org/abs/1701.07875))
 * I. Gulrajani, F. Ahmed, M. Arjovsky, V. Dumoulin, A. Courville: **Improved Training of Wasserstein GANs**, ([PDF](https://arxiv.org/pdf/1704.00028), [BibTeX](https://arxiv.org/abs/1704.00028))
+* https://arxiv.org/pdf/2012.13392.pdf#:~:text=HUMAN%20pose%20estimation%20(HPE)%2C,videos.
 
 ## Videos
 * [Creating Videos with Neural Networks using GAN](https://www.youtube.com/watch?v=CIua95jUD_I)
@@ -18,16 +19,10 @@
 
 | #   | Datensatz | Epochen | Image | Motion |
 | --- | --------- | ------- | ------------ | ---------- |
-| 1 | 2021-08-09-123241 <br/> Activation: **sigmoid** | 3000 | ![](evaluation/2021-08-09-123241/keypoints.png) | ![](evaluation/2021-08-09-123241/motion.gif) |
-| 2 | 2021-08-09-124721 <br/> Activation: **sigmoid** | 3000 | ![](evaluation/2021-08-09-124721/keypoints.png) | ![](evaluation/2021-08-09-124721/motion.gif) |
-| 3 | 2021-08-09-125332 <br/> Activation: **sigmoid** | 3000 | ![](evaluation/2021-08-09-125332/keypoints.png) | ![](evaluation/2021-08-09-125332/motion.gif) |
-| 4 | 2021-08-09-125723 <br/> Activation: **sigmoid** | 3000 | ![](evaluation/2021-08-09-125723/keypoints.png) | ![](evaluation/2021-08-09-125723/motion.gif) |
-| 5 | 2021-08-09-131039 <br/> Activation: **tanh** | 3000 | ![](evaluation/2021-08-09-131039/keypoints.png) | ![](evaluation/2021-08-09-131039/motion.gif) |
-| 6 | 2021-08-09-131550 <br/> Activation: **tanh** | 3000 | ![](evaluation/2021-08-09-131550/keypoints.png) | ![](evaluation/2021-08-09-131550/motion.gif) |
-| 7 | 2021-08-09-131930 <br/> Activation: **tanh** | 3000 | ![](evaluation/2021-08-09-131930/keypoints.png) | ![](evaluation/2021-08-09-131930/motion.gif) |
-| 8 | 2021-08-09-132311 <br/> Activation: **tanh** | 3000 | ![](evaluation/2021-08-09-132311/keypoints.png) | ![](evaluation/2021-08-09-132311/motion.gif) |
-| 9 | 2021-08-09-150217 <br/> Activation: **sigmoid** | 6000 | ![](evaluation/2021-08-09-150217/keypoints.png) | ![](evaluation/2021-08-09-150217/motion.gif) |
-| 10 | 2021-08-09-151550 <br/> Activation: **tanh** | 6000 | ![](evaluation/2021-08-09-151550/keypoints.png) | ![](evaluation/2021-08-09-151550/motion.gif) |
+| 1 | 2021-08-22-150022 <br/> Activation: **sigmoid** | 2667 | ![](evaluation/2021-08-22-150022/keypoints.png) | ![](evaluation/2021-08-22-150022/motion.gif) |
+| 2 | 2021-08-22-154137 <br/> Activation: **sigmoid** | 3001 | ![](evaluation/2021-08-22-154137/keypoints.png) | ![](evaluation/2021-08-22-154137/motion.gif) |
+| 3 | 2021-08-22-160208 <br/> Activation: **sigmoid** | 3001 | ![](evaluation/2021-08-22-160208/keypoints.png) | ![](evaluation/2021-08-22-160208/motion.gif) |
+| 4 | 2021-08-22-165314 <br/> Activation: **sigmoid** | 3001 | ![](evaluation/2021-08-22-165314/keypoints.png) | ![](evaluation/2021-08-22-165314/motion.gif) |
 
 
 ## Inhalt der Thesis

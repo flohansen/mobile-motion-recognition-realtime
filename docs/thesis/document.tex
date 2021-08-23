@@ -36,6 +36,8 @@ automatische Datensatzgenerierung}
 \newcommand{\resnetblocksimple}[3]{$\begin{bmatrix}3 \plh 3, #1 \\ 3 \plh 3, #2\end{bmatrix} \plh #3$}
 \newcommand{\resnetbottleneck}[3]{$\begin{bmatrix}1 \plh 1, #1 \\ 3 \plh 3, #1 \\ 1 \plh 1, #2\end{bmatrix} \plh #3$}
 
+\renewcommand\tabularxcolumn[1]{m{#1}}
+
 \begin{document}
   \maketitle
   \newpage \ \newpage
@@ -47,6 +49,7 @@ automatische Datensatzgenerierung}
   \include{sections/gans.tex}
   \include{sections/dataset.tex}
   \include{sections/motion-detection.tex}
+  \include{sections/mobile-app.tex}
   \include{sections/discussion.tex}
   \include{sections/conclusion.tex}
 

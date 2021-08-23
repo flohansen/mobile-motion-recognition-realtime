@@ -9,16 +9,7 @@ die Bewegung richtig ausgeführt wurde, interessant. Aber auch das Vorhersagen
 von zukünftigen Bewegungen anhand kürzlich getätigten Posen kann für einige
 Anwendungen hilfreich sein. So auch zum Beispiel beim vorzeitigen Erkennen von
 aggressiven Verhaltensmustern, sodass Eingegriffen werden kann, bevor die
-kriminelle Tätigkeit ausgeführt werden kann. Da sich diese Arbeit vor allem mit
-dem Problem beschäftigen soll, wie solche Modelle auf mobilen Plattformen
-überführt werden können, soll schließlich eine Android-App entwickelt werden, um
-die Ergebnisse zusammenzufassend zu präsentieren. Android wird als Plattform
-gewählt, da es zur Zeit die am häufigsten vertretene mobile Plattform ist und
-ein entsprechendes Gerät leicht zur Verfügung steht. Zum Vergleich, Android
-besitzt einen Marktanteil von 72,84\%, iOS einen von 26,34\% und 0,82\% werden
-von sonstigen Plattformen
-gehalten\footnote{https://www.statista.com/statistics/272698/global-market-share-held-by-mobile-operating-systems-since-2009/
-(besucht am 13.08.2021)}.
+kriminelle Tätigkeit ausgeführt werden kann. 
 
 Eine Bewegung ist beschreibbar durch die Änderung des Ortes über die Zeit. Das
 bedeutet, dass eine Fotoaufnahme einer sich bewegenden Person nicht ausreicht,
@@ -179,43 +170,59 @@ Schritt Änderungen an der Anzahl der Neuronen und Schichten vorgenommen.
 Anschließend wird untersucht, ob das Verwenden CNNs ähnliche oder bessere
 Ergebnisse liefert, besonders in Hinblick auf die Performance. In Tabelle
 \ref{table:motion-detection} sind die durchgeführten Experimente aufgelistet.
-Als Schlussfolgerung kann aufgeführt werden, dass CNNs die Bewegungen wesentlich
-besser erkennen können als die Fully-Connected-Modelle. Nicht nur, dass sie eine
-höhere Genauigkeit aufweisen, sie lernen die Verteilung auch wesentlich
-schneller. Während die Fully-Connected-Modelle 300 Epochen für eine Genauigkeit
-von 90-97\% benötigen, benötigen die CNNs lediglich 9-80 Epochen für bessere
-Resultate. Der einzige Nachteil besteht in ihrer Ausführungsgeschwindigkeit, die
-bis zu vier mal langsamer ist.
+
+Das Ergebnis aus den Trainingsversuchen mit rein-realen Datensätzen ist, dass
+CNNs die Bewegungen wesentlich besser erkennen können als die
+Fully-Connected-Modelle. Nicht nur, dass sie hier eine höhere Genauigkeit
+aufweisen, sie lernen die Verteilung auch wesentlich schneller. Während die
+Fully-Connected-Modelle 300 Epochen für eine Genauigkeit von 90-97\% benötigen,
+benötigen die CNNs lediglich 9-80 Epochen für bessere Resultate. Der einzige
+Nachteil besteht in ihrer Ausführungsgeschwindigkeit, die bis zu vier mal
+kleiner ist.
+
+Erstaunlicherweise verhält sich dies bei den Trainingsversuchen mithilfe eines
+GANs ein wenig anders. Grundsätzlich erreichten die Fully-Connected-Modelle eine
+wesentlich höhere Genauigkeit nach sehr viel weniger Trainingsepochen. Die
+Genauigkeit wurde dabei nicht mithilfe von synthetischen Daten des GANs
+gemessen, sondern es wurden hierfür wieder echte Daten verwendet. Damit wurde
+sichergestellt, dass die Genauigkeiten der verschiedenen Trainingsmethoden
+vergleichbar gehalten werden. Das Verwenden von künstlich erzeugten Daten
+liefert in diesem Fall also immer bessere Ergebnisse. Dies liegt vermutlich
+unter anderem daran, dass GANs die Eigenschaft besitzen, zwischen echten Daten
+zu interpolieren und damit automatisch eine Augmentation durchzuführen. Dies
+führt dazu, dass die Modelle eine höhere Vielfalt lernen können. Diese Vielfalt
+ist im echten Datensatz nicht so ausgeprägt. Hierbei ist wichtig zu erwähnen,
+dass das Daten erzeugende GAN auf eben diesen Datensatz trainiert wurde. Der
+Datensatz wurde also verbessert, indem ein GAN verwendet wurde, die Verteilung
+zu lernen und zu interpolieren, um eine größere Datenvielfalt zu erzeugen.
 
 \begin{table}
     \footnotesize
-    \begin{tabularx}{\textwidth}{l|X|l|l|l}
+    \begin{tabularx}{\textwidth}{l|X|c|c|c|c|c}
         \hline
-        name & layers & epochs & accuracy & inference speed \\ \hline
+        name & layers & epochs & $p_\mathrm{real}$ & epochs & $p_\mathrm{gan}$ & inference speed \\ \hline
 
-        \multirow{3}{*}{linear} & Dense, 128 \newline ReLU \newline Dense, 3 & 300 & 0.90 & \num{0.59e-6}s \\ \cline{2-5}
+        \multirow{3}{*}{linear} & Dense, 128 \newline ReLU \newline Dense, 3 & 300 & 0.90 & 82 & 0.99 & \num{0.59e-6}s \\ \cline{2-7}
 
-        & Dense, 256 \newline ReLU \newline Dense, 3 & 300 & 0.94 & \num{0.61e-6}s \\ \cline{2-5}
+        & Dense, 256 \newline ReLU \newline Dense, 3 & 300 & 0.94 & 49 & 0.99 & \num{0.61e-6}s \\ \cline{2-7}
 
-        & Dense, 256 \newline ReLU \newline Dense, 128 \newline ReLU \newline Dense, 3 & 300 & 0.97 & \num{0.83e-6}s \\ \hline
+        & Dense, 128 \newline ReLU \newline Dense, 256 \newline ReLU \newline Dense, 3 & 300 & 0.97 & 70 & 0.99 & \num{0.83e-6}s \\ \hline
 
-        \multirow{3}{*}{conv} & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Dense, 3 & 81 & 0.99 & \num{1.25e-6}s \\ \cline{2-5}
+        \multirow{3}{*}{conv} & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Dense, 3 & 81 & 0.99 & 123 & 0.99 & \num{1.25e-6}s \\ \cline{2-7}
 
-        & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Conv2D, 64, $3 \plh 3$, stride 2 \newline Dense, 3 & 44 & 0.99 & \num{1.74e-6}s \\ \cline{2-5}
+        & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Conv2D, 64, $3 \plh 3$, stride 2 \newline Dense, 3 & 44 & 0.99 & 121 & 0.99 & \num{1.74e-6}s \\ \cline{2-7}
 
-        & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Conv2D, 64, $3 \plh 3$, stride 2 \newline Conv2D, 128, $3 \plh 3$, stride 2 \newline Dense, 3 & 9 & 0.99 & \num{2.27e-6}s \\ \hline
+        & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Conv2D, 64, $3 \plh 3$, stride 2 \newline Conv2D, 128, $3 \plh 3$, stride 2 \newline Dense, 3 & 9 & 0.99 & 126 & 0.99 & \num{2.27e-6}s \\ \hline
     \end{tabularx}
     \caption{Durgeführte Experimente mit verschiedenen Architekturen für die
     Bewegungserkennung. Die Eingabe besteht aus 60 Frames einer
     Bewegungsanimation aus 17 Schlüsselpunkten mit jeweils 3 Eigenschaften (x-,
     y-Koordinaten und Wahrscheinlichkeitsscore) kodiert als Bild (siehe
-    Abbildung \ref{fig:motion-images}). Klar zu erkennen ist, dass die Netzwerke
-    bestehend aus Convolutional-Layer wesentlich schneller lernen, Bewegungen zu
-    erkennen bei einer etwas höheren Ausführungsdauer.}
+    Abbildung \ref{fig:motion-images}). Als Ausgabe sollen die Netze die
+    geschätzte Klasse, also das Label liefern. $p_\mathrm{real}$ gibt die
+    Genauigkeit des jeweiligen Modells an, das mit einem realen Datensatz
+    trainiert wurde. $p_\mathrm{gan}$ gibt hingegen die Genauigkeit der Modelle
+    an, die mithilfe eines KpGAN-Generators trainiert wurden. Für das Messen der
+    Genauigkeit wurden immer reale Daten verwendet.}
     \label{table:motion-detection}
 \end{table}
-
-\section{Erkennung von Anomalien in Bewegungen}
-\section{Erkennung von Eigenschaften}
-\section{Vorhersage von Bewegungen}
-\section{Architektur einer mobilen Anwendung}

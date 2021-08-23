@@ -53,7 +53,7 @@ def generate_motion_gif(generated_motion, shape):
 def get_training_information(path):
     acc = EventAccumulator(path)
     acc.Reload()
-    df = pd.DataFrame([(w, s, tf.make_ndarray(t)) for w, s, t in acc.Tensors('generator loss')], columns=['wall_time', 'step', 'tensor'])
+    df = pd.DataFrame([(w, s, tf.make_ndarray(t)) for w, s, t in acc.Tensors('generator_loss')], columns=['wall_time', 'step', 'tensor'])
 
     epochs = int(df.iloc[-1]['step']) + 1
     estimated_time = df.iloc[-1]['wall_time']
@@ -70,7 +70,7 @@ shutil.rmtree(evaluation_dir)
 template_string  = '| #   | Datensatz | Epochen | Image | Motion |\n'
 template_string += '| --- | --------- | ------- | ------------ | ---------- |\n'
 
-z = tf.random.uniform([1, 100], -1.0, 1.0)
+z = (tf.random.uniform([1, 100], -1.0, 1.0), tf.constant([[0.0, 0.0, 1.0]]))
 
 for i, experiment_name in enumerate(experiment_names):
     experiment_path = os.path.join(experiments_dir, experiment_name)
@@ -82,7 +82,7 @@ for i, experiment_name in enumerate(experiment_names):
 
     os.makedirs(experiment_evaluation_dir)
 
-    generator = tf.keras.models.load_model(generator_model_path, { 'generator_loss': WGAN_Motion.generator_loss })
+    generator = tf.keras.models.load_model(generator_model_path)
     generated_motions = generator(z)
 
     if generator.layers[-1].activation is tf.keras.activations.tanh:
