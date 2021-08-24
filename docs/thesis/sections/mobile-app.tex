@@ -24,6 +24,7 @@ Ausführungsdauer der Machine-Learning-Modelle möglichst gering sein soll. Der
 Grund dafür ist, dass die Modelle den Flaschenhals der Anwendung darstellen und
 eine hohe Abtastrate nur mit entsprechend schnellen Netzwerken möglich ist.
 
+\section{Implementierungsdetails}
 Der Einfachheit halber werden zwei KNNs verwendet, um eine Bewegung zu
 identifizieren. Das eine Netzwerk hat die Aufgabe, Schlüsselpunkte des
 menschlichen Körpers in Bildern zu erkennen. Diese werden anschließend in einen
@@ -35,3 +36,28 @@ Element entfernt. Ein Element dieses Puffers sind 17 Schlüsselpunkte des
 menschlichen Körpers. Dieser Puffer bildet damit die Eingabe für das zweite
 Netzwerk.  Dieses hat die Aufgabe, Schlüsselpunkte aus 60 Kamerabildern einer
 Bewegungsklasse zuzuordnen.
+
+Für die Schlüsselpunkterkennung wird MoveNets Lightning-Architektur
+\cite{movenet} verwendet. Diese wurde speziell für mobile Geräte entwickelt,
+sodass die Erkennung von Schlüs\-sel\-punk\-ten in Echtzeit durchgeführt werden
+kann. Hier gilt es zu testen, ob die Performance in der Tat ausreichend ist, um
+auf modernen, aber leistungsärmeren Geräten in Echtzeit zu laufen. Für die
+Bewegungserkennung werden die verschiedenen Architekturen aus Kapitel
+\ref{chapter:motion-detection} verwendet und getestet. Auch hier ist zu
+überprüfen, ob diese in Zusammenarbeit mit MoveNet zu einer ausreichenden
+Performance kommen. Eine ausreichende Performance wird dann angenommen, wenn
+entsprechende Bewegungen über die Kamera bzw. über die entwickelte App richtig
+erkannt wurden.
+
+\begin{figure}
+    \includegraphics[width=\textwidth]{images/camera_frame_buffer.pdf}
+    \caption{Schematische Darstellung des Puffers der Bewegungserkennung,
+    welcher $n = 60$ Schlüsselpunkte des menschlichen Körpers speichert.}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=\textwidth]{images/app_uml.pdf}
+    \caption{UML-Klassendiagramm der mobilen Anwendung zum Testen der
+    Machine-Learning-Modelle für die Bewegungserkennung.}
+\end{figure}
+
