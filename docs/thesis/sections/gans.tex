@@ -1,4 +1,4 @@
-\chapter{Generative Adversarial Networks}\label{chapter:gans}
+\chapter{Generative-Adversarial-Networks}\label{chapter:gans}
 In Machine-Learning existieren viele verschiedene Modelle, die vorhandene
 Datensätze analysieren und anhand der Daten lernen, Strukturen in den
 Datensätzen zu erkennen.  Besitzt man beispielsweise einen Datensatz
@@ -49,6 +49,8 @@ welchem die eine Partei versucht, die andere zu täuschen
 \min_G \max_D V(G, D) = \mathbb{E}_{x \sim p_{data}(x)}\left[ \log D(x) \right] + \mathbb{E}_{z \sim p_z(z)}\left[ \log (1 - D(G(z))) \right]
 \]
 
+Der Eingabeparameter $z \in \mathbb{R}^n$ stellt einen $n$-dimensionalen Vektor dar, welcher auch als latenter Vektor bezeichnet wird. Dementsprechend wird der Vektorraum auch als latenter Raum bezeichnet. Ein solcher Vektor repräsentiert verschiedenste Objekte mithilfe seiner $n$ Komponenten. In Bezug zu GANs wurde festgestellt, dass ein GAN nicht nur lernt, ähnliche Daten zu einem bestehenden Datensatz zu erzeugen, sondern auch den Zusammenhang zwischen latenten Komponenten und einer Ausgabe zu verstehen. Das schöne daran ist, dass diese latenten Vektoren mithilfe der Gesetze aus der linearen Algebra analysiert und entsprechende Operationen mit ihnen ausgeführt werden können. Hierzu kann folgendes, sehr einfaches Experiment durchgeführt werden. Man wählt zwei latente Vektoren $a, b \leftarrow \mathbb{R}^n$, wobei die Komponenten dieser Vektoren gleich sind, also $a_i = b_i, \; 0 \leq i < n$. Nun wählt man einen zufälligen Komponentenindex $j \in \mathbb{N}$ mit $j \in \left[0, n\right[$ und wählt einen zufälligen Wert für die Komponenten beider Vektoren $a_j \leftarrow \mathbb{R},\; b_j \leftarrow \mathbb{R}$, wobei $a_j \neq b_j$. Betrachtet man nun die Ausgaben des Generators mit $a$ und $b$ als Eingabe, dann unterscheiden sich diese um die Eigenschaft, die durch die Komponente an der Stelle $j$ beeinflusst wird. Das gleiche Prinzip kann auch rückwärts durchgeführt werden. Erzeugt der Generator zum Beispiel ein Bild, worauf ein Gesicht mit Brille zu sehen ist und ein weiteres Bild mit Gesicht ohne Brille, dann kann man die beiden Eingabevektoren voneinander subtrahieren und damit die Komponenten herausfinden, die für die entsprechenden Eigenschaften zuständig sind (in diesem Fall, ob das Gesicht eine Brille trägt oder nicht).
+
 Im Verlauf des Trainings entwickelt sich damit ein Generator, welcher im
 Idealfall so gute Fälschungen erzeugt, sodass sich diese nicht mehr von Daten
 der Ausgangsdistribution unterscheiden lassen. Der Diskriminator kann hier
@@ -78,7 +80,7 @@ es schwerer hatte, Fälschung von Realität zu unterscheiden. Um das Problem zu
 beseitigen wurden einige Erweiterungen an dem Standardmodell des GAN von
 \cite{goodfellow2014generative} hinzugefügt.
 
-\section{Deep Convolution GAN}
+\section{Deep-Convolution-GAN}
 Das \textit{Deep Convolution GAN} (DCGAN) ist ein Versuch,
 \textit{Convolutional Neural Networks} (CNNs) mit GANs zu verknüpfen. Nach
 vielen Fehlschlägen in der Entwicklung von GANs mit CNNs ist die Version von
@@ -140,7 +142,7 @@ Vergrößerungsfaktor pro Convolution-Schicht an, während die Anzahl der
 Filter den Farbkanälen entsprechen.}
 \end{figure}
 
-\section{Wasserstein GAN}
+\section{Wasserstein-GAN}
 Anders als andere GAN-Varianten verwendet das Wasserstein-GAN (WGAN) die
 Was\-ser\-stein-Distanz anstelle der JS- oder KL-Divergenz, um die Gewichte
 von generativen neuronalen Netzen zu optimieren. Da sich die Berechnung aller
@@ -341,3 +343,30 @@ vereinfachte Funktionen resultiert. Gradient-Penalty lässt hingegen
 komplexere Strukturen von Verteilungen zu \cite{gulrajani2017improved}.}
 \label{fig:problems-of-weight-clipping}
 \end{figure}
+
+\section{Conditional-Wasserstein-GAN mit Gradient-Penalty}
+Generative Modelle wie das WGAN oder DCGAN erzeugen bei einem zufälligen
+Eingabevektor immer ein zufälliges, interpoliertes Element aus der
+Trainingsdistribution. Besitzt der Trainingsdatensatz verschiedene Klassen, so
+werden diese Modelle auch zwischen den Klassen interpolierte Ergebnisse
+erzeugen. Aber was ist, wenn wir ein zufälliges Element einer bestimmten Klasse
+erzeugen wollen? Nehmen wir als Beispiel einen Datensatz bestehend aus Bildern
+von Hunden und Katzen. Die bisher vorgestellten DCGANs und WGANs würden auf
+diesen Datensatz trainiert werden und würden bei einem zufälligen Eingabevektor
+Hunde oder Katzenbilder bzw. eine Mischung aus beidem erzeugen. Möchte man nun
+jedoch den Generator der GANs dazu bringen, nur zufällige Hundebilder zu
+erzeugen, so muss aufwändig die dafür zuständige Komponente des Eingabevektors
+extrahiert werden, die bestimmt, ob der Generator ein Hunde- oder ein Katzenbild
+erzeugen soll. Eine einfachere Möglichkeit besteht darin, dem Generator
+zusätzlich zum latenten Vektor die Klasse der zu erzeugenden Ausgabe zu
+übergeben. Diese Idee wurde erstmals mit
+Conditional-Generative-Adversarial-Networks (cGANs) \cite{mirza2014conditional}
+umgesetzt und stellt eine Erweiterung zu den bisher besprochenen GANs dar.
+
+Wie bereits erwähnt, wird bei cGANs zusätzlich zum latenten Vektor $x$ das Label
+bzw. die Klasse $y$ als Eingabe verwendet. Wie dies technisch umgesetzt wird,
+soll das Schema in Abbildung \ref{fig:cgan} verdeutlichen.
+
+\[
+\min_G \max_D V(G, D) = \mathbb{E}_{x \sim p_{data}(x)}\left[ \log D(x \lvert y) \right] + \mathbb{E}_{z \sim p_z(z)}\left[ \log (1 - D(G(z \lvert y))) \right]
+\]
