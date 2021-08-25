@@ -49,7 +49,29 @@ welchem die eine Partei versucht, die andere zu täuschen
 \min_G \max_D V(G, D) = \mathbb{E}_{x \sim p_{data}(x)}\left[ \log D(x) \right] + \mathbb{E}_{z \sim p_z(z)}\left[ \log (1 - D(G(z))) \right]
 \]
 
-Der Eingabeparameter $z \in \mathbb{R}^n$ stellt einen $n$-dimensionalen Vektor dar, welcher auch als latenter Vektor bezeichnet wird. Dementsprechend wird der Vektorraum auch als latenter Raum bezeichnet. Ein solcher Vektor repräsentiert verschiedenste Objekte mithilfe seiner $n$ Komponenten. In Bezug zu GANs wurde festgestellt, dass ein GAN nicht nur lernt, ähnliche Daten zu einem bestehenden Datensatz zu erzeugen, sondern auch den Zusammenhang zwischen latenten Komponenten und einer Ausgabe zu verstehen. Das schöne daran ist, dass diese latenten Vektoren mithilfe der Gesetze aus der linearen Algebra analysiert und entsprechende Operationen mit ihnen ausgeführt werden können. Hierzu kann folgendes, sehr einfaches Experiment durchgeführt werden. Man wählt zwei latente Vektoren $a, b \leftarrow \mathbb{R}^n$, wobei die Komponenten dieser Vektoren gleich sind, also $a_i = b_i, \; 0 \leq i < n$. Nun wählt man einen zufälligen Komponentenindex $j \in \mathbb{N}$ mit $j \in \left[0, n\right[$ und wählt einen zufälligen Wert für die Komponenten beider Vektoren $a_j \leftarrow \mathbb{R},\; b_j \leftarrow \mathbb{R}$, wobei $a_j \neq b_j$. Betrachtet man nun die Ausgaben des Generators mit $a$ und $b$ als Eingabe, dann unterscheiden sich diese um die Eigenschaft, die durch die Komponente an der Stelle $j$ beeinflusst wird. Das gleiche Prinzip kann auch rückwärts durchgeführt werden. Erzeugt der Generator zum Beispiel ein Bild, worauf ein Gesicht mit Brille zu sehen ist und ein weiteres Bild mit Gesicht ohne Brille, dann kann man die beiden Eingabevektoren voneinander subtrahieren und damit die Komponenten herausfinden, die für die entsprechenden Eigenschaften zuständig sind (in diesem Fall, ob das Gesicht eine Brille trägt oder nicht).
+Der Eingabeparameter $z \in \mathbb{R}^n$ stellt einen $n$-dimensionalen Vektor
+dar, welcher auch als latenter Vektor bezeichnet wird. Dementsprechend wird der
+Vektorraum auch als latenter Raum bezeichnet. Ein solcher Vektor repräsentiert
+verschiedenste Objekte mithilfe seiner $n$ Komponenten. In Bezug zu GANs wurde
+festgestellt, dass ein GAN nicht nur lernt, ähnliche Daten zu einem bestehenden
+Datensatz zu erzeugen, sondern auch den Zusammenhang zwischen latenten
+Komponenten und einer Ausgabe zu verstehen. Das schöne daran ist, dass diese
+latenten Vektoren mithilfe der Gesetze aus der linearen Algebra analysiert und
+entsprechende Operationen mit ihnen ausgeführt werden können. Hierzu kann
+folgendes, sehr einfaches Experiment durchgeführt werden. Man wählt zwei
+latente Vektoren $a, b \leftarrow \mathbb{R}^n$, wobei die Komponenten dieser
+Vektoren gleich sind, also $a_i = b_i, \; 0 \leq i < n$. Nun wählt man einen
+zufälligen Komponentenindex $j \in \mathbb{N}$ mit $j \in \left[0, n\right[$
+und wählt einen zufälligen Wert für die Komponenten beider Vektoren $a_j
+\leftarrow \mathbb{R},\; b_j \leftarrow \mathbb{R}$, wobei $a_j \neq b_j$.
+Betrachtet man nun die Ausgaben des Generators mit $a$ und $b$ als Eingabe,
+dann unterscheiden sich diese um die Eigenschaft, die durch die Komponente an
+der Stelle $j$ beeinflusst wird. Das gleiche Prinzip kann auch rückwärts
+durchgeführt werden. Erzeugt der Generator zum Beispiel ein Bild, worauf ein
+Gesicht mit Brille zu sehen ist und ein weiteres Bild mit Gesicht ohne
+Brille, dann kann man die beiden Eingabevektoren voneinander subtrahieren und
+damit die Komponenten herausfinden, die für die entsprechenden Eigenschaften
+zuständig sind (in diesem Fall, ob das Gesicht eine Brille trägt oder nicht).
 
 Im Verlauf des Trainings entwickelt sich damit ein Generator, welcher im
 Idealfall so gute Fälschungen erzeugt, sodass sich diese nicht mehr von Daten
