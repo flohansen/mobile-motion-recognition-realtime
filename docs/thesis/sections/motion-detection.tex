@@ -42,59 +42,58 @@ beschreibbar ist. Damit also ein neuronales Netz eine Bewegungserkennung durchf�
 kann, ist es wichtig, dass dieses mit möglichst vielen Frames pro Sekunde (FPS)
 ausgeführt wird, um verschiedenste Bewegungen erkennen zu können.
 
-Für die Bewegungserkennung ist auch die Erkennung von menschlichen Posen
-wichtig, die Schlüsselpunkte des Körpers aus Bildern extrahiert. Aus diesen
-Informationen können bereits einige Eigenschaften einer Pose bzw. Bewegung
-abgeleitet oder berechnet werden. So ist zum Beispiel die Berechnung des Winkels
-zwischen Oberschenkel und Wade relativ simpel, wenn die entsprechenden
-Schlüsselpunkte bekannt sind. Dem Benutzer kann dadurch berechnet werden, ob
-eine Übung, die abhängig von diesem Winkel ist, richtig ausgeführt wird oder
-nicht. Grundsätzlich werden folgende Methoden zum Erkennen bzw. Analysieren von
-Bewegungen in Betracht gezogen. Erstens, es werden die von der mobilen Kamera
-aufgenommenen Bilder als Eingabe für einen Bildklassifizierer verwendet, welcher
-die Art der Bewegung ausgibt. Zweitens, die aufgenommenen Bilder werden als
-Eingabe in einen Pose-Detektor gegeben, welcher zunächst die in dem Eingabebild
-enthaltenen Schlüsselpunkte ausgibt. Diese werden dann anschließend in einen
-angehängten Prediction-Head gegeben, welcher aus den Schlüsselpunkten z.B. die
-Bewegungsart erkennt oder andere Aufgaben übernimmt. Das Ziel dieses Abschnitts
-ist es also, die beiden Methoden miteinander zu vergleichen und festzustellen,
-welche für eine mobile Anwendung geeignet ist.
+Für die Bewegungserkennung wird in dieser Arbeit die Erkennung von menschlichen
+Posen eingesetzt, die Schlüsselpunkte des Körpers aus Bildern extrahiert. Aus
+diesen Informationen können bereits einige Eigenschaften einer Pose bzw.
+Bewegung abgeleitet oder berechnet werden. So ist zum Beispiel die Berechnung
+des Winkels zwischen Oberschenkel und Wade relativ simpel, wenn die
+entsprechenden Schlüsselpunkte bekannt sind. Dem Benutzer kann dadurch
+berechnet werden, ob eine Übung, die abhängig von diesem Winkel ist, richtig
+ausgeführt wird oder nicht. Grundsätzlich wird folgende Idee zum Erkennen bzw.
+Analysieren von Bewegungen in Betracht verfolgt.  Die von einer Kamera
+aufgenommenen Bilder werden als Eingabe in einen Pose-Detektor gegeben, welcher
+zunächst die in dem Eingabebild enthaltenen Schlüsselpunkte ausgibt.  Diese
+werden dann anschließend in einen angehängten Prediction-Head gegeben, welcher
+dann aus den Schlüsselpunkten die Bewegungsart erkennt.
 
 \section{Erkennung von menschlichen Posen}
 Das Erkennen von menschlichen Posen hat in den letzten Jahren viel
 Aufmerksamkeit bekommen und wird in 2D- bzw. 3D-Human-Pose-Estimation (HPE)
 unterschieden. Diese Arbeit beschäftigt sich mit der 2D-HPE, um Schlüsselpunkte
 des menschlichen Körpers in Bildern zu detektieren. Auch wird sich auf die
-Erkennung von Einzelpersonen in Bildern konzentriert, anstatt viele verschiedene
-Personen gleichzeitig zu bestimmen. Hierbei spricht man von
-Singe-Person-Pipelines, die wiederum in zwei unterschiedliche Methoden
-unterteilt werden \cite{zheng2021deep}.
+Erkennung von Einzelpersonen in Bildern konzentriert, anstatt viele
+verschiedene Personen gleichzeitig zu bestimmen. Hierbei spricht man von
+Single-Person-Pipelines, die wiederum in zwei unterschiedliche Methoden
+unterteilt werden: Regressions- und Körperteildetektionsmethoden
+\cite{zheng2021deep}.
 
 Mit Regressionsmethoden werden zu Eingabebildern direkt die Schlüsselpunkte
-ausgegeben. Dabei soll ein KNN lernen, Bilder zu Schlüsselpunktkoordinaten
-abzubilden, sodass die Ausgabe dementsprechend die Dimension $k \cdot n$
-besitzt, wobei $k$ die Anzahl der Schlüsselpunkte und $n$ die Anzahl der
-Eigenschaften pro Schlüsselpunkt angibt. Das Problem bei dieser Methode ist,
-dass Körperteile wie Hände, Augen und Füße in einem Bild sehr klein ausfallen
-können. Dort ist es dann sehr schwer, diese von der Umgebung unterscheiden zu
-können und damit eine präzise Aussage darüber zu treffen, wo sich deren
-Schlüsselpunkte befinden.
+ausgegeben. Dabei soll ein KNN lernen, Bilder auf Schlüsselpunktkoordinaten
+abzubilden. Die Ausgabe besitzt dementsprechend $k \cdot n$ Komponenten, wobei
+$k$ die Anzahl der Schlüsselpunkte und $n$ die Anzahl der Eigenschaften pro
+Schlüsselpunkt angibt. Das Problem bei dieser Methode ist, dass Körperteile wie
+Hände, Augen und Füße in einem Bild sehr klein ausfallen können. Dort ist es
+dann sehr schwer, diese von der Umgebung unterscheiden zu können und damit eine
+präzise Aussage darüber zu treffen, wo sich deren Schlüsselpunkte befinden.
+Auch ist es möglich, dass einige Körperteile nicht auf dem Bild zu sehen sind.
+Das Treffen einer Aussage, ob das entsprechende Körperteil überhaupt im Bild
+vorhanden ist, gestaltet sich bei dieser Methode eher schwierig. Hierbei kann
+die folgende Methode helfen.
 
-Bei Körperteildetektions-Methoden verläuft die Erkennung der Schlüsselpunkte ein
-wenig anders. Anstatt direkt die Koordinaten der Schlüsselpunkte abzubilden,
+Bei Körperteildetektionsmethoden verläuft die Erkennung von Schlüsselpunkten ein
+wenig anders. Anstatt direkt auf Koordinaten der Schlüsselpunkte abzubilden,
 versucht man hier eine Reihe von Wärmekarten zu erzeugen. Genauer ausgedrückt
-wird für $k$ Schlüsselpunkte eine Menge $H = \{H_1, ..., H_k\}$ Wärmekarten
+wird für $k$ Schlüsselpunkte eine Menge aus Wärmekarten $H = \{H_1, ..., H_k\}$
 erzeugt. Eine Wärmekarte $H_i$ enthält dabei für jedes Koordinatenpaar $(x, y)$
 einen Wahrscheinlichkeitswert $p_{y, x} \in H_i$, welcher angibt, zu welcher
-Wahrscheinlichkeit dort ein Schlüsselpunkt vorliegt. Für das Training solcher
+Wahrscheinlichkeit dort ein Schlüsselpunkt vorliegt.  Für das Training solcher
 Modelle wird meistens die Abweichung zwischen generierten und tatsächlichen
 Wärmekarten mit Hilfe des Mean-Squared-Errors (MSE) minimiert. Grund\-sätz\-lich
-besitzen die convolutional-basierten Netzwerke den Vorteil, dass sie die
-Semantik eines Bildes wesentlich besser erlernen können und daher meist bessere
-Ergebnisse erzielen, als die Regressionsmethoden. Der Unterschied zwischen den
-Methoden ist in Abbildung \ref{fig:pose-detection} zu sehen. Aus diesem Grund
-werden in aktuellen Forschungen bezüglich der Posenerkennung häufig Modelle, die
-Wärmekarten erzeugen, verwendet \cite{zheng2021deep}.
+besitzen Körperteildetektionsmethoden den Vorteil, dass auch relativ kleine
+Körperteile gut erkannt werden. Der Unterschied zwischen den Methoden ist in
+Abbildung \ref{fig:pose-detection} zu sehen. Es werden in aktuellen Forschungen
+bezüglich der Posenerkennung häufig Modelle, die Wärmekarten erzeugen, verwendet
+\cite{zheng2021deep}.
 
 \begin{figure}
     \includegraphics[width=\textwidth]{images/pose_detection.pdf}
@@ -121,7 +120,10 @@ zuständig, den Abstand (Offset) jedes Pixels als Vektor von der geschätzten
 Schlüsselpunktposition zu bestimmen. Ein anderer Kopf übernimmt die Gruppierung
 der Schlüsselpunkte und ordnet diesen Personeninstanzen zu. Der vierte Kopf
 schätzt das Zentrum der Instanzen. Die vollständige Architektur von MoveNet ist
-in Abbildung \ref{fig:movenet-architecture} zu sehen.
+in Abbildung \ref{fig:movenet-architecture} zu sehen. MoveNet verwendet also
+neben dem Erzeugen von Körperteildetektionsmethoden zum Erzeugen von Wärmekarten
+auch Regressionsmethoden, um die Position von Schlüsselpunkten noch genauer
+angeben zu können.
 
 \begin{figure}
     \includegraphics[width=\textwidth]{images/movenet_architecture.png}
