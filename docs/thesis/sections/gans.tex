@@ -392,3 +392,10 @@ soll das Schema in Abbildung \ref{fig:cgan} verdeutlichen.
 \[
 \min_G \max_D V(G, D) = \mathbb{E}_{x \sim p_{data}(x)}\left[ \log D(x \lvert y) \right] + \mathbb{E}_{z \sim p_z(z)}\left[ \log (1 - D(G(z \lvert y))) \right]
 \]
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/cgan.pdf}
+    \caption{Schematische Darstellung eines einfachen Conditional-GANs für den MNIST-Datensatz. Die Eingabe sind ein latenter Vektor mit 100 Komponenten und ein Labelvektor mit 10 Komponenten (entsprechend der Anzahl der Klassen).}
+    \label{fig:cgan}
+\end{figure}
