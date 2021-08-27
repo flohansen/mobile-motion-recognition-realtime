@@ -1,4 +1,4 @@
-\chapter{Generative-Adversarial-Networks}\label{chapter:gans}
+\section{Generative-Adversarial-Networks}\label{chapter:gans}
 In Machine-Learning existieren viele verschiedene Modelle, die vorhandene
 Datensätze analysieren und anhand der Daten lernen, Strukturen in den
 Datensätzen zu erkennen.  Besitzt man beispielsweise einen Datensatz
@@ -83,7 +83,7 @@ entsteht ein Ungleichgewicht. Aus diesem Grund sollten die Lernparameter
 sorgfältig ausgewählt und untersucht werden, damit ein stabil laufendes GAN
 trainiert wird.
 
-\section{Das Mode-Collapse-Problem}
+\subsection{Das Mode-Collapse-Problem}
 Ein großes Problem beim Trainieren von generativen neuronalen Netzen ist, dass
 sich der Generator sehr häufig auf bestimmte Merkmale der Ausgangsdistribution
 des Datensatzes fixiert. Das Ergebnis sind signifikant erhöht wiederkehrende
@@ -102,7 +102,7 @@ es schwerer hatte, Fälschung von Realität zu unterscheiden. Um das Problem zu
 beseitigen wurden einige Erweiterungen an dem Standardmodell des GAN von
 \cite{goodfellow2014generative} hinzugefügt.
 
-\section{Deep-Convolution-GAN}
+\subsection{Deep-Convolution-GAN}
 Das \textit{Deep Convolution GAN} (DCGAN) ist ein Versuch,
 \textit{Convolutional Neural Networks} (CNNs) mit GANs zu verknüpfen. Nach
 vielen Fehlschlägen in der Entwicklung von GANs mit CNNs ist die Version von
@@ -164,7 +164,7 @@ Vergrößerungsfaktor pro Convolution-Schicht an, während die Anzahl der
 Filter den Farbkanälen entsprechen.}
 \end{figure}
 
-\section{Wasserstein-GAN}
+\subsection{Wasserstein-GAN}
 Anders als andere GAN-Varianten verwendet das Wasserstein-GAN (WGAN) die
 Was\-ser\-stein-Distanz anstelle der JS- oder KL-Divergenz, um die Gewichte
 von generativen neuronalen Netzen zu optimieren. Da sich die Berechnung aller
@@ -296,7 +296,7 @@ anstatt diese einer Klasse zuzuweisen und besitzt deshalb mehr Aussagekraft.
 \label{fig:wgan-gan-no-batchnorm}
 \end{figure}
 
-\section{Wasserstein-GAN mit Gradient-Penalty}
+\subsection{Wasserstein-GAN mit Gradient-Penalty}
 Ein großes Problem von Wasserstein-GANs ist das Clippen der Gewichte in ein
 fest definiertes Intervall, um die 1-Lipschitzstetigkeit zu erfüllen. Das dies
 keine elegante Lösung ist, liegt auf der Hand. In \cite{gulrajani2017improved}
@@ -366,7 +366,7 @@ komplexere Strukturen von Verteilungen zu \cite{gulrajani2017improved}.}
 \label{fig:problems-of-weight-clipping}
 \end{figure}
 
-\section{Conditional-Wasserstein-GAN mit Gradient-Penalty}
+\subsection{Conditional-Wasserstein-GAN mit Gradient-Penalty}
 Generative Modelle wie das WGAN oder DCGAN erzeugen bei einem zufälligen
 Eingabevektor immer ein zufälliges, interpoliertes Element aus der
 Trainingsdistribution. Besitzt der Trainingsdatensatz verschiedene Klassen, so
@@ -387,11 +387,48 @@ umgesetzt und stellt eine Erweiterung zu den bisher besprochenen GANs dar.
 
 Wie bereits erwähnt, wird bei cGANs zusätzlich zum latenten Vektor $x$ das Label
 bzw. die Klasse $y$ als Eingabe verwendet. Wie dies technisch umgesetzt wird,
-soll das Schema in Abbildung \ref{fig:cgan} verdeutlichen.
-
+soll das Schema in Abbildung \ref{fig:cgan} verdeutlichen. Die beiden Eingaben,
+latenter Vektor und Label, werden zuerst mithilfe einer Vollverbindungsschicht
+(Dense) und Umformungsschicht (Reshape) auf die gleiche Form gebracht, da diese
+nicht unbedingt gleich aufgebaut sein müssen. Anschließend werden die nun
+zueinander passenden Eingaben mithilfe einer Verkettungsschicht (Concat)
+aneinandergehängt. Der restliche Verlauf verhält sich wie bei den anderen
+vorgestellten GANs, also das Hochskalieren der kleinen Eingabegröße mithilfe von
+mehreren aneinandergereihten transponierten Faltungsschichten (Conv2D
+Transpose). Die Verlustfunktion für das Trainieren des cGANs muss aufgrund der
+Verkettung beider Eingaben ebenfalls angepasst werden. 
 \[
 \min_G \max_D V(G, D) = \mathbb{E}_{x \sim p_{data}(x)}\left[ \log D(x \lvert y) \right] + \mathbb{E}_{z \sim p_z(z)}\left[ \log (1 - D(G(z \lvert y))) \right]
 \]
+
+Der Operator $\lvert$ stellt dabei die Verkettungsoperation dar, sodass $x
+\lvert y$ bedeutet, dass $y$ an $x$ gehängt wird. Aus diesem Grund müssen $x$
+und $y$ auch dieselbe Form aufweisen. Andernfalls kann die Verkettung nicht
+durchgeführt werden. Das komplette Netzwerk lernt damit eine Ausgabe zu
+erzeugen, die auf das eingegebene Label passt. Soweit zur Idee von
+Conditional-Generative-Adversarial-Networks. Dies soll nun auf Wasserstein-GANs
+übertragen werden, sodass in späteren Implementationen
+Conditional-Wasserstein-GANs (cWGAN) zur Verfügung stehen, um automatisiert
+Datensätze zu erzeugen. Die angepasste Verlustfunktion für den Kritisierer,
+welche die Verkettung des Labels berücksichtigt, bildet sich wie folgt.
+\[
+L_w = \mathbb{E}_{\tilde{x} \sim \mathbb{P}_g}\left[D(\tilde{x} \lvert y)\right] -
+    \mathbb{E}_{x \sim \mathbb{P}_r}\left[D(x \lvert y)\right] +
+    \lambda \cdot \mathbb{E}_{\hat{x} \sim \mathbb{P}_{\hat{x}}}\left[(\|\nabla_{\hat{x}} D(\hat{x} \lvert y)\| - 1)^2\right]
+\]
+
+Die Verlustfunktion für den Generator ist entsprechend
+\[
+L_\theta = - \mathbb{E}_{\tilde{x} \sim \mathbb{P}_g} \left[\| D(\tilde{x} \lvert y) \|\right].
+\]
+
+Zur Erinnerung, $x \sim \mathbb{P}_r$ entspricht einer Probe $x$ aus einem
+realen Datensatz. Das $x$ ist damit ebenfalls real. Zudem sind $\tilde{x} = G(z
+\lvert y)$ und $\hat{x} = x \epsilon + \tilde{x} (1 - \epsilon)$ generierte bzw.
+interpolierte Proben. Mithilfe dieser Verlustfunktionen kann nun ein
+Conditional-Wasserstein-GAN mit Gradient-Penalty implementiert werden. Besonders
+wird dies im nächsten Kapitel besprochen, wenn ein Generator zum Erzeugen von
+ganzen Datensätzen mit verschiedenen Klassen umgesetzt werden soll.
 
 \begin{figure}
     \centering

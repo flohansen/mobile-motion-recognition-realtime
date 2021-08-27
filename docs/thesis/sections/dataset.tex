@@ -18,7 +18,7 @@ Raum, dann beschreibt eine Bewegung die Änderung des Ortes eines Objekts über
 die Zeit. Bezogen auf den zu erstellenden Datensatz bedeutet dies, dass einfache
 Bildaufnahmen von beweglichen (dynamischen) Objekten nicht ausreichen. Um eine
 Bewegung aufzuzeichnen, müssen zeitlich aufeinander folgende Bilder aufgenommen
-werden, die letzlich Videos darstellen. Da der Datensatz später dazu verwendet
+werden, die letztlich Videos darstellen. Da der Datensatz später dazu verwendet
 werden soll, um ein neuronales Netz zu trainieren, welches Bewegungen erkennt,
 müssen die zu erlernenden Bewegungen auch in diesem Datensatz als Videos
 vertreten sein.
@@ -88,7 +88,7 @@ Anzahl der Frames, die zweite die Höhe, die dritte die Breite und die vierte di
 Anzahl der Farbkanäle. Anschließend wird der Tensor mithilfe eines
 Convolutional-Layers vergrößert und die Frameanzahl erhöht. Der Stride beträgt
 dabei 2, sodass eine Verdoppelung der Dimensionen stattfindet. Insgesamt werden
-vier solcher Schichten hinereinander gereiht. Dabei entsteht ein Ausgabevideo
+vier solcher Schichten hintereinander gereiht. Dabei entsteht ein Ausgabevideo
 mit 80 Frames, wobei jeder Frame jeweils $96 \times 128 \times 3$ Pixelwerte
 besitzt.
 
