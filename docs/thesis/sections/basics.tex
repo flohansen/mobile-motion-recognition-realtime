@@ -97,7 +97,7 @@ betrieben werden. Anders ausgedrückt besitzt das Netzwerk eine sehr hohe
 Genauigkeit beim Arbeiten mit dem Trainingsdatensatz, aber eine signifikant
 niedrigere Genauigkeit beim Arbeiten mit dem Testdatensatz.
 
-Abhilfe für Degradation sollen die Residual-Networks (ResNet) mithilfe von
+Abhilfe für Degradation sollen die Residual-Networks (ResNets) mithilfe von
 \textit{Building-Blocks} schaffen. Anstatt die Abbildung
 $F(x)$ bei normalen gestapelten Schichten zu optimieren, wird bei ResNet das
 Residuum $F(x) + x$ modelliert. Dies kann mithilfe von Shortcut-Connections
@@ -118,13 +118,13 @@ werden, indem die Building-Blocks gestapelt eingesetzt werden. In
 erfolgreich auf den ImageNet-Datensatz \cite{deng2009imagenet} evaluiert wurden.
 Diese unterscheiden sich hauptsächlich in der Anzahl der verwendeten Schichten
 und sind in Tabelle \ref{table:resnets} zu sehen. Jeder dieser Residual-Blocks,
-egal ob einfacher Building-oder Bottleneck-Block, kann einen Stride besitzen.
+egal ob einfacher Building- oder Bottleneck-Block, kann einen Stride besitzen.
 Dabei ist wichtig, dass der entsprechende Stride nur auf die erste
-Faltungsschicht angewandt wird. Die restlichen Schichten besitzen demnach immer
-einen Stride von 1. Die Ergebnisse nach dem Trainieren dieser Netze haben
-gezeigt, dass das Degradation-Problem gelöst werden konnte, sodass tiefere Netze
-mithilfe von Residual-Blocks auch einen geringeren Fehler erzeugen, also genauer
-arbeiten als weniger tiefe Netze.
+Faltungsschicht des gesamten Blocks angewandt wird. Die restlichen Schichten
+besitzen demnach immer einen Stride von 1. Die Ergebnisse nach dem Trainieren
+dieser Netze haben gezeigt, dass das Degradation-Problem gelöst werden konnte,
+sodass tiefere Netze mithilfe von Residual-Blocks auch einen geringeren Fehler
+erzeugen, also genauer arbeiten als weniger tiefe Netze.
 
 \begin{table}
     \scriptsize
