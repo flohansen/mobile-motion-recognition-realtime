@@ -171,25 +171,38 @@ zu betrachtende Information gleich -- bei der Bewegungserkennung interessiert
 nur die Bewegung und nicht die Umgebung. Genau wie beim ViGAN wird hier
 ebenfalls ein WGAN als Grundarchitektur verwendet. Im Grunde verhält sich das
 Netzwerk ähnlich, außer dass es lediglich einzelne Bilder anstatt Videos
-generiert.
+generiert. Genauer gesagt, wird ein Conditional-Wasserstein-GAN verwendet,
+sodass das jeweilige Label mit als Eingabe fungieren kann, um den Generator zu
+zwingen, eine Ausgabe einer bestimmten Klasse zu erzeugen. Dadurch kann
+gesteuert werden, welche Art von Ausgabe dieser Generator liefert, was
+unabdingbar für das Erzeugen eines kompletten Datensatzes ist. Andernfalls
+erhält man zwar künstlich erzeugte Bewegungen, jedoch ist die Klasse bzw. das
+Label unbekannt. Demnach wär die einzige Alternative das Trainieren von $n$
+WGANs, wobei $n$ die Anzahl der im System vorkommenden Klassen beschreibt, also
+ein WGAN pro Klasse. Da dies eine sehr unelegante Lösung wär, wird versucht ein
+cWGAN entsprechend Abschnitt \ref{section:cwgan-gp} zu implementieren, welches
+Proben aus $n$ verschiedenen Klassen erzeugen kann. Mithilfe eines Labels als
+Eingabe soll gesteuert werden können, zu welcher Klasse das Erzeugnis gehören
+soll
 
 Eine Bewegung bestehend aus $N$ Frames und $k$ Schlüsselpunkten, welche jeweils
 eine Position im zweidimensionalen Raum und eine Auftrittswahrscheinlichkeit
 besitzen, können mithilfe eines Bildes repräsentiert werden. Ein solches Bild
-besitzt damit eine Größe von $N \times k \times 3$. Da später Modelle verwendet
-werden, welche auf dem \textit{COCO Keypoints Dataset} \cite{lin2015microsoft}
-trainiert sind und 17 Schlüsselpunkte von Menschen in Bildern erkennen, wird $k
-= 17$ gewählt. Zudem wird die Anzahl an Frames auf $N = 60$ gesetzt, es wird
-also angenommen, dass entsprechende Bewegungen innerhalb von 60 Frames eindeutig
-erkennbar sind. Die Ausgaben des GANs sind dementsprechend im Format $60 \times
-17 \times 3$. In Abbildung \ref{fig:motion-images} wurden beispielhaft drei
-Bewegungsarten zu Bilder kodiert und deren ersten 10 Frames dargestellt, die
-durch die ersten 10 Reihen des jeweiligen Bildes repräsentiert werden. Auf Basis
-dieser Bilder wird nun ein GAN entwickelt, welches neue Bewegungen des gleichen
-Typs erzeugen soll. Mit anderen Worten, das GAN soll lernen, ähnliche Bilder zu
-erzeugen, die wiederum in Schlüsselpunktanimationen dekodiert werden können.
-Wenn dieses Experiment erfolgreich ist, dann kann der Generator als
-Datensatzerzeuger für die Bewegungserkennung verwendet werden.
+besitzt damit eine Größe von $N \times k \times 3$ RGB-Werten. Da später Modelle
+verwendet werden, welche auf dem \textit{COCO Keypoints Dataset}
+\cite{lin2015microsoft} trainiert wurden und somit 17 Schlüsselpunkte von
+Menschen in Bildern erkennen, wird $k = 17$ gewählt. Zudem wird die Anzahl an
+Frames auf $N = 60$ gesetzt, es wird also angenommen, dass entsprechende
+Bewegungen innerhalb von 60 Frames eindeutig erkennbar sind. Die Ausgaben des
+GANs sind dementsprechend im Format $60 \times 17 \times 3$. In Abbildung
+\ref{fig:motion-images} wurden beispielhaft drei Bewegungsarten zu Bilder
+kodiert und deren ersten 10 Frames dargestellt, die durch die ersten 10 Reihen
+des jeweiligen Bildes repräsentiert werden. Auf Basis dieser Bilder wird nun ein
+GAN entwickelt, welches neue Bewegungen des gleichen Typs erzeugen soll. Mit
+anderen Worten, das GAN soll lernen, ähnliche Bilder zu erzeugen, die wiederum
+in Schlüsselpunktanimationen dekodiert werden können.  Wenn dieses Experiment
+erfolgreich ist, dann kann der Generator als Datensatzerzeuger für die
+Bewegungserkennung verwendet werden.
 
 \begin{figure}
     \includegraphics[width=\textwidth]{images/motion_image.png}

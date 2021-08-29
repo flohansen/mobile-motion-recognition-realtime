@@ -106,9 +106,9 @@ Residuum $F(x) + x$ modelliert. Dies kann mithilfe von Shortcut-Connections
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.4\textwidth]{images/resnet_building_block.png}
-    \caption{Schema für ein Building-Block eines ResNets \cite{he2015deep}. Die
-    Shortcut-Connection ist die Identität von dem Eingabeparameter $x$.}
+    \includegraphics[width=0.8\textwidth]{images/resnet_building_block.pdf}
+    \caption{Schemata für Building-Blocks eines ResNets \cite{he2015deep}. Die
+    Shortcut-Connection ist die Identität von dem Eingabeparameter $x$. Links ist ein einfacher Residual-Block dargestellt während rechts ein tieferer, soganannter Bottleneck-Block dargestellt wird.}
     \label{fig:resnet-building-block}
 \end{figure}
 
@@ -117,10 +117,14 @@ werden, indem die Building-Blocks gestapelt eingesetzt werden. In
 \cite{he2015deep} werden außerdem ein paar Architekturen vorgestellt, die
 erfolgreich auf den ImageNet-Datensatz \cite{deng2009imagenet} evaluiert wurden.
 Diese unterscheiden sich hauptsächlich in der Anzahl der verwendeten Schichten
-und sind in Tabelle \ref{table:resnets} zu sehen. Die Ergebnisse nach dem
-Trainieren dieser Netze haben gezeigt, dass das Degradation-Problem gelöst
-werden konnte, sodass tiefere Netze mithilfe von Residual-Blocks auch einen
-geringeren Fehler erzeugen, also genauer arbeiten als weniger tiefe Netze.
+und sind in Tabelle \ref{table:resnets} zu sehen. Jeder dieser Residual-Blocks,
+egal ob einfacher Building-oder Bottleneck-Block, kann einen Stride besitzen.
+Dabei ist wichtig, dass der entsprechende Stride nur auf die erste
+Faltungsschicht angewandt wird. Die restlichen Schichten besitzen demnach immer
+einen Stride von 1. Die Ergebnisse nach dem Trainieren dieser Netze haben
+gezeigt, dass das Degradation-Problem gelöst werden konnte, sodass tiefere Netze
+mithilfe von Residual-Blocks auch einen geringeren Fehler erzeugen, also genauer
+arbeiten als weniger tiefe Netze.
 
 \begin{table}
     \scriptsize
@@ -136,7 +140,7 @@ geringeren Fehler erzeugen, also genauer arbeiten als weniger tiefe Netze.
         & $1 \times 1$ & \multicolumn{5}{c}{average pool, 1000-d fc, softmax} \\ \hline
         \multicolumn{2}{c|}{FLOPs} & \num{1.8e9} & \num{3.6e9} & \num{3.8e9} & \num{7.6e9} & \num{11.3e9} \\ \hline
     \end{tabularx}
-    \caption{Architekturen für ImageNet \cite{he2015deep}. Es werden die gestapelten Schichten bzw. Building-Blocks für ResNet-18, -34, -50, -101 und -152 aufgelistet.}
+    \caption{Architekturen für ImageNet \cite{he2015deep}. Es werden die gestapelten Schichten bzw. Building-Blocks für ResNet-18, -34, -50, -101 und -152 aufgelistet. Die Building-Blocks werden hier als Matrix dargestellt und geben pro Zeile die Kernelgröße und Anzahl der Kanäle der Faltungsschichten an. Das Multiplikationszeichen hinter den Matrizen gibt die Anzahl der verketteten Building-Blocks an.}
     \label{table:resnets}
 \end{table}
 
