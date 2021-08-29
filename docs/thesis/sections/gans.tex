@@ -412,23 +412,25 @@ Conditional-Wasserstein-GANs (cWGAN) zur Verfügung stehen, um automatisiert
 Datensätze zu erzeugen. Die angepasste Verlustfunktion für den Kritisierer,
 welche die Verkettung des Labels berücksichtigt, bildet sich wie folgt.
 \[
-L_w = \mathbb{E}_{\tilde{x} \sim \mathbb{P}_g}\left[D(\tilde{x} \lvert y)\right] -
+L_w(x, \tilde{x}, \hat{x}, y) = \mathbb{E}_{\tilde{x} \sim \mathbb{P}_g}\left[D(\tilde{x} \lvert y)\right] -
     \mathbb{E}_{x \sim \mathbb{P}_r}\left[D(x \lvert y)\right] +
     \lambda \cdot \mathbb{E}_{\hat{x} \sim \mathbb{P}_{\hat{x}}}\left[(\|\nabla_{\hat{x}} D(\hat{x} \lvert y)\| - 1)^2\right]
 \]
 
 Die Verlustfunktion für den Generator ist entsprechend
 \[
-L_\theta = - \mathbb{E}_{\tilde{x} \sim \mathbb{P}_g} \left[\| D(\tilde{x} \lvert y) \|\right].
+L_\theta = -\mathbb{E}_{\tilde{x} \sim \mathbb{P}_g} \left[D(\tilde{x} \lvert y)\right].
 \]
 
-Zur Erinnerung, $x \sim \mathbb{P}_r$ entspricht einer Probe $x$ aus einem
-realen Datensatz. Das $x$ ist damit ebenfalls real. Zudem sind $\tilde{x} = G(z
-\lvert y)$ und $\hat{x} = x \epsilon + \tilde{x} (1 - \epsilon)$ generierte bzw.
-interpolierte Proben. Mithilfe dieser Verlustfunktionen kann nun ein
-Conditional-Wasserstein-GAN mit Gradient-Penalty implementiert werden. Besonders
-wird dies im nächsten Kapitel besprochen, wenn ein Generator zum Erzeugen von
-ganzen Datensätzen mit verschiedenen Klassen umgesetzt werden soll.
+Für ein Training, in welchem die Daten in Batches vorliegen, wird einfach der
+arithmetische Mittelwert berechnet.  Zur Erinnerung, $x \sim \mathbb{P}_r$
+entspricht einer Probe $x$ aus einem realen Datensatz. Das $x$ ist damit
+ebenfalls real. Zudem sind $\tilde{x} = G(z \lvert y)$ und $\hat{x} = x \epsilon
++ \tilde{x} (1 - \epsilon)$ generierte bzw.  interpolierte Proben. Mithilfe
+dieser Verlustfunktionen kann nun ein Conditional-Wasserstein-GAN mit
+Gradient-Penalty implementiert werden. Besonders wird dies im nächsten Kapitel
+besprochen, wenn ein Generator zum Erzeugen von ganzen Datensätzen mit
+verschiedenen Klassen umgesetzt werden soll. 
 
 \begin{figure}
     \centering

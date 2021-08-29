@@ -1,4 +1,20 @@
 \chapter{Grundlagen}\label{chapter:basics}
+In diesem Kapitel sollen die Grundlagen, die in dieser Arbeit benötigt werden, besprochen werden und bildet den Theorieteil der Thesis. Zuerst wird auf die mathematischen Grundlagen eingegangen, die zum Definieren von Verlustfunktionen für generative Machine-Learning-Modelle essentiell sind. Ziel dieses Teils ist es die Frage zu beantworten, wie weit eine Wahrscheinlichkeitsverteilung von einer anderen entfernt ist, um die Distanz anschließend zu minimieren. Das Minimieren der Entfernung zwischen Verteilungen wird in darauf folgenden Abschnitten verwendet, um Generative-Adversarial-Networks zu trainieren.
+
+Neben den mathematischen Grundlagen werden einige grundlegende Bausteine für die
+Entwicklung von hochqualitativen Feature-Extraktoren für die Objekterkennung auf
+mobilen Endgeräten erläutert. Diese werden in späteren Kapiteln verwendet, um
+neue neuronale Netzwerke zu entwickeln, die unter anderem menschliche Posen aus
+Bildern sehr genau extrahieren und letztlich Bewegungen erkennen können. Hierfür
+ist eine hohe Semantik bei einer hohen Qualität bzw. Auflösung unabdingbar, um
+auch kleine Merkmale wie Hände erkennen zu können. Deshalb werden
+Feature-Pyramid-Networks (FPNs) erläutert, die mithilfe eines sogenannten
+Backbones hochauflösende Features mit einer hohen Semantik extrahieren können
+während einfache Faltungsschichten (Convolutional-Layer) zwar ein hohes
+Verständnis entwickeln, jedoch eine kleine Auflösung dieser Features besitzen.
+
+Neben den FPNs soll auch die Idee hinter Residual-Neural-Networks (ResNets) erläutert werden.
+
 \section{Notationen}
 In dieser Arbeit werden verschiedene Notationen aus der Statistik und dem
 Machine-Learning-Umfeld verwendet und sollen hier aufgrund der Les- und
@@ -12,6 +28,9 @@ $f(x)$ unter $x$ verteilt als $P$}.
 \paragraph{Berechnung von Gradienten.}
 Der Term $\nabla_w\left[f(x)\right]$ stellt die Berechnung der Gradienten von
 den Parametern $w$ mithilfe der Loss-Funktion $f$ dar.
+
+\paragraph{Euklidische Norm.}
+Der Term $\| v \|$ stellt die euklidische Norm von $v$ dar. Sie ist definiert als die Summer aller Quadrate der Komponenten von $v$, also $\| v \| = \| v \|_2 = \sqrt{v_1^2 + v_2^2 + ... + v_n^2}$.
 
 \section{Lipschitzstetigkeit}
 \begin{definition}[K-Lipschitzstetigkeit]
