@@ -24,8 +24,6 @@ Ausführungsdauer der Machine-Learning-Modelle möglichst gering sein soll. Der
 Grund dafür ist, dass die Modelle den Flaschenhals der Anwendung darstellen und
 eine hohe Abtastrate nur mit entsprechend schnellen Netzwerken möglich ist.
 
-\section{Machine-Learning-Frameworks für mobile Geräte}
-
 \section{Implementierungsdetails}
 Der Einfachheit halber werden zwei KNNs verwendet, um eine Bewegung zu
 identifizieren. Das eine Netzwerk hat die Aufgabe, Schlüsselpunkte des
@@ -51,18 +49,26 @@ Performance kommen. Eine ausreichende Performance wird dann angenommen, wenn
 entsprechende Bewegungen über die Kamera bzw. über die entwickelte App richtig
 erkannt wurden.
 
+Für die Entwicklung der Android-App wurde \textit{Kotlin} verwendet. Zudem wird
+die \textit{Ten\-sor\-Flow-Lite-API} (TFLite) verwendet, um die exportierten
+Modelle auf Android auszuführen. Die in dieser Arbeit implementierten Modelle
+wurden alle mit der \textit{TensorFlow-API} trainiert.  Da es sich dabei jedoch
+um ein Desktop Framework handelt, wurden die trainierten Modelle im
+\textit{Saved-Model}-Format gespeichert und anschließend in das TFLite-Format
+umgewandelt. 
+
 Es soll nun der allgemeine Aufbau der mobilen Anwendung besprochen werden. Im
 ersten Schritt wurde sich Gedanken über mögliche Klassen der Anwendung gemacht.
 Diese sind im UML-Klassendiagramm in Abbildung \ref{fig:uml-app} zu sehen. Als
 Einstiegspunkt in dieser, sowie in jeder anderen Android-App, dient die
-MainActivity-Klasse. Hier werden vor allem die View-Elemente der App
+\texttt{MainActivity}-Klasse. Hier werden vor allem die View-Elemente der App
 initialisiert. Auch die Modelle für das Erkennen von Bewegungen werden hier
-geladen. Dies ist zum einen das MoveNet-Lightning-Modell für die
+geladen. Dies ist zum einen das MoveNet-Lightning-Modell\footnote{MoveNet-Lightning, https://tfhub.dev/google/movenet/singlepose/lightning/4} für die
 Schlüsselpunkterkennung und zum anderen das MotionNet aus Kapitel
-\ref{chapter:motion-detection}. Warum genau die beiden Modelle nicht in ein
-einziges Modell zusammengefügt worden sind, hat den Grund, dass die
-Schlüsselpunkte in den dazugehörigen Puffer gespeichert werden sollen. Dieser
-wird dann vom MotionNet ausgelesen und interpretiert, sodass eine
+\ref{chapter:motion-detection}. Warum die beiden Modelle nicht in ein einziges
+Modell zusammengefügt worden sind, hat den Grund, dass die Schlüsselpunkte in
+den dazugehörigen Puffer gespeichert werden sollen. Dieser wird dann
+anschließend vom MotionNet ausgelesen und interpretiert, sodass eine
 Bewegungserkennung stattfinden kann. Die Ausgabe von einem
 Schlüsselpunktdetektor kann demnach nicht direkt als Eingabe für das MotionNet
 dienen. Dies liegt natürlich auch daran, dass versucht wird, eine Bewegung in
@@ -70,25 +76,26 @@ Echtzeit zu erkennen. Deshalb ist es notwendig, dass die Bilder der Kamera auch
 in Echtzeit analysiert werden. Erst wenn diese Abtastung ein bestimmtes
 Zeitfenster beinhaltet, kann eine zeitabhängige Änderung einer Pose erkannt
 werden. Die beiden geladenen Modelle werden nun in eine dafür vorgesehene Klasse
-verwaltet. MotionDetector soll die Erkennungslogik implementieren, was unter
-anderem die Implementierung des Schlüsselpunktpuffers (siehe Abbildung
+verwaltet. \texttt{MotionDetector} soll die Erkennungslogik implementieren, was
+unter anderem die Implementierung des Schlüsselpunktpuffers (siehe Abbildung
 \ref{fig:camera-frame-buffer}) bedeutet. Diese Klasse wird abstrakt umgesetzt,
 damit neue Modelle zum Erkennen von Bewegungen einfach von ihr erben und
 entsprechende Methoden überschreiben können, um den Weg in die Anwendung
-leichter finden zu können. Als Beispiel hierfür wurde das MotionNet
+leichter finden zu können. Als Beispiel hierfür wurde das \texttt{MotionNet}
 implementiert, welches nun von der abstrakten Klasse erbt. Hier werden die
 Modelle als \textit{Interpreter} der \textit{TensorFlow-Lite-API} verwaltet. Die
 Inferenz der Modelle wird schließlich in den zu überschreibenden Methoden
 ausgeführt. Damit die Ausführung der Modelle überhaupt stattfinden kann, müssen
 Bilder über die Kamera in die Anwendung geleitet werden. Dies wird mithilfe der
-implementierten CameraManager-Klasse umgesetzt. Diese stellt das aktuelle Bild
-der Kamera über ein dafür vorgesehenes Steuerelement dar und bietet eine
-Schnittstelle zum Abfangen einzelner Frames. Diese Frames werden anschließend
-über die MainActivity in die Bewegungserkennung geleitet. Nach der Inferenz wird
-das User-Interface mithilfe der MainActivity aktualisiert und die Ergebnisse
-dargestellt. Speziell für die Darstellung der Schlüsselpunkte und der
-Bewegungsart wird die View-Klasse PersonOverlay umgesetzt. Diese stellt alle aus
-der Bewegungserkennung resultierenden Ergebnisse grafisch dar.
+implementierten \texttt{CameraManager}-Klasse umgesetzt. Diese stellt das
+aktuelle Bild der Kamera über ein dafür vorgesehenes Steuerelement dar und
+bietet eine Schnittstelle zum Abfangen einzelner Frames. Diese Frames werden
+anschließend über die \texttt{MainActivity} in die Bewegungserkennung geleitet.
+Nach der Inferenz wird das User-Interface mithilfe der \texttt{MainActivity}
+aktualisiert und die Ergebnisse dargestellt. Speziell für die Darstellung der
+Schlüsselpunkte und der Bewegungsart wird die View-Klasse \texttt{PersonOverlay}
+umgesetzt. Diese stellt alle aus der Bewegungserkennung resultierenden
+Ergebnisse grafisch dar.
 
 \begin{figure}
     \includegraphics[width=\textwidth]{images/camera_frame_buffer.pdf}

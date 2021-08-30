@@ -1,21 +1,21 @@
 \chapter{Bewegungserkennung}\label{chapter:motion-detection}
 In diesem Kapitel sollen die Ergebnisse aus Kapitel \ref{chapter:dataset}
 verwendet werden, um eine Bewegungserkennung zu entwickeln. Genauer gesagt soll
-auch hier ein Modell entworfen werden, um diese Bewegungen zu erkennen und
-klassifizieren. Zudem soll ein Ausblick auf Techniken gegeben werden, um weitere
-bewegungsabhängige Eigenschaften mithilfe von KNNs zu extrahieren. Zum Beispiel
-ist beim Ausüben von sportlichen Aktivitäten neben der Bewegungsart auch
-interessant, ob die Bewegung richtig ausgeführt wurde. Aber auch das
-Vorhersagen von zukünftigen Bewegungen anhand kürzlich getätigten Posen kann für
-einige Anwendungen hilfreich sein. So auch zum Beispiel beim vorzeitigen
-Erkennen von aggressiven Verhaltensmustern, sodass eingegriffen werden kann,
-bevor eine kriminelle Tätigkeit ausgeführt werden kann. 
+hier ein Machine-Learning-Modell entworfen werden, um Bewegungen zu
+erkennen und klassifizieren. Zudem soll ein Ausblick auf Techniken gegeben
+werden, um weitere bewegungsabhängige Eigenschaften mithilfe von KNNs zu
+extrahieren. Zum Beispiel ist beim Ausüben von sportlichen Aktivitäten neben der
+Bewegungsart auch interessant, ob die Bewegung richtig ausgeführt wurde. Aber
+auch das Vorhersagen von zukünftigen Bewegungen anhand kürzlich getätigten Posen
+kann für einige Anwendungen hilfreich sein. So auch zum Beispiel beim
+vorzeitigen Erkennen von aggressiven Verhaltensmustern, sodass eingegriffen
+werden kann, bevor die eigentliche Tätigkeit ausgeführt werden kann. 
 
 Eine Bewegung kann durch die Änderung des Ortes über die Zeit beschrieben
-werden. Das bedeutet, dass eine Fotoaufnahme einer sich bewegenden Person nicht
-ausreicht, um die Bewegung aufzuzeichnen. Entsprechend müssen Bilder über Zeit
-aufgenommen werden. Die nächste Frage, die sich ergibt ist, wie viele
-Bildaufnahmen nötig sind, um eine Bewegung erkennen zu können. Dies hängt
+werden. Das bedeutet, dass eine einzige Fotoaufnahme einer sich bewegenden
+Person nicht ausreicht, um eine Bewegung aufzuzeichnen. Entsprechend müssen
+Bilder über Zeit aufgenommen werden. Die nächste Frage, die sich ergibt ist, wie
+viele Bildaufnahmen nötig sind, um eine Bewegung erkennen zu können. Dies hängt
 natürlich von der Art der Bewegung und der Bewegungsgeschwindigkeit ab. Möchte
 man beispielsweise einen Jumping-Jack aufnehmen und die Person bewegt sich viel
 zu langsam, dann sind wesentlich mehr Aufnahmen nötig, als wenn diese sich in
@@ -32,25 +32,26 @@ Minute schaffen \cite{smolik}. Das würde bedeuten, dass die Abtastrate
 mindestens 2 Hz betragen muss, um das Signal rekonstruierbar aufzuzeichnen.
 Betrachtet man nun eine Beinpressbewegung, die ebenfalls mit 60 Tritten pro
 Minute ausgeführt wird, ergibt sich ebenfalls eine Abtastfrequenz von 2 Hz. Hier
-wird folgendes Problem ersichtlich. Tastet man beide Signale mit 2 Hz ab, so
-kann man nicht zwischen Kreisbewegung und Linearbewegung unterscheiden, wenn
-sich die abgetasteten Punkte überschneiden. Würde man hingegen mit 3 Hz
-abtasten, so wären die Bewegungen eindeutig voneinander unterscheidbar. Dies hat
-unter anderem damit zu tun, dass eine lineare Funktion durch zwei Punkte und ein
-Kreis stets durch drei sich nicht auf einer Geraden befindenden Punkte
-beschreibbar ist. Damit also ein neuronales Netz eine Bewegungserkennung durchführen
-kann, ist es wichtig, dass dieses mit möglichst vielen Frames pro Sekunde (FPS)
-ausgeführt wird, um verschiedenste Bewegungen erkennen zu können.
+wird folgendes Problem ersichtlich. Tastet man die Fußpositionen der Sportler
+mit 2 Hz ab, so kann man nicht zwischen Kreisbewegung und Linearbewegung
+unterscheiden. Würde man hingegen mit 3 Hz abtasten, so wären die Bewegungen
+eindeutig voneinander unterscheidbar. Dies hat unter anderem damit zu tun, dass
+eine lineare Funktion durch zwei Punkte und ein Kreis stets durch drei sich
+nicht auf einer Geraden befindenden Punkte beschreibbar ist. Damit also ein
+neuronales Netz eine akkurate Bewegungserkennung durchführen kann, ist es
+wichtig, dass dieses mit möglichst vielen Frames pro Sekunde (FPS) ausgeführt
+wird, um verschiedenste Bewegungen erkennen zu können. Eine Überabtastung wird
+hierbei als weniger kritisch angesehen, als eine Unterabtastung.
 
 Für die Bewegungserkennung wird in dieser Arbeit die Erkennung von menschlichen
 Posen eingesetzt, die Schlüsselpunkte des Körpers aus Bildern extrahiert. Aus
-diesen Informationen können bereits einige Eigenschaften einer Pose bzw.
+diesen Informationen können bereits einige Eigenschaften einer 
 Bewegung abgeleitet oder berechnet werden. So ist zum Beispiel die Berechnung
 des Winkels zwischen Oberschenkel und Wade relativ simpel, wenn die
 entsprechenden Schlüsselpunkte bekannt sind. Dem Benutzer kann dadurch
 berechnet werden, ob eine Übung, die abhängig von diesem Winkel ist, richtig
 ausgeführt wird oder nicht. Grundsätzlich wird folgende Idee zum Erkennen bzw.
-Analysieren von Bewegungen in Betracht verfolgt.  Die von einer Kamera
+Analysieren von Bewegungen verfolgt. Die von einer Kamera
 aufgenommenen Bilder werden als Eingabe in einen Pose-Detektor gegeben, welcher
 zunächst die in dem Eingabebild enthaltenen Schlüsselpunkte ausgibt.  Diese
 werden dann anschließend in einen angehängten Prediction-Head gegeben, welcher
