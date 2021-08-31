@@ -1,6 +1,34 @@
 \chapter{Fazit und Ausblick}
-In dieser Thesis wurden verschiedene Modelle des maschinellen Lernens entwickelt und evaluiert. Vor allem wurden sogenannte Generative-Adversarial-Networks (GANs) erforscht und neue Methoden zum künstlichen Erzeugen von Bewegungen gesucht, um einen kompletten Datensatz mithilfe eines solchen Modells zu erzeugen. Als Ergebnis wurde ViGAN präsentiert. Neben der Möglichkeit, Videos zu erzeugen stehen noch einige Probleme im Raum, die ViGAN betreffen. So sind Personen oft bewegungslos, während sich z.B. ganze Räume über die Zeit ändern. Als Alternative dazu wurde KpGAN entworfen, welches direkt verschiedenste Bewegungsanimationen erzeugen kann. Diese Bewegungsanimationen bestehen dabei aus menschlichen Schlüsselpunkten und werden als Bilder kodiert. Experimente haben gezeigt, dass Datensätze, die komplett mithilfe von KpGAN erzeugt wurden, mindestens genau so gut für das Training anderer Modelle geeignet sind, wie entsprechende reale Datensätze.
+In dieser Thesis wurden verschiedene Modelle des maschinellen Lernens
+entwickelt und evaluiert. Vor allem wurden sogenannte
+Generative-Adversarial-Networks (GANs) erforscht und neue Methoden zum Erzeugen
+von künstlichen Bewegungen gesucht, um einen kompletten Datensatz mithilfe
+eines solchen Modells zu erzeugen. Als Ergebnis wurde zuerst ViGAN präsentiert.
+Ziel war es, aus einem bestehenden Video-Datensatz neue bisher unbekannte
+Proben zu erzeugen. Dies gelang auch bis zu einem gewissen Grad. Es wurden zwar
+neue Videos vom Netzwerk erzeugt, jedoch konnte nicht kontrolliert werden, ob
+eine Person tatsächlich eine Bewegung ausführt. So sind Personen oft
+regungslose starre Körper, während sich z.B. ganze Räume über die Zeit
+verändern. Als Alternative dazu wurde KpGAN entworfen, welches direkt
+verschiedenste Bewegungsanimationen erzeugen kann. Diese Bewegungsanimationen
+bestehen dabei aus menschlichen Schlüsselpunkten und werden als Bilder kodiert.
+Experimente haben gezeigt, dass Datensätze, die komplett mithilfe von KpGAN
+erzeugt wurden, mindestens genau so gut für das Training anderer Modelle
+geeignet sind, wie entsprechende reale Datensätze.
 
-Im Anschluss wurde mithilfe von KpGAN ein weiteres neuronales Netzwerk trainiert, welches Bewegungen erkennen soll. Die Herausforderung ist dabei die Echtzeiterkennung auf mobilen Geräten, sodass mit Blick auf die Performanz gearbeitet wurde. Aus den Experimenten resultierte schließlich das MotionNet, welches eine sehr gute Erkennrate und Ausführungsgeschwindigkeit besitzt. Mithilfe des trainierten MotionNets und eines externen Modells von Google (MoveNet-Lightning) wurde anschließend eine mobile App entwickelt, welche die Anwendbarkeit und Performanz auf mobilen Geräten messen soll. Auf modernen Smartphones wurde eine Ausführungsgeschwindigkeit von bis zu 14 FPS gemessen. Damit wurde eindeutig bewiesen, dass eine Bewegungserkennung auf mobilen Plattformen in Echtzeit ausführbar ist.
+Im Anschluss wurde mithilfe von KpGAN ein weiteres neuronales Netzwerk
+trainiert, welches Bewegungen erkennen soll. Die Herausforderung ist dabei die
+Echtzeiterkennung auf mobilen Geräten, sodass mit Blick auf die Performanz
+gearbeitet wurde. Aus den Experimenten resultierte schließlich das MotionNet,
+welches eine sehr gute Erkennrate und Ausführungsgeschwindigkeit besitzt.
+Mithilfe des trainierten MotionNets und eines externen Modells von Google
+(MoveNet-Lightning) wurde anschließend eine mobile App entwickelt, welche die
+Anwendbarkeit und Performanz auf mobilen Geräten messen soll. Auf modernen
+Smartphones wurde eine Ausführungsgeschwindigkeit von bis zu 14 FPS gemessen.
+Damit wurde eindeutig bewiesen, dass eine Bewegungserkennung auf mobilen
+Plattformen in Echtzeit ausführbar ist.
 
-Weiterführende Arbeiten können sich in Zukunft mit dem Verbessern des ViGAN be\-schäf\-tigen, um das Problem mit den sich nicht bewegenden Personen in Videos zu lösen. Zudem kann das MotionNet um weitere Bewegungen erweitert werden.
+Weiterführende Arbeiten können sich in Zukunft mit dem Verbessern des ViGAN
+be\-schäf\-tigen, um das Problem mit den sich nicht bewegenden Personen in
+Videos zu lösen. Zudem kann das MotionNet um weitere Bewegungen erweitert
+werden.
