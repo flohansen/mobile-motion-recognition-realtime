@@ -99,7 +99,7 @@ $y$ transportiert wird, um schließlich die Verteilung $P_r$ in die Verteilung
 $P_g$ umzuformen. Aus diesem Grund ist der Wasserstein-Abstand auch als
 \textit{Earth-Mover-Abstand} (EM-Abstand) bekannt.
 
-\section{Residual-Neural-Networks}
+\section{Residual-Neural-Networks}\label{section:residual-blocks}
 Mit \cite{he2015deep} wurde ein neues Framework zum Trainieren von tiefen
 neuronalen Netzen vorgestellt. Ein großes Problem mit sehr tiefen neuronalen
 Netzen ist, dass diese zu einem größeren Fehler im Training führen. Dies führt
@@ -162,6 +162,37 @@ erzeugen, also genauer arbeiten als weniger tiefe Netze.
     \caption{Architekturen für ImageNet \cite{he2015deep}. Es werden die gestapelten Schichten bzw. Building-Blocks für ResNet-18, -34, -50, -101 und -152 aufgelistet. Die Building-Blocks werden hier als Matrix dargestellt und geben pro Zeile die Kernelgröße und Anzahl der Kanäle der Faltungsschichten an. Das Multiplikationszeichen hinter den Matrizen gibt die Anzahl der verketteten Building-Blocks an.}
     \label{table:resnets}
 \end{table}
+
+\section{MobileNetV2}
+Dieser Abschnitt soll nun eine Architektur vorstellen, die geeignet ist, um Modelle des maschinellen Lernens auf mobilen Geräten auszuführen. Diese soll als Grundlage zum Verständnis der MoveNet-Architektur aus \cite{movenet} dienen, die später für die Bewegungserkennung wichtig wird. Die Rede ist hierbei von MobileNetV2 \cite{sandler2019mobilenetv2} und den damit eingeführten Inverted-Residual-Blocks. Diese besitzen einen verringerten Speicherverbrauch bei einer Inferenz, was für mobile Anwendungen sehr wichtig ist und sind wie folgt aufgebaut. Die Eingabe $x$ in einem solchen Block wird zuerst in eine Faltungsschicht mit einem $1 \times 1$ Kernel und einer ReLU6-Aktivierung gegeben. Danach wird eine Depthwise-Separable-Convolution \cite{howard2017mobilenets} durchgeführt, die eine Kernelgröße von $3 \times 3$ verwendet. Auch hier wird eine ReLU6-Aktivierung vorgenommen. Die nächste Schicht ist wieder eine $1 \times 1$ Faltungsschicht mit keiner, also einer linearen Aktivierung. Zum Schluss wird die Ausgabe der letzten Faltungsschicht mit der Identität der Eingabe $x$ addiert und bildet ein Residuum. Der gesamte Ablauf ist in Abbildung \ref{fig:inverted-residual} zu sehen und ähnelt sehr stark den Residual-Blocks aus Abschnitt \ref{section:residual-blocks}.
+
+Es kann nun die Architektur von MobileNetV2 erläutert werden. Die erste Schicht ist eine Faltungsschicht mit 32 Filtern gefolgt von 17 Inverted-Residual-Blocks und einer weiteren Faltungsschicht mit 1280 Filtern. Der gesamte Aufbau soll durch Tabelle \ref{table:mobilenetv2} dargestellt werden.
+
+\begin{table}
+    \begin{tabularx}{\textwidth}{l|l|l|l|l|l}
+        \hline
+        Input & Layer & t & c & n & s \\
+        \hline
+        $224 \times 224 \times 3$ & Conv2D, $3 \times 3$ & - & 32 & 1 & 2 \\
+        $112 \times 112 \times 32$ & Bottleneck & 1 & 16 & 1 & 1 \\
+        $112 \times 112 \times 16$ & Bottleneck & 6 & 24 & 2 & 2 \\
+        $56 \times 56 \times 24$ & Bottleneck & 6 & 32 & 3 & 2 \\
+        $28 \times 28 \times 32$ & Bottleneck & 6 & 64 & 4 & 2 \\
+        $14 \times 14 \times 64$ & Bottleneck & 6 & 96 & 3 & 1 \\
+        $14 \times 14 \times 96$ & Bottleneck & 6 & 160 & 3 & 2 \\
+        $7 \times 7 \times 160$ & Bottleneck & 6 & 320 & 1 & 1 \\
+        $7 \times 7 \times 320$ & Conv2D, $1 \times 1$ & - & 1280 & 1 & 1 \\
+        \hline
+    \end{tabularx}
+    \label{table:mobilenetv2}
+\end{table}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.3\textwidth]{images/inverted_residual.pdf}
+    \caption{Darstellung eines Inverted-Residual-Blocks. Der \textit{Dwise}-Block stellt eine Depthwise-Separable-Convolution aus \cite{howard2017mobilenets} dar. Der gesamte Block wird auch als Bottleneck-Block in der MobileNetV2-Architektur genannt. Nicht zu verwechseln mit dem Bottleneck-Block aus dem ResNet-Kontext.}
+    \label{fig:inverted-residual}
+\end{figure}
 
 \section{Feature-Pyramid-Networks}
 Bei der Objekterkennung ist beim Erlernen der Features eines Bildes die
