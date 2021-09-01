@@ -1,22 +1,22 @@
 \chapter{Fazit und Ausblick}
-In dieser Thesis wurden verschiedene Modelle des maschinellen Lernens
-entwickelt und evaluiert. Vor allem wurden sogenannte
-Generative-Adversarial-Networks (GANs) erforscht und neue Methoden zum Erzeugen
-von künstlichen Bewegungen gesucht, um einen kompletten Datensatz mithilfe
-eines solchen Modells zu erzeugen. Als Ergebnis wurde zuerst ViGAN präsentiert.
-Ziel von ViGAN ist es, aus einem bestehenden Video-Datensatz neue bisher unbekannte
-Proben zu erzeugen. Dies gelang auch bis zu einem gewissen Grad. Es wurden zwar
-neue Videos vom Netzwerk erzeugt, jedoch konnte nicht sichergestellt werden, ob sich
-eine Person tatsächlich bewegt oder still steht. So sind Personen oft
-regungslose starre Körper, während sich z.B. ganze Räume über die Zeit
-verändern. Als Alternative dazu wurde KpGAN entworfen, welches direkt
-verschiedenste Bewegungsanimationen erzeugen kann. Diese Bewegungsanimationen
-bestehen dabei aus menschlichen Schlüsselpunkten und werden als Bilder kodiert.
-Experimente haben gezeigt, dass Datensätze, die komplett mithilfe von KpGAN
-erzeugt wurden, mindestens genau so gut für das Training anderer Modelle
-geeignet sind, wie entsprechende reale Datensätze. Dies bringt einen großen Vorteil mit sich,
-denn der eigentliche Datensatz kann ohne großen Aufwand beliebig erweitert werden, während
-beim realen Datensatz ein signifikanter Zeitaufwand entstehen würde.
+In dieser Thesis wurden verschiedene Modelle des maschinellen Lernens entwickelt
+und evaluiert. Vor allem wurden sogenannte Generative-Adversarial-Networks
+(GANs) erforscht und neue Methoden zum Erzeugen von künstlichen Bewegungen
+gesucht, um einen kompletten Datensatz mithilfe eines solchen Modells zu
+erzeugen. Als Ergebnis wurde zuerst ViGAN präsentiert. Ziel von ViGAN ist es,
+aus einem bestehenden Video-Datensatz neue bisher unbekannte Proben zu erzeugen.
+Dies gelang auch bis zu einem gewissen Grad. Es wurden zwar neue Videos vom
+Netzwerk erzeugt, jedoch konnte nicht sichergestellt werden, ob sich eine Person
+tatsächlich bewegt oder still steht.  So sind Personen oft regungslose starre
+Körper, während sich z.B. ganze Räume über die Zeit verändern. Als Alternative
+dazu wurde KpGAN entworfen, welches direkt verschiedenste Bewegungsanimationen
+erzeugen kann. Diese Bewegungsanimationen bestehen dabei aus menschlichen
+Schlüsselpunkten und werden als Bilder kodiert.  Experimente haben gezeigt, dass
+Datensätze, die komplett mithilfe von KpGAN erzeugt wurden, mindestens genau so
+gut für das Training anderer Modelle geeignet sind, wie entsprechende reale
+Datensätze.  Dies bringt einen großen Vorteil mit sich, denn der eigentliche
+Datensatz kann ohne großen Aufwand beliebig erweitert werden, während beim
+realen Datensatz ein signifikanter Zeitaufwand entstehen würde.
 
 Im Anschluss wurde mithilfe von KpGAN ein weiteres neuronales Netzwerk
 trainiert, welches Bewegungen erkennen soll. Die Herausforderung ist dabei die
