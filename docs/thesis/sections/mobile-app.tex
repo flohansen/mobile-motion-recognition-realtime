@@ -117,4 +117,16 @@ implementierten mobilen Applikation in der Praxis getestet werden. Hierfür muss
 vorerst der Testaufbau besprochen werden, sodass die Ergebnisse nachvollziehbar
 und reproduzierbar sind. Als Plattform wird Android zusammen mit ausgewählten
 mobilen Geräten verwendet. Ziel ist es herauszufinden, ob die Bewegungserkennung
-auf modernen, aber auch auf älterer Hardware in Echtzeit ausführbar ist.
+auf moderner, aber auch auf älterer Hardware in Echtzeit ausführbar ist. Tabelle \ref{table:android-tests} zeigt die durchgeführten Experimente und deren Ergebnisse.
+
+\begin{table}
+    \footnotesize
+    \begin{tabularx}{\textwidth}{l|l|l|l}
+        \hline
+        Mobile Device & CPU & Inference Time & Frames per Second \\ \hline
+        Samsung Galaxy S6 Edge & Exynos 7 Octa 720 & 160 - 200ms & 5 - 6 \\ \hline
+        Samsung Galaxy S10 Edge & Exynos 9820 & 71 - 110ms & 9 - 14  \\ \hline
+    \end{tabularx}
+    \caption{}
+    \label{table:android-tests}
+\end{table}
