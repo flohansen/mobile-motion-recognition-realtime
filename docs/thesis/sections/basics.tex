@@ -83,6 +83,9 @@ Distributionen aus betrachtet wird.
 \section{Wasserstein-Abstand}
 Eine weitere Methode zum Messen des Abstands zwischen zwei
 Wahrscheinlichkeitsverteilungen ist die Berechnung des Wasserstein-Abstands.
+Diese Methode wird besonders wichtig für die folgenden Abschnitten, in denen
+generative neuronale Netze mithilfe des Wasserstein-Abstandes definiert und
+umgesetzt werden.
 
 \begin{definition}[Wasserstein-Abstand \cite{arjovsky2017wasserstein}]
 Seien $P_r$ und $P_g$ zwei Wahrscheinlichkeitsverteilungen, dann ist der
@@ -164,9 +167,41 @@ erzeugen, also genauer arbeiten als weniger tiefe Netze.
 \end{table}
 
 \section{MobileNetV2}
-Dieser Abschnitt soll nun eine Architektur vorstellen, die geeignet ist, um Modelle des maschinellen Lernens auf mobilen Geräten auszuführen. Diese soll als Grundlage zum Verständnis der MoveNet-Architektur aus \cite{movenet} dienen, die später für die Bewegungserkennung wichtig wird. Die Rede ist hierbei von MobileNetV2 \cite{sandler2019mobilenetv2} und den damit eingeführten Inverted-Residual-Blocks. Diese besitzen einen verringerten Speicherverbrauch bei einer Inferenz, was für mobile Anwendungen sehr wichtig ist und sind wie folgt aufgebaut. Die Eingabe $x$ in einem solchen Block wird zuerst in eine Faltungsschicht mit einem $1 \times 1$ Kernel und einer ReLU6-Aktivierung gegeben. Danach wird eine Depthwise-Separable-Convolution \cite{howard2017mobilenets} durchgeführt, die eine Kernelgröße von $3 \times 3$ verwendet. Auch hier wird eine ReLU6-Aktivierung vorgenommen. Die nächste Schicht ist wieder eine $1 \times 1$ Faltungsschicht mit keiner, also einer linearen Aktivierung. Zum Schluss wird die Ausgabe der letzten Faltungsschicht mit der Identität der Eingabe $x$ addiert und bildet ein Residuum. Der gesamte Ablauf ist in Abbildung \ref{fig:inverted-residual} zu sehen und ähnelt sehr stark den Residual-Blocks aus Abschnitt \ref{section:residual-blocks}.
+Dieser Abschnitt soll nun eine Architektur vorstellen, die geeignet ist, um
+Modelle des maschinellen Lernens auf mobilen Geräten auszuführen. Diese soll als
+Grundlage zum Verständnis der MoveNet-Architektur aus \cite{movenet} dienen, die
+später für die Bewegungserkennung wichtig wird. Die Rede ist hierbei von
+MobileNetV2 \cite{sandler2019mobilenetv2} und den damit eingeführten
+Inverted-Residual-Blocks. Diese besitzen einen verringerten Speicherverbrauch
+bei einer Inferenz, was für mobile Anwendungen sehr wichtig ist und sind wie
+folgt aufgebaut. Die Eingabe $x$ in einem solchen Block wird zuerst in eine
+Faltungsschicht mit einem $1 \times 1$ Kernel und einer ReLU6-Aktivierung
+gegeben. Danach wird eine Depthwise-Separable-Convolution
+\cite{howard2017mobilenets} durchgeführt, die eine Kernelgröße von $3 \times 3$
+verwendet. Auch hier wird eine ReLU6-Aktivierung vorgenommen. Die nächste
+Schicht ist wieder eine $1 \times 1$ Faltungsschicht mit keiner, also einer
+linearen Aktivierung. Zum Schluss wird die Ausgabe der letzten Faltungsschicht
+mit der Identität der Eingabe $x$ addiert und bildet ein Residuum. Der gesamte
+Ablauf ist in Abbildung \ref{fig:inverted-residual} zu sehen und ähnelt sehr
+stark den Residual-Blocks aus Abschnitt \ref{section:residual-blocks}. Neben den
+üblichen Parametern wurden ein paar wenige hinzugefügt. So beschreibt der
+Expansionsfaktor $t$ einen Skalar, der die Anzahl der internen Filter des Blocks
+skaliert. Dieser hat keinen Einfluss auf die Eingabe- oder Ausgabegröße Das
+beudetet bei einer Eingabegröße von $h \times w \times c$ besitzen
+die erste und zweite Faltungsschicht $c \cdot t$ Ausgabefilter. Auf die dritte und
+letzte Schicht eines Inverted-Residual-Blocks hat der Expansionsfaktor keinen
+direkten Einfluss. Hier wird lediglich von $c \cdot t$ auf $c'$ Filter projeziert.
+Bei dem Stride eines kompletten Blocks verhält es sich ähnlich. Dieser wird lediglich
+auf die zweite also Depthwise-Separable-Convolution-Schicht angewandt. Die restlichen
+Schichten besitzen einen Stride von 1.
 
-Es kann nun die Architektur von MobileNetV2 erläutert werden. Die erste Schicht ist eine Faltungsschicht mit 32 Filtern gefolgt von 17 Inverted-Residual-Blocks und einer weiteren Faltungsschicht mit 1280 Filtern. Der gesamte Aufbau soll durch Tabelle \ref{table:mobilenetv2} dargestellt werden.
+Der Aufbau von MobileNetV2 kann nun einfach erläutert werden. Die erste Schicht
+ist eine Faltungsschicht mit 32 Filtern gefolgt von 17 Inverted-Residual-Blocks
+und einer weiteren Faltungsschicht mit 1280 Filtern. Der gesamte Aufbau soll
+durch Tabelle \ref{table:mobilenetv2} dargestellt werden. Wie schon eingangs erwähnt,
+wird dieses Modell später für die Bewegungs- bzw. Posenerkennung verwendet. Genauer gesagt
+wird das MoveNetV2 als Backbone für einen Feature-Extraktor verwendet. Dies soll jedoch
+in dem nächsten Abschnitt näher erläutert werden.
 
 \begin{table}
     \begin{tabularx}{\textwidth}{l|l|l|l|l|l}
@@ -184,6 +219,11 @@ Es kann nun die Architektur von MobileNetV2 erläutert werden. Die erste Schicht
         $7 \times 7 \times 320$ & Conv2D, $1 \times 1$ & - & 1280 & 1 & 1 \\
         \hline
     \end{tabularx}
+    \caption{Aufbau von MobileNetV2 nach \cite{sandler2019mobilenetv2}. Der
+    Bottleneck-Block entspricht einem Inverted-Residual-Block (siehe Abbildung
+    \ref{fig:inverted-residual}). Der Parameter $t$ beschreibt den
+    Skalierungsfaktor, $c$ die Anzahl der Filter, $n$ die Anzahl der aneinander
+    geketteten Blöcke und $s$ den Stride eines Block-Verbundes mit $n$ Blöcken.}
     \label{table:mobilenetv2}
 \end{table}
 
@@ -246,4 +286,25 @@ für die Objekterkennung verwendet werden können.
     \caption{Architektur eines Feature-Extractors als Feature-Pyramid-Network
     mit ResNet als Backbone.}
     \label{fig:resnet-fpn}
+\end{figure}
+
+Ähnlich verhält sich der Vorgang beim Verwenden eines MobileNetV2-Backbones, wie
+in Abbildung \ref{fig:mobilenetv2-fpn} dargestellt. Da das MobileNetV2 mehr Blöcke
+als das ResNet besitzt, die Anzahl der Pyramidenstufen aber gleich bleiben soll, werden
+einige Blöcke übersprungen und sind nicht direkt Teil des Top-Down-Pathways. Im Prinzip
+werden lediglich die Blöcke mit Lateralverbindungen mit dem Top-Down-Pathway verknüpft,
+welche die letzte Stufe vor der Halbierung der Filtergröße darstellen. Also immer dann,
+wenn der Stride 2 ist. Ausnahme ist C5. Hier wird einfach die letzte Schicht des Netzwerks
+verwendet. Der Einbau deines FPN erfolgt ansonsten wie vorher erläutert. Die Kombination mit
+MobileNetV2 und Feature-Pyramid-Network ist in dieser Arbeit deshalb wichtig, da dieser
+Feature-Extraktor mit für die Posenerkennung zuständig ist. Besonders, weil die Features
+eine hohe Semantik und eine hohe Auflösung besitzen, können besonders kleine Objekte innerhalb
+eines Bildes erkannt und benötigte Informationen extrahiert werden. In Kapitel \ref{chapter:motion-detection}
+wird die Posenerkennung genauer erläutert.
+
+\begin{figure}
+    \includegraphics[width=\textwidth]{images/MobileNetV2_FPN.pdf}
+    \caption{Architektur eines Feature-Extractors als Feature-Pyramid-Network
+    mit MobileNetV2 als Backbone.}
+    \label{fig:mobilenetv2-fpn}
 \end{figure}
