@@ -139,32 +139,54 @@ werden $n_\mathrm{buffer} \in \{60, 20, 10\}$ Posen für die Erkennung getestet.
 Entsprechend muss die Vorlaufzeit $t$ an die Ausführungsgeschwindigkeit
 $n_\mathrm{fps}$ berücksichtigt werden. 
 
-\[
+\begin{equation}\label{eq:preruntime}
     t = \frac{n_\mathrm{buffer}}{n_\mathrm{fps}}
-\]
+\end{equation}
 
 Bei einer Zwischenspeichergröße von 60 und einer Ausführungsgeschwindigkeit von
 6 FPS würde dies eine Vorlaufzeit von 10 Sekunden bedeuten. Das ist natürlich
 nicht Echtzeit, beschränkt sich jedoch lediglich auf die Änderung zwischen
-Bewegungen. Reduziert man $n_\mathrm{buffer}$ auf 10, dann ergibt sich eine Vorlaufzeit von 1,67 Sekunden. Da ein Zwischenspeicher der Posen für die Erkennung verwendet wird,
-darf dieser Speicher im Idealfall nur Daten der neuen Bewegung enthalten.
-Andernfalls würden Bewegungen gemischt und das Netzwerk könnte keine präzise
-Erkennung gewährleisten.
+Bewegungen. Reduziert man $n_\mathrm{buffer}$ auf 10, dann ergibt sich eine
+Vorlaufzeit von 1,67 Sekunden. Da ein Zwischenspeicher der Posen für die
+Erkennung verwendet wird, darf dieser Speicher im Idealfall nur Daten der neuen
+Bewegung enthalten.  Andernfalls würden Bewegungen gemischt und das Netzwerk
+könnte keine präzise Erkennung gewährleisten.
 
 \begin{table}
     \footnotesize
-    \begin{tabularx}{\textwidth}{l|l|l|l|l|l}
+    \begin{tabularx}{\textwidth}{l|l|X|l|l|l|l}
         \hline
-        Mobile Device & CPU & Inference Time (ms) & $n_\mathrm{fps}$ & $n_\mathrm{buffer}$ & Accuracy \\ \hline
+        Mobile Device & CPU & Inference Time (ms) & $n_\mathrm{fps}$ & $n_\mathrm{buffer}$ & $t$ & Accuracy \\ \hline
 
-        \multirow{3}{*}{Samsung Galaxy S6 Edge} & \multirow{3}{*}{Exynos 7 Octa 720} & \multirow{3}{*}{160 - 200} & \multirow{3}{*}{5 - 6} & 10 & $2 / 3$ \\ \cline{5-6}
-        & & & & 20 & $3 / 3$ \\ \cline{5-6}
-        & & & & 60 & $1 / 3$ \\ \hline
+        \multirow{3}{*}{Samsung Galaxy S6 Edge} & \multirow{3}{*}{Exynos 7 Octa 720} & \multirow{3}{*}{160} & \multirow{3}{*}{6} & 10 & 1.67 & $2 / 3$ \\ \cline{5-7}
+        & & & & 20 & 3.33 & $3 / 3$ \\ \cline{5-7}
+        & & & & 60 & 10 & $1 / 3$ \\ \hline
 
-        \multirow{3}{*}{Samsung Galaxy S10} & \multirow{3}{*}{Exynos 9820} & \multirow{3}{*}{71 - 110} & \multirow{3}{*}{9 - 14} & 10 & $3/3$  \\ \cline{5-6}
-        & & & & 20 & $3/3$ \\ \cline{5-6}
-        & & & & 60 & $1/3$ \\ \hline
+        \multirow{3}{*}{Samsung Galaxy S10} & \multirow{3}{*}{Exynos 9820} & \multirow{3}{*}{71} & \multirow{3}{*}{14} & 10 & 0.71 & $3/3$  \\ \cline{5-7}
+        & & & & 20 & 1.43 & $3/3$ \\ \cline{5-7}
+        & & & & 60 & 4.29 & $1/3$ \\ \hline
     \end{tabularx}
-    \caption{Testergebnisse der Bewegungserkennung auf verschiedenen mobilen Geräten.}
+    \caption{Testergebnisse der Bewegungserkennung auf verschiedenen mobilen Geräten. Die Genauigkeit gibt an, wie viele Bewegungen im Testszenario richtig erkannt wurden.}
     \label{table:android-tests}
 \end{table}
+
+Der Tabelle \ref{table:android-tests} kann man entnehmen, dass drei festgelegte
+Puffergrößen auf unterschiedlich schnellen Geräten ausgeführt wurden. Anhand
+der Gleichung \ref{eq:preruntime} wurden die entsprechenden Vorlaufzeiten
+$t$ berechnet. Während des Testens wurde eine Bewegung für 10 Sekunden plus die
+Vorlaufzeit ausgeführt. Zu Erkennen ist, dass ein größerer Puffer nicht
+bedeutet, dass eine bessere Erkennungsrate erzielt wird. Zusätzlich bedeutet
+ein größerer Puffer auch, dass die Vorlaufzeit entsprechend länger sein muss.
+Dies kann dazu führen, dass keine Echtzeiterkennung möglich ist. Unter dem
+Samsung Galaxy S6 Edge+ wurden die besten Erkennungsraten mit einem Puffer mit
+20 Elementen erreicht. Es wurden alle Bewegungen korrekt erkannt bei einer
+Vorlaufzeit von 3.33 Sekunden. Auf dem Samsung Galaxy S10 haben Puffer mit
+einer Größe von 10 oder 20 zu den besten Ergebnissen geführt. Da dieses Gerät
+eine stärkere Hardware besitzt, sind die Vorlaufzeiten entsprechend geringer
+als die bei dem S6 Edge+. Hier kann sogar mit einem Puffer mit nur 10 Elementen
+verwendet werden, was die Vorlaufzeit auf 0.71 Sekunden reduziert bei gleicher
+Erkennrate. Dies bedeutet lediglich, dass eine Erkennung um 0.71 Sekunden
+verzögert stattfindet. In dem Praxistest wurde außerdem festgestellt, dass eine
+Erkennung einer wechselnden Bewegung sogar vor der Vorlaufzeit möglich ist.
+Insgesamt wurde die Bewegungserkennung auf beiden Geräten in Echtzeit mit einer
+hohen Genauigkeit ausgeführt.

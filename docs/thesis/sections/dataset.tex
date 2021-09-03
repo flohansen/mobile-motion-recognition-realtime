@@ -207,7 +207,7 @@ kodiert und deren ersten 10 Frames dargestellt, die durch die ersten 10 Reihen
 des jeweiligen Bildes repräsentiert werden. Auf Basis dieser Bilder wird nun ein
 GAN entwickelt, welches neue Bewegungen des gleichen Typs erzeugen soll. Mit
 anderen Worten, das GAN soll lernen, ähnliche Bilder zu erzeugen, die wiederum
-in Schlüsselpunktanimationen dekodiert werden können.  Wenn dieses Experiment
+in Schlüsselpunktframes dekodiert werden können. Wenn dieses Experiment
 erfolgreich ist, dann kann der Generator als Datensatzerzeuger für die
 Bewegungserkennung verwendet werden.
 
@@ -255,6 +255,12 @@ verschiedene Bewegungen zu erzeugen.
 
 \begin{figure}
     \includegraphics[width=\textwidth]{images/KpGAN.pdf}
-    \caption{Architektur von KpGAN zum Generieren von Schlüs\-sel\-punkt\-anima\-tionen. Die Eingabe ist ein Vektor, welcher zunächst in das Format $7 \times 2 \times 256$ gebracht wird und das Label der zu erzeugenden Bewegungsart. Anschließend wird mithilfe von insgesamt vier Convolutional-Transpose-Layer eine Ausgabe im Format $60 \times 17 \times 3$ erzeugt. Es werden entsprechend 256, 128, 64 und 3 Filter für die Layer verwendet.}
+    \caption{Architektur von KpGAN zum Generieren von 60 Frames einer
+    Schlüs\-sel\-punkt\-anima\-tion. Die Eingabe ist ein Vektor, welcher
+  zunächst in das Format $7 \times 2 \times 256$ gebracht wird und das Label
+der zu erzeugenden Bewegungsart. Anschließend wird mithilfe von insgesamt vier
+Convolutional-Transpose-Layer eine Ausgabe im Format $60 \times 17 \times 3$
+erzeugt. Es werden entsprechend 256, 128, 64 und 3 Filter für die Schichten
+verwendet.}
     \label{fig:kpgan}
 \end{figure}
