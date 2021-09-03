@@ -59,7 +59,7 @@ if __name__ == '__main__':
     num_classes = train_y.shape[1]
     train_dataset = tf.data.Dataset.from_tensor_slices((train_x, train_y)).batch(args.batch_size).shuffle(128)
 
-    generator = mgan.Generator(num_classes)
+    generator = mgan.Generator60(num_classes)
     generator_optimizer = tf.keras.optimizers.RMSprop(1e-4)
     generator_save_model_path = os.path.join(args.checkpoint_dir, current_time, 'generator')
 

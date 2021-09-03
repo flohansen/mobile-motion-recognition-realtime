@@ -8,9 +8,8 @@ import tensorflow_hub as hub
 import uuid
 from PIL import Image
 
-export_filename = 'push_ups'
-video_chunk_size = 60
-export_dir = 'datasets'
+video_chunk_size = 10
+export_dir = 'datasets/motions2021_xsmall'
 movenet_model = hub.load("https://tfhub.dev/google/movenet/singlepose/lightning/4")
 movenet = movenet_model.signatures['serving_default']
 current_chunk = 1

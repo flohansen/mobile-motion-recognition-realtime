@@ -18,10 +18,86 @@ def generator_loss(fake_score):
 
 def critic_loss(fake_score, real_score, gp, gp_lambda):
     return tf.reduce_mean(fake_score) - tf.reduce_mean(real_score) + gp * gp_lambda
-
-class Generator(tf.keras.Model):
+    
+class Generator10(tf.keras.Model):
   def __init__(self, classes):
-    super(Generator, self).__init__()
+    super(Generator10, self).__init__()
+    # Image generation input
+    self.dense1 = tf.keras.layers.Dense(1*2*256)
+    self.reshape1 = tf.keras.layers.Reshape((1, 2, 256))
+
+    # Label embedding input
+    self.embed = tf.keras.layers.Embedding(classes, 10)
+    self.dense2 = tf.keras.layers.Dense(1*2)
+    self.reshape2 = tf.keras.layers.Reshape((1, 2, classes))
+
+    # Convolutional upsampling layers
+    self.conv1 = tf.keras.layers.Conv2DTranspose(256, (3, 3), strides=2, padding='same', use_bias=True)
+    self.conv2 = tf.keras.layers.Conv2DTranspose(128, (3, 2), strides=2, padding='valid', use_bias=True)
+    self.conv3 = tf.keras.layers.Conv2DTranspose( 64, (3, 3), strides=1, padding='same', use_bias=True)
+    self.conv4 = tf.keras.layers.Conv2DTranspose(  3, (2, 3), strides=2, padding='valid', use_bias=True)
+    
+  def call(self, inputs):
+    x = inputs[0]
+    label = inputs[1]
+
+    x = tf.nn.leaky_relu(self.dense1(x))
+    x = self.reshape1(x)
+
+    label = self.embed(label)
+    label = self.dense2(label)
+    label = self.reshape2(label)
+
+    x = tf.concat([x, label], -1)
+
+    x = tf.nn.leaky_relu(self.conv1(x))
+    x = tf.nn.leaky_relu(self.conv2(x))
+    x = tf.nn.leaky_relu(self.conv3(x))
+    x = tf.nn.tanh(self.conv4(x))
+
+    return x
+
+class Generator20(tf.keras.Model):
+  def __init__(self, classes):
+    super(Generator20, self).__init__()
+    # Image generation input
+    self.dense1 = tf.keras.layers.Dense(1*2*256)
+    self.reshape1 = tf.keras.layers.Reshape((1, 2, 256))
+
+    # Label embedding input
+    self.embed = tf.keras.layers.Embedding(classes, 10)
+    self.dense2 = tf.keras.layers.Dense(1*2)
+    self.reshape2 = tf.keras.layers.Reshape((1, 2, classes))
+
+    # Convolutional upsampling layers
+    self.conv1 = tf.keras.layers.Conv2DTranspose(256, (3, 3), strides=2, padding='same', use_bias=True)
+    self.conv2 = tf.keras.layers.Conv2DTranspose(128, (3, 2), strides=2, padding='valid', use_bias=True)
+    self.conv3 = tf.keras.layers.Conv2DTranspose( 64, (3, 3), strides=(2, 1), padding='same', use_bias=True)
+    self.conv4 = tf.keras.layers.Conv2DTranspose(  3, (2, 3), strides=2, padding='valid', use_bias=True)
+    
+  def call(self, inputs):
+    x = inputs[0]
+    label = inputs[1]
+
+    x = tf.nn.leaky_relu(self.dense1(x))
+    x = self.reshape1(x)
+
+    label = self.embed(label)
+    label = self.dense2(label)
+    label = self.reshape2(label)
+
+    x = tf.concat([x, label], -1)
+
+    x = tf.nn.leaky_relu(self.conv1(x))
+    x = tf.nn.leaky_relu(self.conv2(x))
+    x = tf.nn.leaky_relu(self.conv3(x))
+    x = tf.nn.tanh(self.conv4(x))
+
+    return x
+
+class Generator60(tf.keras.Model):
+  def __init__(self, classes):
+    super(Generator60, self).__init__()
     # Image generation input
     self.dense1 = tf.keras.layers.Dense(7*2*256)
     self.reshape1 = tf.keras.layers.Reshape((7, 2, 256))

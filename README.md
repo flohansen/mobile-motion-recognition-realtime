@@ -23,6 +23,7 @@
 | 2 | 2021-08-22-154137 <br/> Activation: **sigmoid** | 3001 | ![](evaluation/2021-08-22-154137/keypoints.png) | ![](evaluation/2021-08-22-154137/motion.gif) |
 | 3 | 2021-08-22-160208 <br/> Activation: **sigmoid** | 3001 | ![](evaluation/2021-08-22-160208/keypoints.png) | ![](evaluation/2021-08-22-160208/motion.gif) |
 | 4 | 2021-08-22-165314 <br/> Activation: **sigmoid** | 3001 | ![](evaluation/2021-08-22-165314/keypoints.png) | ![](evaluation/2021-08-22-165314/motion.gif) |
+| 5 | 2021-09-03-120423 <br/> Activation: **sigmoid** | 588 | ![](evaluation/2021-09-03-120423/keypoints.png) | ![](evaluation/2021-09-03-120423/motion.gif) |
 
 
 ## Inhalt der Thesis
