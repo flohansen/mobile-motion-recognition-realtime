@@ -170,7 +170,9 @@ Auch in dieser Methode wird ein GAN verwendet, nur diesmal wird die Information
 einer Bewegung wesentlich genauer betrachtet. Das Ziel ist ein schnelleres
 Training des Netzwerks sowie ein geringerer Speicherverbrauch. Ein großer
 Nachteil beim ViGAN ist, dass viele unnötige Informationen mit generiert werden.
-Anstatt also Videos herkömmlicher Art zu erzeugen, sollen nun Animationen
+Für die eigentliche Bewegungserkennung ist eine Veränderung des Raumes über die
+Zeit eher uninteressant. Nur die Bewegung selbst interessiert dabei.
+Die Idee ist nun, dass anstatt Videos mit sich bewegenden Menschen in Räumen erzeugt werden, nun Animationen
 bestehend aus Schlüsselpunkten des menschlichen Körpers generiert werden. Die
 Folge dieser Schlüsselpunkte soll schließlich eine Bewegung darstellen.
 Extrahiert man die Schlüsselpunkte aus entsprechenden Videos, die eine
@@ -192,14 +194,14 @@ sehr unelegante Lösung wär, wird versucht ein cWGAN entsprechend Abschnitt
 Klassen erzeugen kann. Mithilfe eines Labels als Eingabe soll gesteuert werden
 können, zu welcher Klasse das Erzeugnis gehören soll
 
-Eine Bewegung bestehend aus $N$ Frames und $k$ Schlüsselpunkten, welche jeweils
+Eine Bewegung bestehend aus $N$ Frames und $k$ Schlüsselpunkten, die jeweils
 eine Position im zweidimensionalen Raum und eine Auftrittswahrscheinlichkeit
 besitzen, können mithilfe eines Bildes repräsentiert werden. Ein solches Bild
 besitzt damit eine Größe von $N \times k \times 3$. Da später Modelle
 verwendet werden sollen, welche auf dem \textit{COCO Keypoints Dataset}
 \cite{lin2015microsoft} trainiert wurden und somit 17 Schlüsselpunkte von
-Menschen in Bildern erkennen, wird $k = 17$ gewählt. Zudem wird die Anzahl an
-Frames auf $N = 60$ gesetzt, es wird also angenommen, dass entsprechende
+Menschen in Bildern erkennen, wird $k = 17$ gewählt. Zudem wird die Anzahl der
+Frames auf $N = 60$ gesetzt. Es wird hier also angenommen, dass entsprechende
 Bewegungen innerhalb von 60 Frames eindeutig erkennbar sind. Die Ausgaben des
 GANs sind dementsprechend im Format $60 \times 17 \times 3$. In Abbildung
 \ref{fig:motion-images} werden beispielhaft drei Bewegungsarten zu Bilder
