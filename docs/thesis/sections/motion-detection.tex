@@ -140,21 +140,24 @@ Bei der Erkennung von Bewegungsarten handelt es sich um ein
 Klassifizierungsproblem, bei der es darum geht, einer Bewegungsaufzeichnung
 eine Klasse zuzuweisen. Zu einer beliebigen Bewegungssequenz soll also eine
 Aussage getroffen werden, ob es zum Beispiel Hantelübungen sind. Im Laufe dieses
-Abschnitts soll dementsprechend ein Machine-Learning-Modell entworfen werden,
-welches auf diese Aufgabe trainiert wird. Hierzu muss vorerst definiert werden,
-welche Daten verwendet werden und wie diese für das Training vorbereitet werden
-können. Damit eine Ortsänderung eines zu betrachtenden Objektes aufgezeichnet
-werden kann, müssen mehrere Bilder bzw. Videos aufgezeichnet werden. Eine
-Bewegung anhand eines einzelnen Bildes ist nicht möglich, da die Information
-über die Ortsänderung dann nicht vorhanden ist. Es gilt also einen Datensatz zu
-finden, welcher verschiedene Bewegungen im Videoformat bereitstellt. Alternativ
-muss ein entsprechender Datensatz ausgehoben werden, was einen relativ hohen
-Zeitaufwand bedeuten würde. Es wird aufgrund seiner Einfachheit der
-UCF-101-Datensatz \cite{ucf101} verwendet. Dieser besteht aus 101 Bewegungsarten
-in Form von Videos, die öffentlich auf der Plattform YouTube zur Verfügung
-stehen. Ein Videoclip ist dabei eindeutig einer Bewegungsklasse zugeordnet. Um
-den Datensatz künstlich zu erweitern bzw. um eine Augmentation durchzuführen,
-wird das KpGAN aus Kapitel \ref{chapter:gans} verwendet. Dieses erzeugt während des Trainings Schlüsselpunktdaten auf Nachfrage. Zur Unterscheidung wird im Folgenden der UCF-101-Datensatz als realer Datensatz bezeichnet.
+Abschnitts soll dementsprechend ein Machine-Learning-Modell namens MotionNet
+entworfen werden, welches auf diese Aufgabe trainiert wird. Hierzu muss vorerst
+definiert werden, welche Daten verwendet werden und wie diese für das Training
+vorbereitet werden können. Damit eine Ortsänderung eines zu betrachtenden
+Objektes aufgezeichnet werden kann, müssen mehrere Bilder bzw. Videos
+aufgezeichnet werden. Eine Bewegung anhand eines einzelnen Bildes ist nicht
+möglich, da die Information über die Ortsänderung dann nicht vorhanden ist. Es
+gilt also einen Datensatz zu finden, welcher verschiedene Bewegungen im
+Videoformat bereitstellt. Alternativ muss ein entsprechender Datensatz
+ausgehoben werden, was einen relativ hohen Zeitaufwand bedeuten würde. Es wird
+aufgrund seiner Einfachheit der UCF-101-Datensatz \cite{ucf101} verwendet.
+Dieser besteht aus 101 Bewegungsarten in Form von Videos, die öffentlich auf der
+Plattform YouTube zur Verfügung stehen. Ein Videoclip ist dabei eindeutig einer
+Bewegungsklasse zugeordnet. Um den Datensatz künstlich zu erweitern bzw. um eine
+Augmentation durchzuführen, wird das KpGAN aus Kapitel \ref{chapter:gans}
+verwendet. Dieses erzeugt während des Trainings Schlüsselpunktdaten auf
+Nachfrage. Zur Unterscheidung wird im Folgenden der UCF-101-Datensatz als realer
+Datensatz bezeichnet.
 
 Es wird nun ein Modell entworfen, welches $n$ Frames eines Videos einliest und
 die geschätzte Bewegungsklasse für diese Frames ausgibt. Dabei soll das Netzwerk
@@ -197,6 +200,8 @@ ist im echten Datensatz nicht so ausgeprägt. Hierbei ist wichtig zu erwähnen,
 dass das Daten erzeugende GAN auf eben diesen Datensatz trainiert wurde. Der
 Datensatz wurde also verbessert, indem ein GAN verwendet wurde, die Verteilung
 zu lernen und zu interpolieren, um eine größere Datenvielfalt zu erzeugen.
+
+Für den Rest dieser Arbeit wird MotionNet als CNN verwendet, die hier die besten Ergebnisse erzielt wurden.
 
 \begin{table}
     \footnotesize

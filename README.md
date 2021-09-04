@@ -1,43 +1,21 @@
-# Master-Thesis: Bewegungserkennung auf mobilen Geräten mit Verwendung von GANs für eine automatische Datensatzgenerierung
+# Master-Thesis
 
-## Literatur
-* K. Liu, Y. Ye, X. Li and Y. Li: **A Real-Time Method to Estimate Speed of Object Based on Object Detection and Optical Flow Calculation** ([PDF](https://iopscience.iop.org/article/10.1088/1742-6596/1004/1/012003/pdf), [BibTeX](https://iopscience.iop.org/export?articleId=1742-6596/1004/1/012003&doi=10.1088/1742-6596/1004/1/012003&exportFormat=iopexport_bib&exportType=abs&navsubmit=Export+abstract))
-* M. Mandal, L. K. Kumar, M. S. Saran and S. K. Vipparthi: **MotionRec: A Unified Deep Framework for Moving Object Recognition** ([PDF](https://openaccess.thecvf.com/content_WACV_2020/papers/Mandal_MotionRec_A_Unified_Deep_Framework_for_Moving_Object_Recognition_WACV_2020_paper.pdf), [BibTeX](https://openaccess.thecvf.com/content_WACV_2020/html/Mandal_MotionRec_A_Unified_Deep_Framework_for_Moving_Object_Recognition_WACV_2020_paper.html))
-* Y. Yang, A. Loquercio, D. Scaramuzza, S. Soatto: **Unsupervised Moving Object Detection via Contextual Information Separation** ([PDF](https://arxiv.org/pdf/1901.03360), [BibTeX](https://arxiv.org/abs/1901.03360))
-* X. Mao, Q. Li, H. Xie, R. Y.K. Lau, Z. Wang, S. P. Smolley: **Least Squares Generative Adversarial Networks** ([PDF](https://arxiv.org/pdf/1611.04076.pdf), [BibTeX](https://arxiv.org/abs/1611.04076))
-* M. Arjovsky, S. Chintala, L. Bottou: **Wasserstein GAN** ([PDF](https://arxiv.org/pdf/1701.07875) [BibTeX](https://arxiv.org/abs/1701.07875))
-* I. Gulrajani, F. Ahmed, M. Arjovsky, V. Dumoulin, A. Courville: **Improved Training of Wasserstein GANs**, ([PDF](https://arxiv.org/pdf/1704.00028), [BibTeX](https://arxiv.org/abs/1704.00028))
-* https://arxiv.org/pdf/2012.13392.pdf#:~:text=HUMAN%20pose%20estimation%20(HPE)%2C,videos.
+## Tools
+`tools/convert_ucf101.py`: Konvertiert bestimmte Klassen des UFC-101-Datensatzes zu Schlüsselpunktanimationen.
 
-## Videos
-* [Creating Videos with Neural Networks using GAN](https://www.youtube.com/watch?v=CIua95jUD_I)
+## Datensätze
+`datasets/motions2021_10`: Schlüsselpunktanimationen mit 10 Frames als Bilder kodiert.
+`datasets/motions2021_20`: Schlüsselpunktanimationen mit 20 Frames als Bilder kodiert.
+`datasets/motions2021_60`: Schlüsselpunktanimationen mit 60 Frames als Bilder kodiert.
 
-## Blogs
-* [Meow Generator](https://ajolicoeur.wordpress.com/cats/): Vergleich zwischen GAN-Modellen zum Generieren von Katzenbildern
+## Trainieren von KpGAN
+`python train_kpgan.py --help`
 
-## Experimente und Messungen
+Beispiel für 3000 Epochen und einer Batch-Size von 128:
+`python train_kpgan.py --epochs 3000 --save-interval 100 --batch-size 128`
 
-| #   | Datensatz | Epochen | Image | Motion |
-| --- | --------- | ------- | ------------ | ---------- |
-| 1 | 2021-08-22-150022 <br/> Activation: **sigmoid** | 2667 | ![](evaluation/2021-08-22-150022/keypoints.png) | ![](evaluation/2021-08-22-150022/motion.gif) |
-| 2 | 2021-08-22-154137 <br/> Activation: **sigmoid** | 3001 | ![](evaluation/2021-08-22-154137/keypoints.png) | ![](evaluation/2021-08-22-154137/motion.gif) |
-| 3 | 2021-08-22-160208 <br/> Activation: **sigmoid** | 3001 | ![](evaluation/2021-08-22-160208/keypoints.png) | ![](evaluation/2021-08-22-160208/motion.gif) |
-| 4 | 2021-08-22-165314 <br/> Activation: **sigmoid** | 3001 | ![](evaluation/2021-08-22-165314/keypoints.png) | ![](evaluation/2021-08-22-165314/motion.gif) |
-| 5 | 2021-09-03-120423 <br/> Activation: **sigmoid** | 588 | ![](evaluation/2021-09-03-120423/keypoints.png) | ![](evaluation/2021-09-03-120423/motion.gif) |
+## Trainieren von ViGAN
+`python train_vigan.py --help`
 
-
-## Inhalt der Thesis
-
-* Einführung in GANs
-    - Theorie
-    - Mode-Collapse
-    - Deep Convolution GAN
-    - Wasserstein GAN
-    - Wasserstein GAN-GP
-    - Unrolled GAN
-    - Least Squares GAN
-* Erstellen eines Datensatzes
-    - Rahmenbedingungen
-    - Verwendung von GANs
-    - Messung unterschiedlicher GANs
-    - Analyse der Ergebnisse
+Beispiel für 3000 Epochen und einer Batch-Size von 4:
+`python train_vigan.py --epochs 3000 --save-interval 100 --batch-size 4`
