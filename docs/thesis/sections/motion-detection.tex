@@ -150,11 +150,11 @@ Bewegung anhand eines einzelnen Bildes ist nicht möglich, da die Information
 finden, welcher verschiedene Bewegungen im Videoformat bereitstellt. Alternativ
 muss ein entsprechender Datensatz ausgehoben werden, was einen relativ hohen
 Zeitaufwand bedeuten würde. Es wird aufgrund seiner Einfachheit der
-UCF101-Datensatz \cite{ucf101} verwendet. Dieser besteht aus 101 Bewegungsarten
+UCF-101-Datensatz \cite{ucf101} verwendet. Dieser besteht aus 101 Bewegungsarten
 in Form von Videos, die öffentlich auf der Plattform YouTube zur Verfügung
 stehen. Ein Videoclip ist dabei eindeutig einer Bewegungsklasse zugeordnet. Um
 den Datensatz künstlich zu erweitern bzw. um eine Augmentation durchzuführen,
-wird das KpGAN aus Kapitel \ref{chapter:gans} verwendet. Dieses erzeugt während des Trainings Schlüsselpunktdaten auf Nachfrage.
+wird das KpGAN aus Kapitel \ref{chapter:gans} verwendet. Dieses erzeugt während des Trainings Schlüsselpunktdaten auf Nachfrage. Zur Unterscheidung wird im Folgenden der UCF-101-Datensatz als realer Datensatz bezeichnet.
 
 Es wird nun ein Modell entworfen, welches $n$ Frames eines Videos einliest und
 die geschätzte Bewegungsklasse für diese Frames ausgibt. Dabei soll das Netzwerk
@@ -163,7 +163,7 @@ klassifizieren. Da das Neutrainieren der Posenerkennung zu lange dauern würde,
 wird ein vortrainiertes MoveNet als Backbone verwendet. Für die Klassifizierung
 werden verschiedene Köpfe implementiert, die anschließend miteinander verglichen
 werden. Ziel ist es herauszufinden, welche Architekturen für den Gebrauch auf
-mobilen Plattformen geeignet sind. Als Testplattform wird, wie einleitend beschrieben, Android verwendet.
+mobilen Plattformen geeignet sind.
 
 Die zu betrachtenen Metriken sind Genauigkeit und
 Aus\-führ\-ungs\-ge\-schwin\-dig\-keit. Als erstes werden einfache
@@ -200,21 +200,21 @@ zu lernen und zu interpolieren, um eine größere Datenvielfalt zu erzeugen.
 
 \begin{table}
     \footnotesize
-    \begin{tabularx}{\textwidth}{l|X|c|c|c|c|c}
+    \begin{tabularx}{\textwidth}{l|X||c|c||c|c||c}
         \hline
-        name & layers & epochs & $p_\mathrm{real}$ & epochs & $p_\mathrm{gan}$ & inference speed \\ \hline
+        Network Type & Layers & $e_\mathrm{real}$ & $p_\mathrm{real}$ & $e_\mathrm{gan}$ & $p_\mathrm{gan}$ & Inference Speed (s) \\ \hline
 
-        \multirow{3}{*}{linear} & Dense, 128 \newline ReLU \newline Dense, 3 & 300 & 0.90 & 82 & 0.99 & \num{0.59e-6}s \\ \cline{2-7}
+        \multirow{3}{*}{linear} & Dense, 128 \newline ReLU \newline Dense, 3 & 300 & 0.90 & 82 & 0.99 & \num{0.59e-6} \\ \cline{2-7}
 
-        & Dense, 256 \newline ReLU \newline Dense, 3 & 300 & 0.94 & 49 & 0.99 & \num{0.61e-6}s \\ \cline{2-7}
+        & Dense, 256 \newline ReLU \newline Dense, 3 & 300 & 0.94 & 49 & 0.99 & \num{0.61e-6} \\ \cline{2-7}
 
-        & Dense, 128 \newline ReLU \newline Dense, 256 \newline ReLU \newline Dense, 3 & 300 & 0.97 & 70 & 0.99 & \num{0.83e-6}s \\ \hline
+        & Dense, 128 \newline ReLU \newline Dense, 256 \newline ReLU \newline Dense, 3 & 300 & 0.97 & 70 & 0.99 & \num{0.83e-6} \\ \hline
 
-        \multirow{3}{*}{conv} & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Dense, 3 & 81 & 0.99 & 123 & 0.99 & \num{1.25e-6}s \\ \cline{2-7}
+        \multirow{3}{*}{conv} & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Dense, 3 & 81 & 0.99 & 123 & 0.99 & \num{1.25e-6} \\ \cline{2-7}
 
-        & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Conv2D, 64, $3 \plh 3$, stride 2 \newline Dense, 3 & 44 & 0.99 & 121 & 0.99 & \num{1.74e-6}s \\ \cline{2-7}
+        & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Conv2D, 64, $3 \plh 3$, stride 2 \newline Dense, 3 & 44 & 0.99 & 121 & 0.99 & \num{1.74e-6} \\ \cline{2-7}
 
-        & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Conv2D, 64, $3 \plh 3$, stride 2 \newline Conv2D, 128, $3 \plh 3$, stride 2 \newline Dense, 3 & 9 & 0.99 & 126 & 0.99 & \num{2.27e-6}s \\ \hline
+        & Conv2D, 16, $3 \plh 3$, stride 2 \newline Conv2D, 32, $3 \plh 3$, stride 2 \newline Conv2D, 64, $3 \plh 3$, stride 2 \newline Conv2D, 128, $3 \plh 3$, stride 2 \newline Dense, 3 & 9 & 0.99 & 126 & 0.99 & \num{2.27e-6} \\ \hline
     \end{tabularx}
     \caption{Durgeführte Experimente mit verschiedenen Architekturen für die
     Bewegungserkennung. Die Eingabe besteht aus 60 Frames einer
@@ -224,7 +224,7 @@ zu lernen und zu interpolieren, um eine größere Datenvielfalt zu erzeugen.
     geschätzte Klasse, also das Label liefern. $p_\mathrm{real}$ gibt die
     Genauigkeit des jeweiligen Modells an, das mit einem realen Datensatz
     trainiert wurde. $p_\mathrm{gan}$ gibt hingegen die Genauigkeit der Modelle
-    an, die mithilfe eines KpGAN-Generators trainiert wurden. Für das Messen der
+    an, die mithilfe eines KpGAN-Generators trainiert wurden. $e_\mathrm{real}$ und $e_\mathrm{gan}$ sind entsprechende Trainingsepochen. Für das Messen der
     Genauigkeit wurden immer reale Daten verwendet.}
     \label{table:motion-detection}
 \end{table}

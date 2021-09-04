@@ -6,7 +6,7 @@ bestehend aus Fotoaufnahmen von Tieren, so kann ein Klassifizierer trainiert
 werden, um einem Bild eine Tierklasse zuzuweisen. Aus diesem Grund fässt man
 diese Modelle unter dem Begriff \textit{Bildklassifizierung} zusammen.
 
-Wesentlich interessanter ist das Erkennen von vielen Objekten innerhalb eines
+Auch interessant ist das Erkennen von vielen Objekten innerhalb eines
 Bildes, anstatt das gesamte Bild nur einer einzigen Klasse zuzuweisen. In der
 \textit{Objekterkennung} entwickelt man Modelle, welche mehr als nur eine
 Klasse erkennen können. Sie liefern zusätzlich zu den erkannten Klassen ihre
@@ -33,18 +33,18 @@ können. Hier hat man also versucht, eine Vorhersage zur Entwicklung von
 menschlichen Bewegung zu tätigen.
 
 Die Funktionsweise von GANs ist im Prinzip ziemlich simpel. Während beim
-klassischen supervised-learning in der Regel nur ein Modell beim Training
-involviert ist, verhält sich das bei generativen Modellen etwas anders. Zum
-Einen wird ein Generator definiert, welcher, wie sein Name andeutet, Ausgaben
-selbst erzeugt. Zum Anderen wird ein Diskriminator in das Training eingebaut,
-welcher zwischen künstlich erzeugten und reellen Daten unterscheidet. Diese
-beiden Modelle werden dann gleichermaßen trainiert. Während der Generator
-versucht, Fälschungen immer genauer zu erzeugen, versucht der Diskriminator
-immer besser zwischen Fälschung und Realität zu unterscheiden. Die
-Ausgabe des Diskriminators ist dementsprechend entweder 0 für Fälschung und 1
-für Realität. Mit anderen Worten, die beiden Komponenten spielen Spiel, in
-welchem die eine Partei versucht, die andere zu täuschen
-\cite{goodfellow2014generative}.
+klassischen überwachten Lernen (Supervised-Learning) in der Regel nur ein
+Modell beim Training involviert ist, verhält sich das bei generativen Modellen
+etwas anders. Zum Einen wird ein Generator definiert, welcher, wie sein Name
+andeutet, Ausgaben selbst erzeugt. Zum Anderen wird ein Diskriminator in das
+Training eingebaut, welcher zwischen künstlich erzeugten und realen Daten
+unterscheidet. Diese beiden Modelle werden dann gleichermaßen trainiert.
+Während der Generator versucht, immer bessere Fälschungen zu erzeugen, versucht
+der Diskriminator immer besser zwischen Fälschung und Realität zu
+unterscheiden. Die Ausgabe des Diskriminators ist dementsprechend entweder 0
+für Fälschung und 1 für Realität. Mit anderen Worten, die beiden Komponenten
+spielen ein Spiel, in welchem die eine Partei versucht, die andere zu täuschen
+und wird mithilfe des folgenden Ausdrucks definiert \cite{goodfellow2014generative}.
 \[
 \min_G \max_D V(G, D) = \mathbb{E}_{x \sim p_{data}(x)}\left[ \log D(x) \right] + \mathbb{E}_{z \sim p_z(z)}\left[ \log (1 - D(G(z))) \right]
 \]
@@ -76,7 +76,7 @@ zuständig sind (in diesem Fall, ob das Gesicht eine Brille trägt oder nicht).
 Im Verlauf des Trainings entwickelt sich damit ein Generator, welcher im
 Idealfall so gute Fälschungen erzeugt, sodass sich diese nicht mehr von Daten
 der Ausgangsdistribution unterscheiden lassen. Der Diskriminator kann hier
-bestenfalls nur raten, kann also eine Genauigkeit von höchstens 50\%
+bestenfalls nur raten, also eine Genauigkeit von höchstens 50\%
 erreichen. Ist dies nicht der Fall, d.h. der Diskriminator kann Fälschungen
 mit einer höheren Wahrscheinlichkeit von realen Daten unterscheiden, so
 entsteht ein Ungleichgewicht. Aus diesem Grund sollten die Lernparameter
@@ -99,8 +99,9 @@ Gesichtszüge zu generieren, als männliche \cite{richardson2018gans}. Dies
 lässt sich damit erklären, dass der Generator beim Trainingsvorgang mehr
 Erfolg beim Generieren von weiblichen Gesichtern hatte und der Diskriminator
 es schwerer hatte, Fälschung von Realität zu unterscheiden. Um das Problem zu
-beseitigen wurden einige Erweiterungen an dem Standardmodell des GAN von
-\cite{goodfellow2014generative} hinzugefügt.
+beseitigen wurden einige Änderungen an dem Standardmodell des GAN von
+\cite{goodfellow2014generative} vorgenommen. Wie dieses Problem gelöst wird,
+soll in den nächsten Abschnitten erläutert werden.
 
 \subsection{Deep-Convolution-GAN}
 Das \textit{Deep Convolution GAN} (DCGAN) ist ein Versuch,
@@ -281,8 +282,9 @@ durch Annäherung des Wasserstein-Abstandes zwischen Generator- und
 Ausgangsdistribution das Problem des Mode-Collapse gelöst.  Durch den
 Wasserstein-Abstand wird der Abstand zwischen den Verteilung wesentlich besser
 minimiert (im Falle des Generator-Modells) als bei der KL- oder JS-Divergenz.
-Die Ausgabe eines Kritisierers stellt damit eine Bewertung der Eingabe dar,
-anstatt diese einer Klasse zuzuweisen und besitzt deshalb mehr Aussagekraft.
+Die Ausgabe eines Kritisierers stellt außerdem eine Bewertung der Eingabe dar,
+anstatt diese in die Kategorien Fälschung oder Realität einzuteilen und besitzt
+deshalb mehr Aussagekraft.
 
 \begin{figure}
 \includegraphics[width=0.5\textwidth]{images/image-022.png}
@@ -376,7 +378,7 @@ erzeugen wollen? Nehmen wir als Beispiel einen Datensatz bestehend aus Bildern
 von Hunden und Katzen. Die bisher vorgestellten DCGANs und WGANs würden auf
 diesen Datensatz trainiert werden und würden bei einem zufälligen Eingabevektor
 Hunde oder Katzenbilder bzw. eine Mischung aus beidem erzeugen. Möchte man nun
-jedoch den Generator der GANs dazu bringen, nur zufällige Hundebilder zu
+jedoch den Generator des GANs dazu bringen, nur zufällige Hundebilder zu
 erzeugen, so muss aufwändig die dafür zuständige Komponente des Eingabevektors
 extrahiert werden, die bestimmt, ob der Generator ein Hunde- oder ein Katzenbild
 erzeugen soll. Eine einfachere Möglichkeit besteht darin, dem Generator
@@ -412,15 +414,16 @@ Conditional-Wasserstein-GANs (cWGAN) zur Verfügung stehen, um automatisiert
 Datensätze zu erzeugen. Die angepasste Verlustfunktion für den Kritisierer,
 welche die Verkettung des Labels berücksichtigt, bildet sich wie folgt.
 \[
-L_w(x, \tilde{x}, \hat{x}, y) = \mathbb{E}_{\tilde{x} \sim \mathbb{P}_g}\left[D(\tilde{x} \lvert y)\right] -
+L_w = \mathbb{E}_{\tilde{x} \sim \mathbb{P}_g}\left[D(\tilde{x} \lvert y)\right] -
     \mathbb{E}_{x \sim \mathbb{P}_r}\left[D(x \lvert y)\right] +
     \lambda \cdot \mathbb{E}_{\hat{x} \sim \mathbb{P}_{\hat{x}}}\left[(\|\nabla_{\hat{x}} D(\hat{x} \lvert y)\| - 1)^2\right]
 \]
 
-Die Verlustfunktion für den Generator ist entsprechend
+Der Verlust des Generators lässt sich mit
 \[
-L_\theta = -\mathbb{E}_{\tilde{x} \sim \mathbb{P}_g} \left[D(\tilde{x} \lvert y)\right].
+L_\theta = -\mathbb{E}_{\tilde{x} \sim \mathbb{P}_g} \left[D(\tilde{x} \lvert y)\right]
 \]
+berechnen.
 
 Für ein Training, in welchem die Daten in Batches vorliegen, wird einfach der
 arithmetische Mittelwert berechnet.  Zur Erinnerung, $x \sim \mathbb{P}_r$
