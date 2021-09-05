@@ -1,18 +1,30 @@
 \chapter{Grundlagen}\label{chapter:basics}
-In diesem Kapitel sollen die Grundlagen, die in dieser Arbeit benötigt werden, besprochen werden und bildet den Theorieteil der Thesis. Zuerst wird auf die mathematischen Grundlagen eingegangen, die zum Definieren von Verlustfunktionen für generative Machine-Learning-Modelle essentiell sind. Ziel dieses Teils ist es die Frage zu beantworten, wie weit eine Wahrscheinlichkeitsverteilung von einer anderen entfernt ist, um die Distanz anschließend zu minimieren. Das Minimieren der Entfernung zwischen Verteilungen wird in darauf folgenden Abschnitten verwendet, um Generative-Adversarial-Networks zu trainieren.
+In diesem Kapitel sollen die Grundlagen, die in dieser Arbeit benötigt werden,
+besprochen werden und bildet den Theorieteil der Thesis. Zuerst wird auf die
+mathematischen Grundlagen eingegangen, die zum Definieren von Verlustfunktionen
+für generative Machine-Learning-Modelle essentiell sind. Ziel dieses Teils ist
+es die Frage zu beantworten, wie weit eine Wahrscheinlichkeitsverteilung von
+einer anderen entfernt ist, um die Distanz anschließend zu minimieren. Das
+Minimieren der Entfernung zwischen Verteilungen wird in darauf folgenden
+Abschnitten verwendet, um Generative-Adversarial-Networks zu trainieren.
 
 Neben den mathematischen Grundlagen werden einige grundlegende Bausteine für die
-Entwicklung von hochqualitativen Feature-Extraktoren für die Objekterkennung auf
+Entwicklung von hochqualitativen Merkmal-Extraktoren für die Objekterkennung auf
 mobilen Endgeräten erläutert. Diese werden in späteren Kapiteln verwendet, um
 neue neuronale Netzwerke zu entwickeln, die unter anderem menschliche Posen aus
 Bildern sehr genau extrahieren und letztlich Bewegungen erkennen können. Hierfür
 ist eine hohe Semantik bei einer hohen Qualität bzw. Auflösung unabdingbar, um
 auch kleine Merkmale wie Hände erkennen zu können. Deshalb werden
 Feature-Pyramid-Networks (FPNs) erläutert, die mithilfe eines sogenannten
-Backbones hochauflösende Features mit einer hohen Semantik extrahieren können, während einfache Faltungsschichten (Convolutional-Layer) zwar ein hohes
-Verständnis entwickeln, jedoch eine kleine Auflösung dieser Features besitzen.
+Backbones hochauflösende Merkmale mit einer hohen Semantik extrahieren können,
+während einfache Faltungsschichten, auch \textit{Convolutional-Layer} oder kurz
+\textit{Conv} genannt, zwar ein hohes
+Verständnis entwickeln, jedoch eine kleine Auflösung dieser Merkmale besitzen.
 
-Neben den FPNs sollen auch die Architekturen von Residual-Neural-Networks (ResNets) und Inverted-Residuals (MobileNetV2) erläutert werden. Diese dienen meist als sogenannte Backbones für Feature-Extraktoren und sind in Verbindung mit FPNs essentieller Bestandteil der Posenerkennung.
+Neben den FPNs sollen auch die Architekturen von Residual-Neural-Networks
+(ResNets) und Inverted-Residuals (MobileNetV2) erläutert werden. Diese dienen
+meist als Backbones für Merkmal-Extraktoren und sind in Verbindung
+mit FPNs essentieller Bestandteil der Posenerkennung.
 
 \section{Notationen}
 In dieser Arbeit werden verschiedene Notationen aus der Statistik und dem
@@ -100,6 +112,33 @@ Der Term $\gamma(x, y)$ stellt dabei die \textit{Masse} dar, die von $x$ nach
 $y$ transportiert wird, um schließlich die Verteilung $P_r$ in die Verteilung
 $P_g$ umzuformen. Aus diesem Grund ist der Wasserstein-Abstand auch als
 \textit{Earth-Mover-Abstand} (EM-Abstand) bekannt.
+
+\FloatBarrier
+\section{Backbones}
+Backbones sind Netzwerke, die vor allem Merkmale (Features) aus der Eingabe, wie
+z.B. aus einem Bild, extrahieren, ohne dass eine Abschätzung durchgeführt wird.
+Die extrahierten Merkmale werden anschließend verwendet, um beispielsweise eine
+Abschätzung mithilfe eines Regressors auszuführen \cite{amjoud2020backbones}.
+Man kann demnach verschiedene Backbones mit unterschiedlichen Regressoren
+verbinden, ganz nach dem Baukastenprinzip. In dieser Arbeit werden vor allem
+ResNet- und MobileNet-Backbones verwendet, da einige Konfigurationen von ihnen
+vielversprechend für die Ausführung auf mobilen Geräten sind. Abbildung
+\ref{fig:backbone-regressor-framework} soll verdeutlichen, wie
+Machine-Learning-Modelle mithilfe eines solchen modularen Frameworks
+zusammengestellt werden können.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\textwidth]{images/backbone-regressor-framework.pdf}
+  \caption{Schematische Darstellung einer Machine-Learning-Architektur, die aus
+  einem Backbone für die Merkmal-Extraktion und einem Prediction-Head für die
+Klassifizierung bzw. Objektdetektion besteht. Optional können
+Feature-Extraktoren wie Feature-Pyramid-Networks o.ä. an das Backbone gehängt
+werden, um z.B. die Qualität der Merkmale zu verbessern.}
+  \label{fig:backbone-regressor-framework}
+\end{figure}
+
+\FloatBarrier
 
 \section{Residual-Neural-Networks}\label{section:residual-blocks}
 Mit \cite{he2015deep} wurde ein neues Framework zum Trainieren von tiefen
@@ -203,7 +242,7 @@ und einer weiteren Faltungsschicht. Der gesamte Aufbau soll
 durch Tabelle \ref{table:mobilenetv2} dargestellt werden. Wie schon eingangs
 erwähnt, wird dieses Modell später für die Bewegungs- bzw. Posenerkennung
 verwendet. Genauer gesagt wird das MobileNetV2 als Backbone für einen
-Feature-Extraktor verwendet. Dies soll jedoch in dem nächsten Abschnitt näher
+Merkmal-Extraktor verwendet. Dies soll jedoch in dem nächsten Abschnitt näher
 erläutert werden.
 
 \begin{table}
@@ -238,13 +277,13 @@ erläutert werden.
 \end{figure}
 
 \section{Feature-Pyramid-Networks}
-Bei der Objekterkennung ist beim Erlernen der Features eines Bildes die
-Auflösung dieser Features sehr gering. Feature-Pyramid-Networks (FPN) haben die
+Bei der Objekterkennung ist beim Erlernen der Merkmale eines Bildes die
+Auflösung dieser Merkmale sehr gering. Feature-Pyramid-Networks (FPN) haben die
 Aufgabe, eine hohe Semantik bei einer hohen Auflösung zu generieren. Häufig sind
 diese Netzwerke nur Teil eines Backbones bzw. werden dahinter geschaltet. Als
 Backbone-Modell kann zum Beispiel AlexNet, MobileNet und ResNet dienen. In
-Kombination mit einem FPN werden diese Netze damit zu einem Feature-Extractor
-umgewandelt, der eine hohe Semantik bei einer hohen Auflösung der Features
+Kombination mit einem FPN werden diese Netze damit zu einem Merkmal-Extractor
+umgewandelt, der eine hohe Semantik bei einer hohen Auflösung der Merkmale
 erlernen kann. Der Weg von der Eingabe über das Backbone-Modell wird auch als
 \textit{Bottom-Up-Pathway} bezeichnet, während der Weg vom Backbone über die
 Feature-Pyramid als \textit{Top-Down-Pathway} bezeichnet wird
@@ -278,18 +317,18 @@ M3, M2) ausgibt. Betrachtet man nun die letzte Ausgabe M5 relativ zum
 Eingabeformat, so besitzt diese Architektur einen Stride von $\frac{224}{56} = 4$.
 
 Kurz zusammengefasst wird eine große Eingabe mithilfe des Bottom-Up-Pathways
-bzw. Backbones zu vielen kleinen Filtern umgeformt, um die Features des Bildes
+bzw. Backbones zu vielen kleinen Filtern umgeformt, um die Merkmale des Bildes
 zu verstehen. Der Top-Down-Pathway versucht hingegen diese relativ kleinen Filter hochzuskalieren. Dadurch sollen die hohe Semantik aus dem Bottom-Up-Pathway beibehalten werden und die Filter eine höhere Auflösung erhalten. Das Problem beim
 Vergrößern der Filter ist, dass dabei ein Alias-Effekt auftritt, das Bild also
 verschwommen wirkt. Hierfür dienen Smoothing-Layer, welche wiederum nichts
 weiter als Convolutional-Layer mit einem $3 \times 3$ Kernel und einem Stride
 von 1 sind. Entsprechend werden die Ausgaben M5 - M2 verschärft und ergeben
-Features mit einer hohen Auflösung und einer hohen Semantik, die nun wahlweise
+Merkmale mit einer hohen Auflösung und einer hohen Semantik, die nun wahlweise
 für die Objekterkennung verwendet werden können.
 
 \begin{figure}
     \includegraphics[width=\textwidth]{images/ResNet_FPN.pdf}
-    \caption{Architektur eines Feature-Extractors als Feature-Pyramid-Network
+    \caption{Architektur eines Merkmal-Extractors als Feature-Pyramid-Network
     mit ResNet als Backbone.}
     \label{fig:resnet-fpn}
 \end{figure}
@@ -303,14 +342,15 @@ welche die letzte Stufe vor der Halbierung der Filtergröße darstellen. Also im
 wenn der Stride 2 ist. Ausnahme ist C5. Hier wird einfach die letzte Schicht des Netzwerks
 verwendet. Der Einbau eines FPN erfolgt ansonsten wie vorher erläutert. Die Kombination mit
 MobileNetV2 und Feature-Pyramid-Network ist in dieser Arbeit deshalb wichtig, da dieser
-Feature-Extraktor mit für die Posenerkennung zuständig ist. Besonders, weil die Features
+Merkmal-Extraktor mit für die Posenerkennung zuständig ist. Besonders, weil die
+Merkmale
 eine hohe Semantik und eine hohe Auflösung besitzen, können besonders kleine Objekte innerhalb
 eines Bildes erkannt und benötigte Informationen extrahiert werden. In Kapitel \ref{chapter:motion-detection}
 wird die Posenerkennung genauer erläutert.
 
 \begin{figure}
     \includegraphics[width=\textwidth]{images/MobileNetV2_FPN.pdf}
-    \caption{Architektur eines Feature-Extractors als Feature-Pyramid-Network
+    \caption{Architektur eines Merkmal-Extractors als Feature-Pyramid-Network
     mit MobileNetV2 als Backbone.}
     \label{fig:mobilenetv2-fpn}
 \end{figure}

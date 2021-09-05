@@ -1,6 +1,6 @@
 \chapter{Datensatzerzeugung}\label{chapter:dataset}
 Ein wichtiger Bestandteil beim Entwickeln von künstlichen neuronalen Netzen ist
-der unterliegende Datensatz, der zum Trainieren der Parameter der Netze
+der Datensatz, der zum Trainieren der Parameter der Netze
 verwendet wird. Ein Machine-Learning-Modell ist nur so gut wie der verwendete
 Datensatz. Dieser muss deshalb eine große Varianz der Daten repräsentieren. Das
 bedeutet, dass ausreichend Einträge vorhanden sein müssen, um das Netzwerk auf
@@ -98,7 +98,7 @@ ein Ausgabevideo mit 80 Frames, wobei jeder Frame jeweils $96 \times 128 \times
     \includegraphics[width=\textwidth]{images/ViGAN.pdf}
     \caption{Architektur von ViGAN. Als Eingabe dient ein zufälliger Vektor $\vec{z}
     \in \mathbb{R}^{100}$. Dieser wird anschließend in fünf $6 \times 8 \times
-    256$ Features umgewandelt. Um die relativ kleinen Frames in eine größere
+    256$ Merkmale umgewandelt. Um die relativ kleinen Frames in eine größere
     Auflösung zu skalieren, werden vier 3D-Convolutional-Transpose-Layer verwendet. Jedes
     dieser Schichten verwendet eine Kernelgröße von $5 \times 5 \times 5$ und
     einen Stride von 2.  Insgesamt ergibt sich also ein Stride von $2^4 = 16$,
@@ -192,7 +192,7 @@ System vorkommenden Klassen beschreibt, also ein WGAN pro Klasse. Da dies eine
 sehr unelegante Lösung wär, wird versucht ein cWGAN entsprechend Abschnitt
 \ref{section:cwgan-gp} zu implementieren, welches Proben aus $n$ verschiedenen
 Klassen erzeugen kann. Mithilfe eines Labels als Eingabe soll gesteuert werden
-können, zu welcher Klasse das Erzeugnis gehören soll
+können, zu welcher Klasse das Erzeugnis gehören soll.
 
 Eine Bewegung bestehend aus $N$ Frames und $k$ Schlüsselpunkten, die jeweils
 eine Position im zweidimensionalen Raum und eine Auftrittswahrscheinlichkeit
@@ -258,11 +258,13 @@ verschiedene Bewegungen zu erzeugen.
 \begin{figure}
     \includegraphics[width=\textwidth]{images/KpGAN.pdf}
     \caption{Architektur von KpGAN zum Generieren von 60 Frames einer
-    Schlüs\-sel\-punkt\-anima\-tion. Die Eingabe ist ein Vektor, welcher
-  zunächst in das Format $7 \times 2 \times 256$ gebracht wird und das Label
-der zu erzeugenden Bewegungsart. Anschließend wird mithilfe von insgesamt vier
-Convolutional-Transpose-Layer eine Ausgabe im Format $60 \times 17 \times 3$
-erzeugt. Es werden entsprechend 256, 128, 64 und 3 Filter für die Schichten
-verwendet.}
+      Schlüs\-sel\-punkt\-anima\-tion. Die Eingaben sind ein Label der zu
+      erzeugenden Bewegungsart und ein latenter Vektor, welcher zunächst in das Format $7
+      \times 2 \times 256$ gebracht wird. Das Label wird mithilfe einer
+      Embedding-Schicht in das Format $7 \times 2 \times 3$ umgeformt, sodass es
+      mit dem umgeformten, latenten Vektor verkettet werden kann. Anschließend
+    wird mithilfe von insgesamt vier Convolutional-Transpose-Layer eine Ausgabe
+  im Format $60 \times 17 \times 3$ erzeugt. Es werden entsprechend 256, 128, 64
+und 3 Filter für die Schichten verwendet.}
     \label{fig:kpgan}
 \end{figure}

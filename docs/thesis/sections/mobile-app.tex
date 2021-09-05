@@ -1,11 +1,11 @@
 \chapter{Entwicklung einer mobilen Anwendung}\label{mobile-app}
 Auf Basis der ausgearbeiteten Ergebnisse aus Kapitel
 \ref{chapter:motion-detection} soll nun eine mobile Anwendung entwickelt
-werden. Ziel ist es die Ergebnisse mit einem praktischen Experiment für mobile
+werden. Ziel ist es, die Ergebnisse mit einem praktischen Experiment für mobile
 Plattformen zu verifizieren und damit die Forschungsfrage zu beantworten. Da
 sich diese Arbeit vor allem mit dem Problem beschäftigen soll, wie eine
 Bewegungserkennung auf mobilen Plattformen ausgeführt werden kann, soll eine
-Android-App entwickelt werden, die Ergebnisse aus den vorherigen Kapiteln auf
+Android-App entwickelt werden, damit die Ergebnisse aus den vorherigen Kapiteln auf
 einer mobilen Plattform getestet werden können. Android wird als Plattform
 gewählt, da es zur Zeit die am häufigsten vertretene mobile Plattform ist und
 ein entsprechendes Gerät leicht zur Verfügung steht. Zum Vergleich, Android
@@ -126,7 +126,7 @@ Beim Testen der Bewegungserkennung wurde sich die Frage gestellt, wie lange
 eine Bewegung ausgeführt werden muss, um den Puffer komplett mit dieser
 Bewegung zu füllen, ohne dass andere Bewegungsarten in diesem enthalten sind.
 Hierfür wird nach dem Beginn einer neuen Bewegung eine Vorlaufzeit festgelegt,
-die sicher stellt, dass nach Ablauf dieser Zeit der komplette Puffer mit einer
+die sicherstellt, dass nach Ablauf dieser Zeit der komplette Puffer mit einer
 Bewegung gefüllt ist. Je größer der Puffer ist, desto größer ist auch die
 Vorlaufzeit. Gleichzeitig verringert sich die benötigte Vorlaufzeit, je
 schneller die Bewegungserkennung ausgeführt werden kann. Das bedeutet
@@ -172,7 +172,7 @@ Auf dem Samsung Galaxy S10 haben Puffer mit einer Größe von 10 oder 20 zu den
 besten Ergebnissen geführt. Da dieses Gerät eine stärkere Hardware besitzt,
 sind die Vorlaufzeiten entsprechend geringer als die bei dem S6 Edge+. Hier
 kann sogar mit einem Puffer mit nur 10 Elementen verwendet werden, was die
-Vorlaufzeit auf 0.71 Sekunden reduziert bei gleicher Erkennrate. Dies bedeutet
+Vorlaufzeit auf 0.71 Sekunden reduziert bei gleicher Erkennungsrate. Dies bedeutet
 lediglich, dass eine Erkennung um 0.71 Sekunden verzögert stattfindet. In dem
 Praxistest wurde außerdem festgestellt, dass eine Erkennung einer wechselnden
 Bewegung sogar vor der Vorlaufzeit möglich ist.  Insgesamt wurde die

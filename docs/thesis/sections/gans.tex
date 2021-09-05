@@ -126,14 +126,14 @@ Upsampling zu ermöglichen. Auch der Diskriminator wird mit solchen CNN-Layer
 ausgestattet, um räumliches Downsampling zu erlernen.
 
 Neben dem Auslassen von Max-Pooling-Layer folgt DCGAN auch dem Trend,
-Fully-Connected-Layer vor jedem Convolutional-Feature zu vermeiden. Dabei
+Fully-Connected-Layer nach jedem Convolutional-Layer zu vermeiden. Dabei
 wurde festgestellt, dass die Verknüpfung von Fully-Connected-Layer und der
 Eingabe des Generators bzw. mit der Ausgabe des Diskriminators am besten
 funktionieren. Die erste Schicht des Generators ist also ein
 Fully-Connected-Layer (1-dimensional), jedoch wird die Ausgabe der Schicht in
 einen 4-dimensionalen Tensor umgewandelt. Im Falle des Diskriminators wird die
 Ausgabe des letzen Convolutional-Layers (4-dimensional) abgeflacht und in eine
-1-dimensionale Schicht mit einer Sigmoid-Aktivierungsfuntion gefüttert
+1-dimensionale Fully-Connected-Schicht mit einer Sigmoid-Aktivierungsfuntion gegeben.
 \cite{radford2016unsupervised}.
 
 Um Mode-Collapse zu vermeiden, verwendet \cite{radford2016unsupervised}
