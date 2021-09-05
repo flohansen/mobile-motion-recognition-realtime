@@ -53,9 +53,9 @@ Der Eingabeparameter $z \in \mathbb{R}^n$ stellt einen $n$-dimensionalen Vektor
 dar, welcher auch als latenter Vektor bezeichnet wird. Dementsprechend wird der
 Vektorraum auch als latenter Raum bezeichnet. Ein solcher Vektor repräsentiert
 verschiedenste Objekte mithilfe seiner $n$ Komponenten. In Bezug zu GANs wurde
-festgestellt, dass ein GAN nicht nur lernt, ähnliche Daten zu einem bestehenden
-Datensatz zu erzeugen, sondern auch den Zusammenhang zwischen latenten
-Komponenten und einer Ausgabe zu verstehen. Das schöne daran ist, dass diese
+festgestellt, dass ein GAN nicht nur lernt ähnliche Daten zu einem bestehenden
+Datensatz zu erzeugen, sondern auch den Zusammenhang zwischen den latenten
+Komponenten und der Ausgabe zu verstehen. Das schöne daran ist, dass diese
 latenten Vektoren mithilfe der Gesetze aus der linearen Algebra analysiert und
 entsprechende Operationen mit ihnen ausgeführt werden können. Hierzu kann
 folgendes, sehr einfaches Experiment durchgeführt werden. Man wählt zwei
@@ -93,8 +93,8 @@ allen Elementen des Datensatzes erzeugt. Mit anderen Worten, bei einer
 zufälligen Eingabe in das Netz, soll immer eine unterschiedliche Ausgabe
 erzeugt werden. Bei einem Mode-Collapse ist dies nicht der Fall. Es kann
 beispielsweise passieren, dass wenn das Netz auf das Erzeugen von neuen
-Gesichtern trainiert wird, dass dieses ausschließlich weibliche Gesichter
-erzeugt, weil das Netz herausgefunden hat, dass es einfacher ist, weibliche
+Gesichtern trainiert wird, dieses ausschließlich weibliche Gesichter
+erzeugt. Das Netz könnte herausgefunden haben, dass es einfacher ist, weibliche
 Gesichtszüge zu generieren, als männliche \cite{richardson2018gans}. Dies
 lässt sich damit erklären, dass der Generator beim Trainingsvorgang mehr
 Erfolg beim Generieren von weiblichen Gesichtern hatte und der Diskriminator
@@ -104,8 +104,8 @@ beseitigen wurden einige Änderungen an dem Standardmodell des GAN von
 soll in den nächsten Abschnitten erläutert werden.
 
 \subsection{Deep-Convolution-GAN}
-Das \textit{Deep Convolution GAN} (DCGAN) ist ein Versuch,
-\textit{Convolutional Neural Networks} (CNNs) mit GANs zu verknüpfen. Nach
+Das \textit{Deep-Convolution-GAN} (DCGAN) ist ein Versuch,
+\textit{Convolutional-Neural-Networks} (CNNs) mit GANs zu verknüpfen. Nach
 vielen Fehlschlägen in der Entwicklung von GANs mit CNNs ist die Version von
 \cite{radford2016unsupervised} stabil und auf viele unterschiedliche
 Datensätze anwendbar. Dafür wurden viele verschiedene Kombinationen von
@@ -117,14 +117,13 @@ Netze erreicht werden.
 Zusätzlich zur eigentlichen Architektur von DCGAN werden moderne Techniken
 verwendet, um CNN-Architekturen zu vereinfachen.  Damit der Generator über
 mehrere Schichten hinweg die räumliche Darstellung von Objekten lernen kann,
-werden Convolutional-Layer verwendet. Anstatt, dass sogenannte
-Max-Pooling-Layer zum Einsatz kommen, können nach
-\cite{springenberg2015striving} einfach Convolutional-Layer mit erhöhtem
-Stride verwendet werden, ohne dass die Genauigkeit sinkt. In Bezug zu DCGANs
-von \cite{radford2016unsupervised} werden solche Schichten verwendet, um dem
-Generator das Erlernen vom räumlichen Upsampling zu ermöglichen. Auch der
-Diskriminator wird mit solchen CNN-Layer ausgestattet, um räumliches
-Downsampling zu erlernen.
+werden Convolutional-Layer verwendet. Anstelle von sogenannten
+Max-Pooling-Layer können nach \cite{springenberg2015striving} einfach
+Convolutional-Layer mit erhöhtem Stride verwendet werden, ohne dass die
+Genauigkeit sinkt. In Bezug zu DCGANs von \cite{radford2016unsupervised} werden
+solche Schichten verwendet, um dem Generator das Erlernen vom räumlichen
+Upsampling zu ermöglichen. Auch der Diskriminator wird mit solchen CNN-Layer
+ausgestattet, um räumliches Downsampling zu erlernen.
 
 Neben dem Auslassen von Max-Pooling-Layer folgt DCGAN auch dem Trend,
 Fully-Connected-Layer vor jedem Convolutional-Feature zu vermeiden. Dabei
@@ -138,12 +137,12 @@ Ausgabe des letzen Convolutional-Layers (4-dimensional) abgeflacht und in eine
 \cite{radford2016unsupervised}.
 
 Um Mode-Collapse zu vermeiden, verwendet \cite{radford2016unsupervised}
-Batch-Normalization-Layer. Dadurch wird das Training stabilisiert und Probleme
+Batch-Normalisierungsschicht. Dadurch wird das Training stabilisiert und Probleme
 wie \textit{Internal-Covariate-Shifting} angegangen \cite{pmlr-v37-ioffe15}.
 Vor allem wird dadurch aber auch verhindert, dass der Generator immer die
 gleichen Ausgaben erzeugt. Das Anwenden der Batch-Normalisierung in allen
 Schichten des Netzwerks führt jedoch zur Stichprobenoszillation und
-Instabilität des Modells. Aus diesem Grund wird auf Batch-Normalization in der
+Instabilität des Modells. Aus diesem Grund wird auf Batch-Normalisierung in der
 Ausgabesschicht des Generators und in der Eingabeschicht des Diskriminators
 verzichtet.
 
@@ -177,7 +176,7 @@ W(P_r, P_\theta) = \sup_{\|f\|_L \leq 1} \mathbb{E}_{x \sim P_r}\left[f(x)\right
 \]
 
 gilt, wobei das Supremum über alle 1-Lipschitz-Funktionen $f : X \to
-\mathbb{R}$ ist. Zusätzlich wird ein kleiner Trick angewendet, um das Problem
+\mathbb{R}$ ist. Zusätzlich wird ein kleiner Trick angewandt, um das Problem
 weiter zu vereinfachen, indem K-Lipschitz-kontinuierliche Funktionen verwendet
 werden.
 \[
@@ -189,7 +188,7 @@ parametrisiert durch $w$ existiert, wobei $W$ die Menge aller möglichen
 Parameter darstellt, so können die Parameter $w$ und damit die Abbildung $f_w$
 von einem neuronalen Netz erlernt werden, um so die Wasserstein-Distanz
 effizient abzuschätzen. Hier bildet der Wasserstein-Abstand also gleichzeitig
-die Loss-Funktion des Kritisierer mit
+die Verlustfunktion des Kritisierer mit
 \[
 W(P_r, P_\theta) = \max_{w \in W} \mathbb{E}_{x \sim P_r}\left[f_w(x)\right]
 - \mathbb{E}_{z \sim P_r(z)}\left[f_w(g_\theta(z))\right].
@@ -256,11 +255,11 @@ die Distanz zwischen den beiden Verteilungen $\mathbb{P}_r, \mathbb{P}_\theta$
 zu minimieren, um möglichst realitätsnahe Ausgaben erzeugen zu können. Als
 nächstes werden die Gradienten $g_w$ für Parameter $w$ mithilfe von
 Gradient-Descent, dargestellt als $\nabla_w$, berechnet. Hierfür wird die
-Wasserstein-Distanz als Loss-Funktion verwendet.  Der nächste Schritt besteht
+Wasserstein-Distanz als Verlustfunktion verwendet.  Der nächste Schritt besteht
 daraus, die Parameter $w$ des Kritisierer-Netzwerks mithilfe des
 RMSprop-Algorithmus zu aktualisieren und die aktualisierten Gewichte so gering
 wie möglich zu halten, um die K-Lipschitz-Kontinuität zu gewährleisten. Dies
-wird mithilfe der Funktion $\mathrm{clip}$ umgesetzt, welche die
+wird mithilfe der Funktion \textit{clip} umgesetzt, welche die
 Parameterwerte in einem bestimmten Intervall $\left[-c; c\right]$ festsetzt.
 Die bis hier erläuterten Schritte werden $n_{critic}$-mal durchgeführt, sodass
 das Kritisierer-Netzwerk immer öfter trainiert wird, als der Generator. Dieser
@@ -272,7 +271,7 @@ Bestimmen der Gradienten von den Generator-Parametern $\theta$ verwendet.
 
 Im direkten Vergleich zu dem originalen GAN \cite{goodfellow2014generative}
 werden einige Änderungen in der Architektur vorgenommen. Während in dem
-originalen Anstatz fast nach jeder Schicht eine Batch-Normalization
+originalen Anstatz fast nach jeder Schicht eine Batch-Normalisierung
 vorgenommen wird, können diese bei WGANs entfallen. Standard-GANs würden
 hierbei kaum interpretierbare Resultate erzeugen, WGANs hingegen produzieren
 trotzdem gute Ergebnisse, wie Experimente von \cite{arjovsky2017wasserstein}
@@ -280,8 +279,8 @@ zeigen (siehe Abbildung \ref{fig:wgan-gan-no-batchnorm}). Das Wasserstein-GAN
 hat zusätzlich noch einige nützliche Eigenschaften. So wird unter anderem
 durch Annäherung des Wasserstein-Abstandes zwischen Generator- und
 Ausgangsdistribution das Problem des Mode-Collapse gelöst.  Durch den
-Wasserstein-Abstand wird der Abstand zwischen den Verteilung wesentlich besser
-minimiert (im Falle des Generator-Modells) als bei der KL- oder JS-Divergenz.
+Wasserstein-Abstand wird der Abstand zwischen den Verteilungen wesentlich besser
+minimiert als bei der KL- oder JS-Divergenz.
 Die Ausgabe eines Kritisierers stellt außerdem eine Bewertung der Eingabe dar,
 anstatt diese in die Kategorien Fälschung oder Realität einzuteilen und besitzt
 deshalb mehr Aussagekraft.
@@ -290,24 +289,24 @@ deshalb mehr Aussagekraft.
 \includegraphics[width=0.5\textwidth]{images/image-022.png}
 \includegraphics[width=0.5\textwidth]{images/image-024.png}
 \caption{Vergleich von WGAN und Standard-GAN \cite{arjovsky2017wasserstein}.
-    Links sind Ausgaben vom WGAN-Algorithmus zu sehen während rechts Ausgaben
+    Links sind Ausgaben vom WGAN-Algorithmus zu sehen, während rechts Ausgaben
     eines Standard-GANs dargestellt sind. In beiden Generator-Modellen wurden
-    Batch-Normalization-Layer entfernt. Klar zu erkennen ist, dass WGAN immer
-    noch interpretierbare Ergebnisse liefert während bei Standard-GANs Probleme
+    Batch-Normalisierungsschicht entfernt. Klar zu erkennen ist, dass WGAN immer
+    noch interpretierbare Ergebnisse liefert, während bei Standard-GANs Probleme
     erkennbar sind.}
 \label{fig:wgan-gan-no-batchnorm}
 \end{figure}
 
 \subsection{Wasserstein-GAN mit Gradient-Penalty}
-Ein großes Problem von Wasserstein-GANs ist das Clippen der Gewichte in ein
-fest definiertes Intervall, um die 1-Lipschitzstetigkeit zu erfüllen. Das dies
-keine elegante Lösung ist, liegt auf der Hand. In \cite{gulrajani2017improved}
-wurde speziell dieses Problem genauer untersucht und es wurde festgestellt,
-dass das Beschneiden der Gewichte den Kritisierer dazu verleitet, nur extrem
-einfache Funktionen zu erlernen, wie der Vergleich in Abbildung
-\ref{fig:problems-of-weight-clipping} zeigt. 
+Ein großes Problem von Wasserstein-GANs ist das Abschneiden der
+Netzwerkgewichte (Weight-Clipping) in ein fest definiertes Intervall, um die
+1-Lipschitzstetigkeit zu erfüllen. Das dies keine elegante Lösung ist, liegt
+auf der Hand. In \cite{gulrajani2017improved} wurde speziell dieses Problem
+genauer untersucht und es wurde festgestellt, dass das Beschneiden der Gewichte
+den Kritisierer dazu verleitet, nur extrem einfache Funktionen zu erlernen, wie
+der Vergleich in Abbildung \ref{fig:problems-of-weight-clipping} zeigt. 
 
-Um das Problem des Weight-Clippings anzugehen, stellt
+Um das Problem mit dem Abschneiden der Gewichte anzugehen, stellt
 \cite{gulrajani2017improved} eine alternative Lösung vor, die auf anderem Wege
 die 1-Lipschitzstetigkeit in WGANs sicherstellen soll. Hierbei soll
 Gradient-Penalty helfen und wird als
@@ -317,7 +316,7 @@ Gradient-Penalty helfen und wird als
 berechnet, wobei $\hat{x} =  x \epsilon + \tilde{x}(1 - \epsilon)$ eine
 zufällige Gewichtung zwischen realen ($x$) und generierten Daten ($\tilde{x}$)
 darstellt. Das $\epsilon$ wird dabei zufällig aus $\left[0, 1\right]$ gewählt.
-Daraus resultierend gestaltet sich die neue Loss-Funktion des Kritisierers wie
+Daraus resultierend gestaltet sich die neue Verlustfunktion des Kritisierers wie
 folgt.
 \[
 L = \mathbb{E}_{\tilde{x} \sim \mathbb{P}_g}\left[D(\tilde{x})\right] -
@@ -403,7 +402,7 @@ Verkettung beider Eingaben ebenfalls angepasst werden.
 \min_G \max_D V(G, D) = \mathbb{E}_{x \sim p_{data}(x)}\left[ \log D(x \lvert y) \right] + \mathbb{E}_{z \sim p_z(z)}\left[ \log (1 - D(G(z \lvert y))) \right]
 \]
 
-Der Operator $\lvert$ stellt dabei die Verkettungsoperation dar, sodass $x
+Die Verknüpfung $\lvert$ stellt dabei die Verkettungsoperation dar, sodass $x
 \lvert y$ bedeutet, dass $y$ an $x$ gehängt wird. Aus diesem Grund müssen $x$
 und $y$ auch dieselbe Form aufweisen. Andernfalls kann die Verkettung nicht
 durchgeführt werden. Das komplette Netzwerk lernt damit eine Ausgabe zu
@@ -411,7 +410,7 @@ erzeugen, die auf das eingegebene Label passt. Soweit zur Idee von
 Conditional-Generative-Adversarial-Networks. Dies soll nun auf Wasserstein-GANs
 übertragen werden, sodass in späteren Implementationen
 Conditional-Wasserstein-GANs (cWGAN) zur Verfügung stehen, um automatisiert
-Datensätze zu erzeugen. Die angepasste Verlustfunktion für den Kritisierer,
+Datensätze zu erzeugen. Die angepasste Verlustfunktion $L_w$ für den Kritisierer,
 welche die Verkettung des Labels berücksichtigt, bildet sich wie folgt.
 \[
 L_w = \mathbb{E}_{\tilde{x} \sim \mathbb{P}_g}\left[D(\tilde{x} \lvert y)\right] -
@@ -419,18 +418,18 @@ L_w = \mathbb{E}_{\tilde{x} \sim \mathbb{P}_g}\left[D(\tilde{x} \lvert y)\right]
     \lambda \cdot \mathbb{E}_{\hat{x} \sim \mathbb{P}_{\hat{x}}}\left[(\|\nabla_{\hat{x}} D(\hat{x} \lvert y)\| - 1)^2\right]
 \]
 
-Der Verlust des Generators lässt sich mit
+Der Verlust $L_\theta$ des Generators lässt sich mit
 \[
 L_\theta = -\mathbb{E}_{\tilde{x} \sim \mathbb{P}_g} \left[D(\tilde{x} \lvert y)\right]
 \]
 berechnen.
 
 Für ein Training, in welchem die Daten in Batches vorliegen, wird einfach der
-arithmetische Mittelwert berechnet.  Zur Erinnerung, $x \sim \mathbb{P}_r$
-entspricht einer Probe $x$ aus einem realen Datensatz. Das $x$ ist damit
-ebenfalls real. Zudem sind $\tilde{x} = G(z \lvert y)$ und $\hat{x} = x \epsilon
-+ \tilde{x} (1 - \epsilon)$ generierte bzw.  interpolierte Proben. Mithilfe
-dieser Verlustfunktionen kann nun ein Conditional-Wasserstein-GAN mit
+arithmetische Mittelwert der Verluste berechnet. Zur Erinnerung, $x \sim
+\mathbb{P}_r$ entspricht einer Probe $x$ aus einem realen Datensatz. Das $x$
+ist damit ebenfalls real. Zudem sind $\tilde{x} = G(z \lvert y)$ und $\hat{x} =
+x \epsilon + \tilde{x} (1 - \epsilon)$ generierte bzw.  interpolierte Proben.
+Mithilfe dieser Verlustfunktionen kann nun ein Conditional-Wasserstein-GAN mit
 Gradient-Penalty implementiert werden. Besonders wird dies im nächsten Kapitel
 besprochen, wenn ein Generator zum Erzeugen von ganzen Datensätzen mit
 verschiedenen Klassen umgesetzt werden soll. 
@@ -438,6 +437,6 @@ verschiedenen Klassen umgesetzt werden soll.
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{images/cgan.pdf}
-    \caption{Schematische Darstellung eines einfachen Conditional-GANs für den MNIST-Datensatz. Die Eingabe sind ein latenter Vektor mit 100 Komponenten und ein Labelvektor mit 10 Komponenten (entsprechend der Anzahl der Klassen).}
+    \caption{Schematische Darstellung eines einfachen Conditional-GANs für den MNIST-Datensatz. Die Eingaben sind ein latenter Vektor mit 100 Komponenten und ein Labelvektor mit 10 Komponenten (entsprechend der Anzahl der Klassen).}
     \label{fig:cgan}
 \end{figure}

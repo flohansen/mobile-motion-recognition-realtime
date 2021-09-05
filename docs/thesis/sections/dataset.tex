@@ -1,4 +1,4 @@
-\chapter{Erstellen eines Datensatzes}\label{chapter:dataset}
+\chapter{Datensatzerzeugung}\label{chapter:dataset}
 Ein wichtiger Bestandteil beim Entwickeln von künstlichen neuronalen Netzen ist
 der unterliegende Datensatz, der zum Trainieren der Parameter der Netze
 verwendet wird. Ein Machine-Learning-Modell ist nur so gut wie der verwendete
@@ -39,8 +39,8 @@ Fokus auf die eigentliche Forschungsarbeit verbessern.
 
 Nun stellt sich natürlich die Frage, wie ein kleiner Datensatz künstlich
 vergrößert werden kann. Künstlich bedeutet hier, dass das Vergrößern des
-Datensatzes mithilfe von Algorithmen geschieht und vom Computer anstatt vom
-Menschen durchgeführt wird. Die folgenden Beispiele richten sich nach
+Datensatzes mithilfe von Algorithmen geschieht und vom Computer anstelle vom
+Mensch durchgeführt wird. Die folgenden Beispiele richten sich nach
 \cite{shorten2019}. Eine Möglichkeit ist es, die Daten zu augmentieren.  Dies
 wird bereits häufig während des Trainings von neuronalen Netzen durchgeführt,
 indem simple Transformationen wie Rotation, Translation und Verzerrung an den
@@ -70,12 +70,12 @@ Datensatz für das Trainieren von neuronalen Netzen geeignet ist. In Kapitel
 vorgestellt. Aufgrund der Vorteile von Wasserstein-GANs, nämlich die
 Interpretationsmöglichkeit des Fehlers während des Trainings und die
 Mode-Collapse-Resistenz, wird dieses als Grundarchitektur gewählt. Da häufig
-GANs nur in Verbindung mit einzelnen Bildern verwendet werden, muss das WGAN
-entsprechend angepasst werden, um Videos anstatt von Bildern zu erzeugen. Wie im
+GANs nur für das Erzeugen von einzelnen Bildern verwendet werden, muss das WGAN
+entsprechend angepasst werden, um Videos anstelle von Bildern zu erzeugen. Wie im
 vorherigen Abschnitt besprochen, ist es wichtig, dass die Frames des Videos
 zueinander passen und nicht aus dem Kontext gerissen werden. Wie in Abbildung
 \ref{fig:vigan} dargestellt unterscheidet sich ViGAN nicht allzu sehr vom WGAN.
-Der größte Unterschied besteht darin, dass 3D-Convolutional-Transpose- anstelle
+Der größte Unterschied besteht darin, dass 3D- anstelle
 der 2D-Convolutional-Transpose-Layer verwendet werden. Dies ermöglicht nicht nur
 ein Hochskalieren des Bildes, sondern auch ein Erhöhen der Frameanzahl. Die Idee
 dabei ist, dass das Netzwerk dadurch lernt, zusammenhängende Frames zu

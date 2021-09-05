@@ -9,16 +9,15 @@ Bildern sehr genau extrahieren und letztlich Bewegungen erkennen können. Hierf�
 ist eine hohe Semantik bei einer hohen Qualität bzw. Auflösung unabdingbar, um
 auch kleine Merkmale wie Hände erkennen zu können. Deshalb werden
 Feature-Pyramid-Networks (FPNs) erläutert, die mithilfe eines sogenannten
-Backbones hochauflösende Features mit einer hohen Semantik extrahieren können
-während einfache Faltungsschichten (Convolutional-Layer) zwar ein hohes
+Backbones hochauflösende Features mit einer hohen Semantik extrahieren können, während einfache Faltungsschichten (Convolutional-Layer) zwar ein hohes
 Verständnis entwickeln, jedoch eine kleine Auflösung dieser Features besitzen.
 
 Neben den FPNs sollen auch die Architekturen von Residual-Neural-Networks (ResNets) und Inverted-Residuals (MobileNetV2) erläutert werden. Diese dienen meist als sogenannte Backbones für Feature-Extraktoren und sind in Verbindung mit FPNs essentieller Bestandteil der Posenerkennung.
 
 \section{Notationen}
 In dieser Arbeit werden verschiedene Notationen aus der Statistik und dem
-Machine-Learning-Umfeld verwendet und sollen hier aufgrund der Les- und
-Verständlichkeit aufgelistet werden.
+Machine-Learning-Umfeld verwendet und sollen hier aufgrund der Lesbarkeit
+aufgelistet werden.
 
 \paragraph{Erwartungswert.}
 Der Term $\mathbb{E}_{x \sim P}\left[f(x)\right]$ stellt den Erwartungswert
@@ -30,7 +29,7 @@ Der Term $\nabla_w\left[f(x)\right]$ stellt die Berechnung der Gradienten von
 den Parametern $w$ mithilfe der Loss-Funktion $f$ dar.
 
 \paragraph{Euklidische Norm.}
-Der Term $\| v \|$ stellt die euklidische Norm von $v$ dar. Sie ist definiert als die quadratische Wurzel der Summer aller Quadrate der Komponenten von $v$, also $\| v \| = \| v \|_2 = \sqrt{v_1^2 + v_2^2 + ... + v_n^2}$.
+Der Term $\| v \|$ stellt die euklidische Norm von $v$ dar. Sie ist definiert als die quadratische Wurzel der Summe aller Quadrate der Komponenten von $v$, also $\| v \| = \| v \|_2 = \sqrt{v_1^2 + v_2^2 + ... + v_n^2}$.
 
 \section{Lipschitzstetigkeit}
 \begin{definition}[K-Lipschitzstetigkeit]
@@ -77,13 +76,13 @@ Die Jensen-Shannon-Divergenz kann als Erweiterung der
 Kullback-Leibler-Divergenz angesehen werden. Im Gegensatz zur
 Kullback-Leibler-Divergenz ist die Jensen-Shannon-Divergenz (JS-Divergenz)
 symmetrisch. Das bedeutet, dass der Abstand zwischen zwei
-Wahrscheinlichkeitsverteilungen gleich groß ist, egal von welchen er beiden
+Wahrscheinlichkeitsverteilungen gleich groß ist, egal von welchen der beiden
 Distributionen aus betrachtet wird.
 
 \section{Wasserstein-Abstand}
 Eine weitere Methode zum Messen des Abstands zwischen zwei
 Wahrscheinlichkeitsverteilungen ist die Berechnung des Wasserstein-Abstands.
-Diese Methode wird besonders wichtig für die folgenden Abschnitten, in denen
+Diese Methode wird besonders wichtig für die folgenden Abschnitte, in denen
 generative neuronale Netze mithilfe des Wasserstein-Abstandes definiert und
 umgesetzt werden.
 
@@ -106,18 +105,20 @@ $P_g$ umzuformen. Aus diesem Grund ist der Wasserstein-Abstand auch als
 Mit \cite{he2015deep} wurde ein neues Framework zum Trainieren von tiefen
 neuronalen Netzen vorgestellt. Ein großes Problem mit sehr tiefen neuronalen
 Netzen ist, dass diese zu einem größeren Fehler im Training führen. Dies führt
-ebenfalls zu einem erhöhten Test-Fehler. Diese Fehler werden überraschenderweise
-immer größer, je tiefer das Netzwerk ist und das Phänomen wird als
-\textit{Degradation} bezeichnet. Dies ist auch bei der Genauigkeit solcher Netze
-beobachtbar. Ist die Genauigkeit gesättigt und erhöht man nun die Tiefe des
-Netzes, so degradiert die Genauigkeit schnell. Laut \cite{he2015deep} liegt dies
-nicht am Overfitting (Überanpassung). Overfitting beschreibt die
-Überspezialisierung eines Machine-Learning-Modells, welches sich zu sehr an den
-dahinterliegenden Datensatz angepasst hat. Ein solches Modell kann nicht mehr
-zuverlässig mit Daten außerhalb des zum Trainieren verwendeten Datensatzes
-betrieben werden. Anders ausgedrückt besitzt das Netzwerk eine sehr hohe
-Genauigkeit beim Arbeiten mit dem Trainingsdatensatz, aber eine signifikant
-niedrigere Genauigkeit beim Arbeiten mit dem Testdatensatz.
+ebenfalls zu einem erhöhten Test-Fehler. Dies steht im Konflikt mit der
+eigentlichen Vermutung, dass tiefere Netzwerke intelligenter sein müssten, als
+weniger tiefe. Diese Fehler werden überraschenderweise immer größer, je tiefer
+das Netzwerk ist, was als \textit{Degradation} bezeichnet wird.
+Dies ist auch bei der Genauigkeit solcher Netze beobachtbar. Ist die
+Genauigkeit gesättigt und erhöht man nun die Tiefe des Netzes, so degradiert
+die Genauigkeit. Laut \cite{he2015deep} liegt dies nicht am Overfitting
+(Überanpassung). Overfitting beschreibt die Überspezialisierung eines
+Machine-Learning-Modells, welches sich zu sehr an den dahinterliegenden
+Datensatz angepasst hat. Ein solches Modell kann nicht mehr zuverlässig mit
+Daten außerhalb des zum Trainieren verwendeten Datensatzes betrieben werden.
+Anders ausgedrückt besitzt das Netzwerk eine sehr hohe Genauigkeit beim
+Arbeiten mit dem Trainingsdatensatz, aber eine signifikant niedrigere
+Genauigkeit beim Arbeiten mit dem Testdatensatz.
 
 Abhilfe für Degradation sollen die Residual-Networks (ResNets) mithilfe von
 \textit{Building-Blocks} schaffen. Anstatt die Abbildung
@@ -130,17 +131,17 @@ Residuum $F(x) + x$ modelliert. Dies kann mithilfe von Shortcut-Connections
     \centering
     \includegraphics[width=0.8\textwidth]{images/resnet_building_block.pdf}
     \caption{Schemata für Building-Blocks eines ResNets \cite{he2015deep}. Die
-    Shortcut-Connection ist die Identität von dem Eingabeparameter $x$. Links ist ein einfacher Residual-Block dargestellt während rechts ein tieferer, soganannter Bottleneck-Block dargestellt wird.}
+    Shortcut-Connection ist die Identität von dem Eingabeparameter $x$. Links ist ein einfacher Residual-Block dargestellt, während rechts ein tieferer, soganannter Bottleneck-Block dargestellt wird.}
     \label{fig:resnet-building-block}
 \end{figure}
 
 Abhängig von den Anforderungen können nun entsprechend tiefe Netze eingesetzt
-werden, indem die Building-Blocks gestapelt eingesetzt werden. In
-\cite{he2015deep} werden außerdem ein paar Architekturen vorgestellt, die
+werden, indem die Building-Blocks verkettet eingesetzt werden. In
+\cite{he2015deep} werden außerdem Architekturen vorgestellt, die
 erfolgreich auf den ImageNet-Datensatz \cite{deng2009imagenet} evaluiert wurden.
 Diese unterscheiden sich hauptsächlich in der Anzahl der verwendeten Schichten
-und sind in Tabelle \ref{table:resnets} zu sehen. Jeder dieser Residual-Blocks,
-egal ob einfacher Building- oder Bottleneck-Block, kann einen Stride besitzen.
+und sind in Tabelle \ref{table:resnets} zu sehen. Jeder dieser Residual-Blöcke,
+egal ob einfacher Building- oder Bottleneck-Block, kann einen Stride besitzen. Bottleneck-Blöcke sind tiefere Residual-Blöcke mit drei Faltungsschichten, deren Filter einen Flaschenhals darstellen (vgl. Abbildung \ref{fig:resnet-building-block}).
 Dabei ist wichtig, dass der entsprechende Stride nur auf die erste
 Faltungsschicht des gesamten Blocks angewandt wird. Die restlichen Schichten
 besitzen demnach immer einen Stride von 1. Die Ergebnisse nach dem Trainieren
@@ -168,40 +169,42 @@ erzeugen, also genauer arbeiten als weniger tiefe Netze.
 
 \section{MobileNetV2}
 Dieser Abschnitt soll nun eine Architektur vorstellen, die geeignet ist, um
-Modelle des maschinellen Lernens auf mobilen Geräten auszuführen. Diese soll als
-Grundlage zum Verständnis der MoveNet-Architektur aus \cite{movenet} dienen, die
-später für die Bewegungserkennung wichtig wird. Die Rede ist hierbei von
-MobileNetV2 \cite{sandler2019mobilenetv2} und den damit eingeführten
-Inverted-Residual-Blocks. Diese besitzen einen verringerten Speicherverbrauch
-bei einer Inferenz, was für mobile Anwendungen sehr wichtig ist und sind wie
-folgt aufgebaut. Die Eingabe $x$ in einem solchen Block wird zuerst in eine
-Faltungsschicht mit einem $1 \times 1$ Kernel und einer ReLU6-Aktivierung
-gegeben. Danach wird eine Depthwise-Separable-Convolution
+Modelle des maschinellen Lernens auf mobilen Geräten auszuführen. Diese soll
+als Grundlage zum Verständnis der MoveNet-Architektur aus \cite{movenet}
+dienen, die später für die Bewegungserkennung wichtig wird. Die Rede ist
+hierbei von MobileNetV2 \cite{sandler2019mobilenetv2} und den damit
+eingeführten Inverted-Residual-Blocks. Diese besitzen einen verringerten
+Speicherverbrauch bei einer Inferenz, was für mobile Anwendungen sehr wichtig
+ist und sind wie folgt aufgebaut. Die Eingabe $x$ in einem solchen Block wird
+zuerst in eine Faltungsschicht mit einem $1 \times 1$ Kernel und einer
+ReLU6-Aktivierung gegeben. Danach wird eine Depthwise-Separable-Convolution
 \cite{howard2017mobilenets} durchgeführt, die eine Kernelgröße von $3 \times 3$
 verwendet. Auch hier wird eine ReLU6-Aktivierung vorgenommen. Die nächste
-Schicht ist wieder eine $1 \times 1$ Faltungsschicht mit keiner, also einer
-linearen Aktivierung. Zum Schluss wird die Ausgabe der letzten Faltungsschicht
+Schicht ist wieder eine $1 \times 1$ Faltungsschicht mit einer linearen
+Aktivierungsfunktion. Zum Schluss wird die Ausgabe der letzten Faltungsschicht
 mit der Identität der Eingabe $x$ addiert und bildet ein Residuum. Der gesamte
 Ablauf ist in Abbildung \ref{fig:inverted-residual} zu sehen und ähnelt sehr
-stark den Residual-Blocks aus Abschnitt \ref{section:residual-blocks}. Neben den
-üblichen Parametern wurden ein paar wenige hinzugefügt. So beschreibt der
-Expansionsfaktor $t$ einen Skalar, der die Anzahl der internen Filter des Blocks
-skaliert. Dieser hat keinen Einfluss auf die Eingabe- oder Ausgabegröße Das
-beudetet bei einer Eingabegröße von $h \times w \times c$ besitzen
-die erste und zweite Faltungsschicht $c \cdot t$ Ausgabefilter. Auf die dritte und
-letzte Schicht eines Inverted-Residual-Blocks hat der Expansionsfaktor keinen
-direkten Einfluss. Hier wird lediglich von $c \cdot t$ auf $c'$ Filter projeziert.
-Bei dem Stride eines kompletten Blocks verhält es sich ähnlich. Dieser wird lediglich
-auf die zweite also Depthwise-Separable-Convolution-Schicht angewandt. Die restlichen
-Schichten besitzen einen Stride von 1.
+stark den Residual-Blocks aus Abschnitt \ref{section:residual-blocks}. Neben
+den üblichen Parametern wurden ein paar wenige hinzugefügt. So beschreibt der
+Expansionsfaktor $t$ einen Skalar, der die Anzahl der internen Filter des
+Blocks skaliert. Dieser hat keinen Einfluss auf die Eingabe- oder Ausgabegröße.
+Das beudetet, dass bei einer Eingabegröße von $h \times w \times c$ die erste
+und zweite Faltungsschicht $c \cdot t$ Ausgabefilter besitzen. Auf die dritte
+und letzte Schicht eines Inverted-Residual-Blocks hat der Expansionsfaktor
+keinen direkten Einfluss. Hier wird lediglich von $c \cdot t$ auf $c'$ Filter
+projeziert, indem eine Faltungsschicht mit $c'$ Filtern verwendet wird. Bei dem Stride eines kompletten Blocks verhält es sich ähnlich.
+Dieser wird lediglich auf die zweite also
+Depthwise-Separable-Convolution-Schicht angewandt. Die restlichen Schichten
+besitzen einen Stride von 1.
 
-Der Aufbau von MobileNetV2 kann nun einfach erläutert werden. Die erste Schicht
-ist eine Faltungsschicht mit 32 Filtern gefolgt von 17 Inverted-Residual-Blocks
-und einer weiteren Faltungsschicht mit 1280 Filtern. Der gesamte Aufbau soll
-durch Tabelle \ref{table:mobilenetv2} dargestellt werden. Wie schon eingangs erwähnt,
-wird dieses Modell später für die Bewegungs- bzw. Posenerkennung verwendet. Genauer gesagt
-wird das MoveNetV2 als Backbone für einen Feature-Extraktor verwendet. Dies soll jedoch
-in dem nächsten Abschnitt näher erläutert werden.
+Das MobileNetV2 ist relativ einfach aufgebaut. Die erste Schicht
+ist eine Faltungsschicht gefolgt von 17 Inverted-Residual-Blocks
+und einer weiteren Faltungsschicht. Der gesamte Aufbau soll
+durch Tabelle \ref{table:mobilenetv2} dargestellt werden. Wie schon eingangs
+erwähnt, wird dieses Modell später für die Bewegungs- bzw. Posenerkennung
+verwendet. Genauer gesagt wird das MobileNetV2 als Backbone für einen
+Feature-Extraktor verwendet. Dies soll jedoch in dem nächsten Abschnitt näher
+erläutert werden.
 
 \begin{table}
     \begin{tabularx}{\textwidth}{l|l|l|l|l|l}
@@ -223,14 +226,14 @@ in dem nächsten Abschnitt näher erläutert werden.
     Bottleneck-Block entspricht einem Inverted-Residual-Block (siehe Abbildung
     \ref{fig:inverted-residual}). Der Parameter $t$ beschreibt den
     Skalierungsfaktor, $c$ die Anzahl der Filter, $n$ die Anzahl der aneinander
-    geketteten Blöcke und $s$ den Stride eines Block-Verbundes mit $n$ Blöcken.}
+    geketteten Blöcke und $s$ den Stride eines Block-Verbunds mit $n$ Blöcken.}
     \label{table:mobilenetv2}
 \end{table}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.3\textwidth]{images/inverted_residual.pdf}
-    \caption{Darstellung eines Inverted-Residual-Blocks. Der \textit{Dwise}-Block stellt eine Depthwise-Separable-Convolution aus \cite{howard2017mobilenets} dar. Der gesamte Block wird auch als Bottleneck-Block in der MobileNetV2-Architektur genannt. Nicht zu verwechseln mit dem Bottleneck-Block aus dem ResNet-Kontext.}
+    \caption{Darstellung eines Inverted-Residual-Blocks. Der \textit{Dwise}-Block stellt eine Depthwise-Separable-Convolution aus \cite{howard2017mobilenets} dar. Der gesamte Block wird auch als Bottleneck-Block in der MobileNetV2-Architektur bezeichnet. Nicht zu verwechseln mit dem Bottleneck-Block aus dem ResNet-Kontext.}
     \label{fig:inverted-residual}
 \end{figure}
 
@@ -254,15 +257,14 @@ Bild und wird mithilfe der ersten ResNet-Schicht (C1) in $112 \times 112 \times
 $7 \times 7$ Kernel umgeformt. Anschließend wird die Ausgabe in ein
 Max-Pooling-Block gegeben, welcher die Eingabe in $56 \times 56 \times 128$
 Filter umwandelt. Die nächsten Blöcke sind für die Einbettung von FPNs am
-wichtigsten. Der folgende Block (C2) besteht aus mehreren Residual-Blocks,
+wichtigsten, denn sie bilden eine Schnittstelle, die verwendet wird, um ein FPN anzubinden. Der folgende Block (C2) besteht aus mehreren Residual-Blocks,
 welche zusammen einen Stride von 1 ergeben und 256 Filter erzeugen. Diese Blöcke
 werden zusammengefasst auch \textit{Bottlenecks} genannt. Darauf folgen drei
-weitere Bottleneck-Blöcke (C3, C4, C5) mit einem Stride von 2. Nach C5 ensteht
+weitere Bottlenecks (C3, C4, C5) jeweils mit einem Stride von 2. Nach C5 ensteht
 somit eine Ausgabe von $7 \times 7 \times 2048$. Soweit zum Aufbau des
 Bottom-Up-Pathways. Der Top-Down-Pathway wird mithilfe von Verbindungsschichten
-(Laterals) mit dem Backbone verbunden. Diese haben die Aufgabe, die Anzahl der
-Filter aus dem Bottom-Up-Pathway so umzuformen bzw. anzugleichen, sodass diese
-im Top-Down-Pathway miteinander addiert werden können. Hierfür werden
+(Laterals) mit dem Backbone (C2, C3, C4, C5) verbunden. Diese haben die Aufgabe, die Anzahl der
+Filter aus dem Bottom-Up-Pathway anzugleichen, sodass die Ausgaben aus dem Bottom-Up-Pathway mit denen des Top-Down-Pathways addiert werden können. Hierfür werden
 Convolutional-Layer mit einem $1 \times 1$ Kernel und 256 Filtern verwendet,
 sodass lediglich die Anzahl der Filter transformiert werden. Im Konkreten
 bedeutet dies, dass die Ausgabe von C5 von $7 \times 7 \times 2048$ auf die Form
@@ -273,7 +275,11 @@ Lateralverbindungen und Bottleneck-Blöcken verkettet wiederholt, sodass das FPN
 schließlich vier Ausgaben mit den Größen $56 \times 56 \times 256$, $28 \times
 28 \times 256$, $14 \times 14 \times 256$ und $7 \times 7 \times 256$ (M5, M4,
 M3, M2) ausgibt. Betrachtet man nun die letzte Ausgabe M5 relativ zum
-Eingabeformat, so besitzt diese Architektur einen Stride von 4. Das Problem beim
+Eingabeformat, so besitzt diese Architektur einen Stride von $\frac{224}{56} = 4$.
+
+Kurz zusammengefasst wird eine große Eingabe mithilfe des Bottom-Up-Pathways
+bzw. Backbones zu vielen kleinen Filtern umgeformt, um die Features des Bildes
+zu verstehen. Der Top-Down-Pathway versucht hingegen diese relativ kleinen Filter hochzuskalieren. Dadurch sollen die hohe Semantik aus dem Bottom-Up-Pathway beibehalten werden und die Filter eine höhere Auflösung erhalten. Das Problem beim
 Vergrößern der Filter ist, dass dabei ein Alias-Effekt auftritt, das Bild also
 verschwommen wirkt. Hierfür dienen Smoothing-Layer, welche wiederum nichts
 weiter als Convolutional-Layer mit einem $3 \times 3$ Kernel und einem Stride
@@ -295,7 +301,7 @@ einige Blöcke übersprungen und sind nicht direkt Teil des Top-Down-Pathways. I
 werden lediglich die Blöcke mit Lateralverbindungen mit dem Top-Down-Pathway verknüpft,
 welche die letzte Stufe vor der Halbierung der Filtergröße darstellen. Also immer dann,
 wenn der Stride 2 ist. Ausnahme ist C5. Hier wird einfach die letzte Schicht des Netzwerks
-verwendet. Der Einbau deines FPN erfolgt ansonsten wie vorher erläutert. Die Kombination mit
+verwendet. Der Einbau eines FPN erfolgt ansonsten wie vorher erläutert. Die Kombination mit
 MobileNetV2 und Feature-Pyramid-Network ist in dieser Arbeit deshalb wichtig, da dieser
 Feature-Extraktor mit für die Posenerkennung zuständig ist. Besonders, weil die Features
 eine hohe Semantik und eine hohe Auflösung besitzen, können besonders kleine Objekte innerhalb
