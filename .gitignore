@@ -284,11 +284,9 @@ TSWLatexianTemp*
 #*Notes.bib
 
 venv/
-videos/
 __pycache__/
 checkpoints/
 logs/
 .vim/
 .vscode/
 experiments/
-dataset/

@@ -3,7 +3,7 @@ import cv2
 import datetime
 import glob
 from argparse import ArgumentParser
-from models.vigan_wgan import WGAN
+from modules.vigan_wgan import WGAN
 from utils import get_training_epochs
 from dataset import load_video_data
 import tensorflow as tf
