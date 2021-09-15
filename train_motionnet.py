@@ -1,10 +1,11 @@
+import os
 import argparse
 import numpy as np
 import random
 import tensorflow as tf
 import tensorflow_hub as hub
 from dataset import read_motion2021_dataset
-from modules.motionnet import MotionNet60
+from modules.motionnet import MotionNet
 
 def generate_train_samples(num_classes, batch_size, generator):
   train_y = np.zeros((batch_size, num_classes), dtype=np.float32)
@@ -20,11 +21,12 @@ def generate_train_samples(num_classes, batch_size, generator):
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
-  parser.add_argument('num_frames', type=int, default=20)
-  parser.add_argument('--batch-size', type=int, default=32)
-  parser.add_argument('--epochs', type=int, default=50)
-  parser.add_argument('--save-interval', type=int, default=100)
-  parser.add_argument('--use-dataset-generator', action='store_true')
+  parser.add_argument('num_frames', type=int, default=20, help='The number of frames to classify')
+  parser.add_argument('--batch-size', type=int, default=32, help='The batch size')
+  parser.add_argument('--epochs', type=int, default=50, help='The number of epochs')
+  parser.add_argument('--save-interval', type=int, default=100, help='After how many epochs the model will be saved')
+  parser.add_argument('--dataset-dir', type=str, default='datasets', help='The directory where the datasets are located')
+  parser.add_argument('--use-dataset-generator', action='store_true', help='If the training loop should use a keypoint dataset generator')
   args = parser.parse_args()
 
   with open(f'datasets/motions2021_{args.num_frames}/labels.txt', 'r') as f:
@@ -36,8 +38,8 @@ if __name__ == '__main__':
 
   num_classes = len(labels)
   # model = MotionNet(num_classes, [256])
-  model = MotionNet60(num_classes, [16, 32, 64, 128])
-  real_x, real_y = read_motion2021_dataset(f'datasets/motions2021_{args.num_frames}')
+  model = MotionNet(num_classes, args.num_frames, [16, 32, 64, 128])
+  real_x, real_y = read_motion2021_dataset(os.path.join(args.dataset_dir, f'motions2021_{args.num_frames}'))
   real_dataset = tf.data.Dataset.from_tensor_slices((real_x, real_y)).batch(args.batch_size)
 
   num_batches = int(tf.data.experimental.cardinality(real_dataset).numpy())

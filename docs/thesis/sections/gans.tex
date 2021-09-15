@@ -3,8 +3,8 @@ In Machine-Learning existieren viele verschiedene Modelle, die vorhandene
 Datensätze analysieren und anhand der Daten lernen, Strukturen in den
 Datensätzen zu erkennen.  Besitzt man beispielsweise einen Datensatz
 bestehend aus Fotoaufnahmen von Tieren, so kann ein Klassifizierer trainiert
-werden, um einem Bild eine Tierklasse zuzuweisen. Aus diesem Grund fässt man
-diese Modelle unter dem Begriff \textit{Bildklassifizierung} \cite{lorente2021image} zusammen.
+werden, um einem Bild eine Tierklasse zuzuweisen. Aus diesem Grund fasst man
+diese Modelle unter den Begriff \textit{Bildklassifizierung} \cite{lorente2021image} zusammen.
 
 Auch interessant ist das Erkennen von vielen Objekten innerhalb eines
 Bildes, anstatt das gesamte Bild nur einer einzigen Klasse zuzuweisen. In der
@@ -16,7 +16,7 @@ innerhalb des Bildes \cite{zaidi2021survey}.
 
 Neben Modellen, die zu einem bestimmten Sachverhalt eine Aussage treffen
 können, existieren auch Modelle, welche in der Lage sind, neue Sachverhalte zu
-erzeugen. Diese fallen unter dem Begriff \textit{Generative Adversarial
+erzeugen. Diese fallen unter den Begriff \textit{Generative Adversarial
 Networks} (GANs) und bilden das Hauptthema dieses Abschnitts. Das interessante
 an diesen generativen Modellen ist, dass sie nicht nur die Strukturen eines
 Datensatzes lernen, sondern darüber hinaus neue Elemente der
@@ -35,8 +35,8 @@ menschlichen Bewegung zu tätigen.
 Die Funktionsweise von GANs ist im Prinzip ziemlich simpel. Während beim
 klassischen überwachten Lernen (Supervised-Learning) in der Regel nur ein
 Modell beim Training involviert ist, verhält sich das bei generativen Modellen
-etwas anders. Zum Einen wird ein Generator definiert, welcher, wie sein Name
-andeutet, Ausgaben selbst erzeugt. Zum Anderen wird ein Diskriminator in das
+etwas anders. Zum einen wird ein Generator definiert, welcher, wie sein Name
+andeutet, Ausgaben selbst erzeugt. Zum anderen wird ein Diskriminator in das
 Training eingebaut, welcher zwischen künstlich erzeugten und realen Daten
 unterscheidet. Diese beiden Modelle werden dann gleichermaßen trainiert.
 Während der Generator versucht, immer bessere Fälschungen zu erzeugen, versucht
@@ -55,7 +55,7 @@ Vektorraum auch als latenter Raum bezeichnet. Ein solcher Vektor repräsentiert
 verschiedenste Objekte mithilfe seiner $n$ Komponenten. In Bezug zu GANs wurde
 festgestellt, dass ein GAN nicht nur lernt ähnliche Daten zu einem bestehenden
 Datensatz zu erzeugen, sondern auch den Zusammenhang zwischen den latenten
-Komponenten und der Ausgabe zu verstehen. Das schöne daran ist, dass diese
+Komponenten und der Ausgabe zu verstehen. Das Schöne daran ist, dass diese
 latenten Vektoren mithilfe der Gesetze aus der linearen Algebra analysiert und
 entsprechende Operationen mit ihnen ausgeführt werden können. Hierzu kann
 folgendes, sehr einfaches Experiment durchgeführt werden. Man wählt zwei
@@ -188,7 +188,7 @@ parametrisiert durch $w$ existiert, wobei $W$ die Menge aller möglichen
 Parameter darstellt, so können die Parameter $w$ und damit die Abbildung $f_w$
 von einem neuronalen Netz erlernt werden, um so die Wasserstein-Distanz
 effizient abzuschätzen. Hier bildet der Wasserstein-Abstand also gleichzeitig
-die Verlustfunktion des Kritisierer mit
+die Verlustfunktion des Kritisierers mit
 \[
 W(P_r, P_\theta) = \max_{w \in W} \mathbb{E}_{x \sim P_r}\left[f_w(x)\right]
 - \mathbb{E}_{z \sim P_r(z)}\left[f_w(g_\theta(z))\right].
@@ -196,7 +196,7 @@ W(P_r, P_\theta) = \max_{w \in W} \mathbb{E}_{x \sim P_r}\left[f_w(x)\right]
 
 Trotzdem darf nicht vergessen werden, dass dies nur gültig ist, falls die
 Funktion 1-Lipschitz-kontinuierlich ist. Um dies zu erzwingen, werden die
-Werte der aktualisierten Gewichte des Kritisierer zwischen $\left[-c; c\right]$
+Werte der aktualisierten Gewichte des Kritisierers zwischen $\left[-c; c\right]$
 gehalten. Dabei muss laut \cite{arjovsky2017wasserstein} $c$ relativ klein
 sein.
 
@@ -256,7 +256,7 @@ zu minimieren, um möglichst realitätsnahe Ausgaben erzeugen zu können. Als
 nächstes werden die Gradienten $g_w$ für Parameter $w$ mithilfe von
 Gradient-Descent, dargestellt als $\nabla_w$, berechnet. Hierfür wird die
 Wasserstein-Distanz als Verlustfunktion verwendet.  Der nächste Schritt besteht
-daraus, die Parameter $w$ des Kritisierer-Netzwerks mithilfe des
+darin, die Parameter $w$ des Kritisierer-Netzwerks mithilfe des
 RMSprop-Algorithmus zu aktualisieren und die aktualisierten Gewichte so gering
 wie möglich zu halten, um die K-Lipschitz-Kontinuität zu gewährleisten. Dies
 wird mithilfe der Funktion \textit{clip} umgesetzt, welche die
@@ -291,7 +291,7 @@ deshalb mehr Aussagekraft.
 \caption{Vergleich von WGAN und Standard-GAN \cite{arjovsky2017wasserstein}.
     Links sind Ausgaben vom WGAN-Algorithmus zu sehen, während rechts Ausgaben
     eines Standard-GANs dargestellt sind. In beiden Generator-Modellen wurden
-    Batch-Normalisierungsschicht entfernt. Klar zu erkennen ist, dass WGAN immer
+    Batch-Nor\-mali\-sier\-ungs\-schicht entfernt. Klar zu erkennen ist, dass WGAN immer
     noch interpretierbare Ergebnisse liefert, während bei Standard-GANs Probleme
     erkennbar sind.}
 \label{fig:wgan-gan-no-batchnorm}
@@ -300,7 +300,7 @@ deshalb mehr Aussagekraft.
 \subsection{Wasserstein-GAN mit Gradient-Penalty}
 Ein großes Problem von Wasserstein-GANs ist das Abschneiden der
 Netzwerkgewichte (Weight-Clipping) in ein fest definiertes Intervall, um die
-1-Lipschitzstetigkeit zu erfüllen. Das dies keine elegante Lösung ist, liegt
+1-Lipschitzstetigkeit zu erfüllen. Dass dies keine elegante Lösung ist, liegt
 auf der Hand. In \cite{gulrajani2017improved} wurde speziell dieses Problem
 genauer untersucht und es wurde festgestellt, dass das Beschneiden der Gewichte
 den Kritisierer dazu verleitet, nur extrem einfache Funktionen zu erlernen, wie
@@ -376,7 +376,7 @@ erzeugen. Aber was ist, wenn wir ein zufälliges Element einer bestimmten Klasse
 erzeugen wollen? Nehmen wir als Beispiel einen Datensatz bestehend aus Bildern
 von Hunden und Katzen. Die bisher vorgestellten DCGANs und WGANs würden auf
 diesen Datensatz trainiert werden und würden bei einem zufälligen Eingabevektor
-Hunde oder Katzenbilder bzw. eine Mischung aus beidem erzeugen. Möchte man nun
+Hunde- oder Katzenbilder bzw. eine Mischung aus beidem erzeugen. Möchte man nun
 jedoch den Generator des GANs dazu bringen, nur zufällige Hundebilder zu
 erzeugen, so muss aufwändig die dafür zuständige Komponente des Eingabevektors
 extrahiert werden, die bestimmt, ob der Generator ein Hunde- oder ein Katzenbild
@@ -411,7 +411,7 @@ Conditional-Generative-Adversarial-Networks. Dies soll nun auf Wasserstein-GANs
 übertragen werden, sodass in späteren Implementationen
 Conditional-Wasserstein-GANs (cWGAN) zur Verfügung stehen, um automatisiert
 Datensätze zu erzeugen. Die angepasste Verlustfunktion $L_w$ für den Kritisierer,
-welche die Verkettung des Labels berücksichtigt, bildet sich wie folgt.
+welche die Verkettung des Labels be\-rück\-sich\-tigt, bildet sich wie folgt.
 \[
 L_w = \mathbb{E}_{\tilde{x} \sim \mathbb{P}_g}\left[D(\tilde{x} \lvert y)\right] -
     \mathbb{E}_{x \sim \mathbb{P}_r}\left[D(x \lvert y)\right] +

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>README</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="master-thesis-bewegungserkennung-auf-mobilen-geräten-mit-verwendung-von-gans-für-eine-automatische-datensatzgenerierung">Master-Thesis: Bewegungserkennung auf mobilen Geräten mit Verwendung von GANs für eine automatische Datensatzgenerierung</h1>
+<h2 id="inhaltsverzeichnis">Inhaltsverzeichnis</h2>
+<ul>
+<li><a href="#master-thesis">Master-Thesis</a>
+<ul>
+<li><a href="#quickstart">Quickstart</a></li>
+<li><a href="#datens-tze">Datensätze</a></li>
+<li><a href="#abh-ngigkeiten-installieren">Abhängigkeiten installieren</a></li>
+<li><a href="#trainieren-von-kpgan">Trainieren von KpGAN</a>
+<ul>
+<li><a href="#schritt-1--herunterladen-der-datens-tze">Schritt 1: Herunterladen der Datensätze</a></li>
+<li><a href="#schritt-2--trainingsschleife-starten">Schritt 2: Trainingsschleife starten</a></li>
+</ul></li>
+<li><a href="#trainieren-von-vigan">Trainieren von ViGAN</a>
+<ul>
+<li><a href="#schritt-1--herunterladen-der-datens-tze-1">Schritt 1: Herunterladen der Datensätze</a></li>
+<li><a href="#schritt-2--trainingsschleife-starten-1">Schritt 2: Trainingsschleife starten</a></li>
+</ul></li>
+<li><a href="#trainieren-von-motionnet">Trainieren von MotionNet</a>
+<ul>
+<li><a href="#schritt-1--datensatz-festlegen">Schritt 1: Datensatz festlegen</a></li>
+<li><a href="#schritt-2--trainingsschleife-starten-2">Schritt 2: Trainingsschleife starten</a></li>
+</ul></li>
+<li><a href="#tools">Tools</a>
+<ul>
+<li><a href="#erstellen-eines-datensatzes-f-r-kpgan">Erstellen eines Datensatzes für KpGAN</a></li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="quickstart">Quickstart</h2>
+<p><strong>Umwandeln eines trainierten MotionNet-Modells in das TFLite-Format:</strong></p>
+<pre><code>tflite_convert --saved_model_dir=checkpoints/motionnet --output_file=checkpoints/motionnet_20.tflite</code></pre>
+<hr />
+<p><strong>Trainieren von MotionNet, welches 20 Frames einer Bewegung klassifiziert:</strong></p>
+<pre><code>python .\train_motionnet.py 20 .\datasets\motions2021_20 --epochs 300 --save-interval 50 --batch-size 128 --use-dataset-generator</code></pre>
+<hr />
+<p><strong>Trainieren von KpGAN, welches Bewegungen bestehend aus 20 Schlüsselpunktframes erzeugt:</strong></p>
+<pre><code>python train_kpgan.py 20 --epochs 500 --save-interval 100 --batch-size 128</code></pre>
+<h2 id="datensätze">Datensätze</h2>
+<p>Es wurden verschiedene Datensätze zum Trainieren der verschiedenen GANs erstellt. Diese sind in folgender Tabelle dokumentiert. Der Pfad zu den Datensatzordnern kann beliebig gewählt werden. Dieser kann in den Python-Skripts übergeben werden. Die Datensätze selbst müssen aber <strong>zwingend</strong> wie folgt benannt werden.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Pfad</th>
+<th>Beschreibung</th>
+<th>Modell</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>motions2021_10</code></td>
+<td>Schlüsselpunktanimationen mit 10 Frames als Bilder kodiert.</td>
+<td>KpGAN</td>
+</tr>
+<tr class="even">
+<td><code>motions2021_20</code></td>
+<td>Schlüsselpunktanimationen mit 20 Frames als Bilder kodiert.</td>
+<td>KpGAN</td>
+</tr>
+<tr class="odd">
+<td><code>motions2021_60</code></td>
+<td>Schlüsselpunktanimationen mit 60 Frames als Bilder kodiert.</td>
+<td>KpGAN</td>
+</tr>
+<tr class="even">
+<td><code>videos</code></td>
+<td>Videos von Hantelübungen mit unterschiedlichen Personen.</td>
+<td>ViGAN</td>
+</tr>
+</tbody>
+</table>
+<h2 id="abhängigkeiten-installieren">Abhängigkeiten installieren</h2>
+<p>Damit die Python-Programme ausgeführt werden können, müssen die entsprechenden Abhängigkeiten installiert werden. Dies kann mithilfe der <code>requirements.txt</code> im Hauptverzeichnis des Projektes getan werden.</p>
+<pre><code>pip install -r requirements.txt</code></pre>
+<h2 id="trainieren-von-kpgan">Trainieren von KpGAN</h2>
+<h3 id="schritt-1-herunterladen-der-datensätze">Schritt 1: Herunterladen der Datensätze</h3>
+<p>In der Arbeit wurden unterschiedliche Datensätze verwendet, um KpGAN Bewegungssequenzen generieren zu lassen, die jeweils aus 10, 20 oder 60 Frames bestehen. Falls die Datensätze nicht bereits vorhanden sind, können diese aus dem <a href="https://drive.google.com/drive/folders/1eP3lIetg4uYdd5ICSJtjb5AHvnZgCGpg?usp=sharing">Google Drive</a> heruntergeladen werden. Die Datensätze werden am besten unter <code>/path/to/project/datasets</code> entpackt.</p>
+<pre><code>/path/to/project
+├───datasets
+|   ├───motions2021_10
+|   ├───motions2021_20
+|   └───motions2021_60
+├───modules
+├───tools
+...</code></pre>
+<h3 id="schritt-2-trainingsschleife-starten">Schritt 2: Trainingsschleife starten</h3>
+<p>Nachdem die Datensätze lokal zur Verfügung stehen, kann das KpGAN trainiert werden. Hierfür wird das Skript <code>train_kpgan.py</code> verwendet. Einzelheiten über die Parameter können mithilfe des Kommandos <code>python train_kpgan.py --help</code> nachgelesen werden. Diese sind im Folgenden trotzdem nochmal kurz beschrieben.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Default</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>frames</code></td>
+<td>-</td>
+<td>Kann <code>10</code>, <code>20</code> oder <code>60</code> sein. Gibt die Anzahl der Frames an, die eine Bewegung darstellen.</td>
+</tr>
+<tr class="even">
+<td><code>--batch-size</code></td>
+<td>32</td>
+<td>Größe der zum Training verwendeten Batches</td>
+</tr>
+<tr class="odd">
+<td><code>--n-critic</code></td>
+<td>5</td>
+<td>Anzahl der Iterationen zum Trainieren des Kritisierers</td>
+</tr>
+<tr class="even">
+<td><code>--epochs</code></td>
+<td>100</td>
+<td>Anzahl der zum Training verwendeten Epochen</td>
+</tr>
+<tr class="odd">
+<td><code>--save-interval</code></td>
+<td>10</td>
+<td>Gibt an, nach wie vielen Epochen das Modell gespeichert werden soll</td>
+</tr>
+<tr class="even">
+<td><code>--checkpoint-dir</code></td>
+<td><code>checkpoints</code></td>
+<td>Der Ordner, in welchem das trainierte Modell gespeichert werden soll</td>
+</tr>
+<tr class="odd">
+<td><code>--log-dir</code></td>
+<td><code>logs</code></td>
+<td>Der Ordner, in welchem der Trainingsprozess dokumentiert abgelegt werden soll (kann über <a href="https://www.tensorflow.org/tensorboard">Tensorboard</a> ausgelesen und dargestellt werden)</td>
+</tr>
+</tbody>
+</table>
+<p>Beispiel für ein Training des KpGAN, welches 20 Frames einer Bewegung erzeugt, mit 3000 Epochen und einer Batch-Größe von 128:</p>
+<pre><code>python train_kpgan.py 20 --epochs 500 --save-interval 100 --batch-size 128</code></pre>
+<h2 id="trainieren-von-vigan">Trainieren von ViGAN</h2>
+<h3 id="schritt-1-herunterladen-der-datensätze-1">Schritt 1: Herunterladen der Datensätze</h3>
+<p>ViGAN wurde mithilfe eines Videodatensatzes trainiert. Falls die Datensätze nicht bereits vorhanden sind, können diese aus dem <a href="https://drive.google.com/drive/folders/1eP3lIetg4uYdd5ICSJtjb5AHvnZgCGpg?usp=sharing">Google Drive</a> heruntergeladen werden. Die Datensätze werden am besten unter <code>/path/to/project/datasets</code> entpackt.</p>
+<pre><code>/path/to/project
+├───datasets
+|   └───videos
+├───modules
+├───tools
+...</code></pre>
+<h3 id="schritt-2-trainingsschleife-starten-1">Schritt 2: Trainingsschleife starten</h3>
+<p>Nachdem die Datensätze lokal zur Verfügung stehen, kann das KpGAN trainiert werden. Hierfür wird das Skript <code>train_vigan.py</code> verwendet. Einzelheiten über die Parameter können mithilfe des Kommandos <code>python train_vigan.py --help</code> nachgelesen werden. Diese sind im Folgenden trotzdem nochmal kurz beschrieben.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Default</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>--batch-size</code></td>
+<td>4</td>
+<td>Größe der zum Training verwendeten Batches</td>
+</tr>
+<tr class="even">
+<td><code>--n-critic</code></td>
+<td>5</td>
+<td>Anzahl der Iterationen zum Trainieren des Kritisierers</td>
+</tr>
+<tr class="odd">
+<td><code>--epochs</code></td>
+<td>100</td>
+<td>Anzahl der zum Training verwendeten Epochen</td>
+</tr>
+<tr class="even">
+<td><code>--save-interval</code></td>
+<td>100</td>
+<td>Gibt an, nach wie vielen Epochen das Modell gespeichert werden soll</td>
+</tr>
+<tr class="odd">
+<td><code>--checkpoint-dir</code></td>
+<td><code>checkpoints</code></td>
+<td>Der Ordner, in welchem das trainierte Modell gespeichert werden soll</td>
+</tr>
+<tr class="even">
+<td><code>--dataset-dir</code></td>
+<td><code>datasets/videos</code></td>
+<td>Der Ordner des Datensatzes für das Training</td>
+</tr>
+<tr class="odd">
+<td><code>--log-dir</code></td>
+<td><code>logs</code></td>
+<td>Der Ordner, in welchem der Trainingsprozess dokumentiert abgelegt werden soll (kann über <a href="https://www.tensorflow.org/tensorboard">Tensorboard</a> ausgelesen und dargestellt werden)</td>
+</tr>
+<tr class="even">
+<td><code>--checkpoint</code></td>
+<td>None</td>
+<td>Gibt den Speicherpunkt einer vergangenen Trainingssession an, die weiter trainiert werden soll</td>
+</tr>
+</tbody>
+</table>
+<p>Beispiel für 3000 Epochen und einer Batch-Größe von 4:</p>
+<pre><code>python train_vigan.py --epochs 500 --save-interval 100 --batch-size 4</code></pre>
+<h2 id="trainieren-von-motionnet">Trainieren von MotionNet</h2>
+<h3 id="schritt-1-datensatz-festlegen">Schritt 1: Datensatz festlegen</h3>
+<p>Beim Training des MotionNets kann zwischen zwei Arten von Datensätzen gewählt werden. Zum einen kann ein realer Datensatz, wie beim Training von KpGAN verwendet werden. Zum anderen kann ein KpGAN selbst als Datensatzgenerator verwendet werden, um dynamisch auf Nachfrage neue Trainingsdaten zu erzeugen.</p>
+<h3 id="schritt-2-trainingsschleife-starten-2">Schritt 2: Trainingsschleife starten</h3>
+<p>Das Training mit realen Daten verhält sich ähnlich wie beim Trainieren eines KpGANs (siehe oben). Ein Beispiel für das Trainieren des MotionNets mit 20 Frames ist folgendes Kommando.</p>
+<pre><code>python train_motionnet.py 20 --epochs 300 --save-interval 50 --batch-size 128</code></pre>
+<p>Um MotionNet mithilfe eines KpGANs zu trainieren, kann folgendes Kommando angepasst werden.</p>
+<pre><code>python .\train_motionnet.py 20 --epochs 300 --save-interval 50 --batch-size 128 --use-dataset-generator</code></pre>
+<p>Der reale Datensatz wird in diesem Fall als Testdatensatz verwendet.</p>
+<h2 id="tools">Tools</h2>
+<h3 id="erstellen-eines-datensatzes-für-kpgan">Erstellen eines Datensatzes für KpGAN</h3>
+<p>Um die Datensätze für KpGAN zu erzeugen, wurde ein Werkzeug entwickelt, welches Videos des <a href="https://www.crcv.ucf.edu/data/UCF101.php">UCF-101-Datensatzes</a> in Schlüsselpunktanimationen umwandelt. Dieses Werkzeug befindet sich unter <code>tools/convert_ucf101.py</code>. Um die Datensätze aus der Thesis zu erzeugen, wurden folgende Kommandos verwendet.</p>
+<pre><code>python .\tools\convert_ucf101.py --number-output-frames 60 /path/to/UCF-101 datasets/motions2021_60 PushUps PullUps BenchPress
+
+python .\tools\convert_ucf101.py --number-output-frames 20 /path/to/UCF-101 datasets/motions2021_20 PushUps PullUps BenchPress
+
+python .\tools\convert_ucf101.py --number-output-frames 10 /path/to/UCF-101 datasets/motions2021_10 PushUps PullUps BenchPress</code></pre>
+<p>Diese Kommandos erzeugen Schlüsselpunktanimationsdatensätze bestehend aus den Klassen <code>PushUps</code>, <code>PullUps</code> und <code>BenchPress</code> mit 60, 20 und 10 Frames pro Bewegung. Natürlich kann anstatt dieser Klassen alle anderen des UCF-101-Datensatzes verwendet werden.</p>
+</body>
+</html>

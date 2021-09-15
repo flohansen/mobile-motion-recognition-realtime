@@ -1,0 +1,25 @@
+\chapter{Verwandte Arbeiten}
+In \cite{yu2018remotenet} wird ReMotENet vorgestellt. Dies ist eine Architektur,
+die zum Erkennen und Separieren von Bewegungen eingesetzt werden kann. Hierbei
+werden ganze Videoclips eingelesen, wodurch eine erhöhte Geschwindigkeit im
+Vergleich zu anderen Methoden wie Background-Substraction und einer
+anschließenden Objektdetektion erreicht wird. Leider wird hierbei nur
+identifiziert, welches Objekt sich bewegt, aber nicht, welche Bewegung
+ausgeführt wird. Auch handelt es sich hierbei nicht um eine Echtzeiterkennung.
+
+Die Arbeit von \cite{kidzinksi2020} präsentiert eine Methode zum Abschätzen von
+Bewegungseigenschaften. So werden beispielsweise Laufgeschwindigkeiten,
+Kniebeugewinkel und Kadenz einer Bewegung mithilfe eines Deep-Learning-Modells
+erfasst. Auch hier handelt es sich nicht um eine Echtzeiterkennung.
+
+In \cite{zhu2020} wird die Erkennung von bewegten Objekten behandelt. Hier
+werden vor allem sich bewegende Objekte in Echtzeit und in hochauflösenden
+Videoframes detektiert. Das Modell erreicht eine Geschwindigkeit von 21 FPS mit
+einer Genauigkeit von 86,15\% bei einer Bildauflösung von $1920 \times 1080$
+Pixel. Eine tiefere Bewegungsanalyse wird hier jedoch nicht vorgenommen.
+
+In \cite{erol2020motion} wird auf das Klassifizieren von Bewegungen eingegangen.
+Zudem werden synthetische Radar-Mikro-Doppler-Signaturen von Bewegungen von
+einem GAN erzeugt, um später mit diesem einen Datensatz für einen Klassifizierer
+zu generieren. Insgesamt wird eine Erkennungsrate von 93\% erreicht. Die
+Erkennung geschieht dabei nicht in Echtzeit.

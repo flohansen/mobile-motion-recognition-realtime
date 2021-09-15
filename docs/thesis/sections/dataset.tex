@@ -12,7 +12,7 @@ repräsentiert wird, die alle eine andere Perspektive des gleichen Kontexts
 darstellen. Das Problem ist nämlich, dass eine handgeschriebene Ziffer immer anders aussieht. Um ein neuronales Netz also auf dieses Problem vorzubereiten, müssen verschiedenste Varianten zum Training bereitstehen.
 
 In diesem Abschnitt soll nun ein Datensatz eingeführt werden, welcher keine
-Daten für das Erkennen von Ziffern, aber für die die Bewegungserkennung
+Daten für das Erkennen von Ziffern, aber für die Bewegungserkennung
 bereitstellt. Um diesen Datensatz zu erstellen, muss vorab geklärt werden, was
 eine Bewegung eigentlich ist. Betrachtet man einen Punkt im Raum, dann
 beschreibt eine Bewegung des Punktes die Änderung des Ortes eines Objekts über
@@ -102,7 +102,8 @@ ein Ausgabevideo mit 80 Frames, wobei jeder Frame jeweils $96 \times 128 \times
     Auflösung zu skalieren, werden vier 3D-Convolutional-Transpose-Layer verwendet. Jedes
     dieser Schichten verwendet eine Kernelgröße von $5 \times 5 \times 5$ und
     einen Stride von 2.  Insgesamt ergibt sich also ein Stride von $2^4 = 16$,
-    sodass die Eingabegröße von $5 \times 6 \times 8 \times 256$ auf 80x96x128x3
+    sodass die Eingabegröße von $5 \times 6 \times 8 \times 256$ auf
+    $80 \times 96 \times 128 \times 3$
     hochskaliert wird.}
     \label{fig:vigan}
 \end{figure}
@@ -186,10 +187,10 @@ Eingabe fungieren kann, um den Generator zu zwingen, eine Ausgabe einer
 bestimmten Klasse zu erzeugen. Dadurch kann gesteuert werden, welche Art von
 Ausgabe dieser Generator liefert, was unabdingbar für das Erzeugen eines
 kompletten Datensatzes ist. Andernfalls erhält man zwar künstlich erzeugte
-Bewegungen, jedoch ist die Klasse bzw. das Label unbekannt. Demnach wär die
+Bewegungen, jedoch ist die Klasse bzw. das Label unbekannt. Demnach wäre die
 einzige Alternative das Trainieren von $n$ WGANs, wobei $n$ die Anzahl der im
 System vorkommenden Klassen beschreibt, also ein WGAN pro Klasse. Da dies eine
-sehr unelegante Lösung wär, wird versucht ein cWGAN entsprechend Abschnitt
+sehr unelegante Lösung wäre, wird versucht ein cWGAN entsprechend Abschnitt
 \ref{section:cwgan-gp} zu implementieren, welches Proben aus $n$ verschiedenen
 Klassen erzeugen kann. Mithilfe eines Labels als Eingabe soll gesteuert werden
 können, zu welcher Klasse das Erzeugnis gehören soll.
